@@ -2,3 +2,8 @@
     local-name: mas_third_party_software
     uri: git@github.com:b-it-bots/third-party-software.git
     version: groovy_catkin
+
+- git:
+    local-name: rosjava_core
+    uri: git@github.com:rosjava/rosjava_core.git
+    version: groovy-devel
