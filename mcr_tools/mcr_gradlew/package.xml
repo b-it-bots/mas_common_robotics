@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package>
+  <name>mcr_gradlew</name>
+  <version>0.0.1</version>
+  <description>
+    This package provides a wrapper for the Java build system Gradle [1]. Other
+    catkin packages can can include this wrapper instead of copying the
+    associated files and directories (gradle/, gradlew) to their package
+    directory.
+
+    To use the wrapper include the mcr_gradlew package in the CMakeLists.txt
+    file:
+    find_package(catkin REQUIRED mcr_gradlew)
+
+    After this the ${mcr_gradlew_GRADLEW_BIN} variable contains the file name
+    (including the absolute path) to the "gradlew" binary in this package.
+
+    [1] http://www.gradle.org/
+  </description>
+  <license>GPLv3</license>
+
+  <maintainer email="sven.schneider@h-brs.de">Sven Schneider</maintainer>
+  <author email="sven.schneider@h-brs.de">Sven Schneider</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+</package>
