@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package>
+  <name>mcr_speech_srvs</name>
+  <version>0.1.0</version>
+  <description>The mcr_speech_srvs package</description>
+
+  <maintainer email="robotics@inf.h-brs.de">MAS robotics</maintainer>
+
+  <license>BSD</license>
+  <build_depend>message_generation</build_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>
