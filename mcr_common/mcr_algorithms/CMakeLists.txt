@@ -33,7 +33,7 @@ include_directories(
 )
 
 ## Declare a cpp library
-add_library(mcr__segmentation 
+add_library(mcr_segmentation 
   common/src/segmentation/laserscan_segmentation.cpp
   common/src/segmentation/pointcloud_segmentation.cpp
 )
