@@ -14,6 +14,7 @@ find_package(PCL 1.6 REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS common/include/
+  LIBRARIES mcr_geometry
 #  LIBRARIES mcr_algorithms
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
