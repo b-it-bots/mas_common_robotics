@@ -80,6 +80,10 @@ add_library(mcr_controller
   common/src/controller/pi_controller.cpp
 )
 
+install(DIRECTORY common/include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+)
 ## Declare a cpp executable
 # add_executable(mcr_algorithms_node src/mcr_algorithms_node.cpp)
 
