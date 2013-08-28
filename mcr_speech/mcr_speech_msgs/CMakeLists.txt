@@ -3,11 +3,15 @@ project(mcr_speech_msgs)
 
 find_package(catkin REQUIRED message_generation)
 
+add_message_files(
+  FILES
+   RecognizedSpeech.msg  
+   Say.msg
+)
+
 add_service_files(
    FILES
    ChangeGrammar.srv  
-   GetLastRecognizedSpeech.srv  
-   Say.srv
 )
 
 generate_messages()

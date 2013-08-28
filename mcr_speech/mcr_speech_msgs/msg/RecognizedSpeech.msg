@@ -1,4 +1,3 @@
----
 string understood_phrase
 string keyword
 float32 confidence
