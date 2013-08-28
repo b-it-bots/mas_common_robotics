@@ -1,9 +1,7 @@
 <package>
   <name>mcr_node_monitor</name>
   <version>0.1.0</version>
-  <description>
-     brsu_node_status
-  </description>
+  <description>check alive state of a node by using rosping</description>
    
   <author email="matthias.fueller@h-brs.de">Matthias Füller</author>
   <maintainer email="matthias.fueller@h-brs.de">Matthias Füller</maintainer>
