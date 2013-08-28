@@ -5,7 +5,7 @@ find_package(PCL 1.6 REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS common/include/
-  LIBRARIES mcr_geometry
+  LIBRARIES mcr_geometry mcr_segmentation
 )
 
 include_directories(

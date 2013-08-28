@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(mcr_leg_detector)
+project(mcr_leg_detection)
 find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs geometry_msgs message_generation dynamic_reconfigure mcr_algorithms message_filters tf)
 find_package(OpenCV)
+
+generate_dynamic_reconfigure_options(
+  ros/config/LegDetection.cfg
+)
 
 add_message_files(
   FILES
@@ -14,12 +18,8 @@ generate_messages(
   geometry_msgs
 )
 
-generate_dynamic_reconfigure_options(
-  ros/config/LegDetectorConfig.cfg
-)
-
 catkin_package(
-  CATKIN_DEPENDS message_runtime
+  CATKIN_DEPENDS message_runtime dynamic_reconfigure
 )
 
 include_directories(
@@ -30,7 +30,7 @@ include_directories(
 )
 
 add_executable(leg_detection_node 
-  ros/src/leg_detector_node.cpp
+  ros/src/leg_detection_node.cpp
   ros/src/laser_processor.cpp
   ros/src/calc_leg_features.cpp
   ros/src/tracker_kalman.cpp
