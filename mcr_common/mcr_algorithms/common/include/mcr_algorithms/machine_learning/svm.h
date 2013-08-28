@@ -1,7 +1,7 @@
 #ifndef SVM_H_
 #define SVM_H_
 
-#include <svm.h>
+#include <libsvm/svm.h>
 #include <fstream>
 #include <sstream>
 #include <errno.h>
