@@ -15,7 +15,7 @@ include_directories(
 )
 
 add_library(mcr_manipulation_utils
-   ros/src/${PROJECT_NAME}/ros_urdf_loader.cpp
+   ros/src/ros_urdf_loader.cpp
 )
 
 target_link_libraries(mcr_manipulation_utils
