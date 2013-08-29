@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_algorithms)
-find_package(catkin REQUIRED COMPONENTS libsvm mcr_perception_msgs)
+find_package(catkin REQUIRED COMPONENTS libsvm geometry_msgs sensor_msgs mcr_perception_msgs)
 find_package(PCL 1.6 REQUIRED)
 
 catkin_package(
+  CATKIN_DEPENDS message_runtime libsvm geometry_msgs sensor_msgs mcr_perception_msgs
   INCLUDE_DIRS common/include/
   LIBRARIES mcr_geometry mcr_segmentation mcr_machine_learning
 )
