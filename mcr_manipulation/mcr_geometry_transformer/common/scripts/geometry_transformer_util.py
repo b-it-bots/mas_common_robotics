@@ -5,13 +5,13 @@ def transform_wrench(transform, wrench):
     http://www.ros.org/wiki/tf/Reviews/2010-03-12_API_Review)
     
     :param transform: The desired transform that should be applied.
-    [numpy.matrix[4][4]]
+    :type transform: numpy.matrix[4][4]
     
     :param wrench_in: The wrench to which the transform should be applied.
-    [geometry_msgs.msg.WrenchStamped]
+    :type wrench_in: geometry_msgs.msg.WrenchStamped]
     
     :return: The transformed wrench.
-    [geometry_msgs.msg.WrenchStamped]
+    :rtype: geometry_msgs.msg.WrenchStamped
     '''
     
     return None

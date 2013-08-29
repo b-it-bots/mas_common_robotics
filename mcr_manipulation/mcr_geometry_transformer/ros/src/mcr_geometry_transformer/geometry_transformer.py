@@ -9,13 +9,19 @@ class GeometryTransformer:
         self.listener = tf.TransformListener()
 
 
-    '''
-    Transform the provided wrench to the target frame. Throws an exception if
-    the transformation failed.
-    
-    :param wrench_in: geometry_msgs.msg.WrenchStamped
-    :param target_frame: String
-    :return: geometry_msgs.msg.WrenchStamped
-    '''
     def transformWrench(self, wrench_in, target_frame = "base_link"):
+        '''
+        Transform the provided wrench to the target frame. Throws an exception
+        if the transformation failed.
+        
+        :param wrench_in: The wrench which should be transformed.
+        :type wrench_in: geometry_msgs.msg.WrenchStamped]
+        
+        :param target_frame: The frame into which the wrench should be
+        transformed.
+        :type target_frame: String
+        
+        :return: The transformed wrench.
+        :rtype: geometry_msgs.msg.WrenchStamped
+        '''
         return geometry_msgs.msg.WrenchStamped()
