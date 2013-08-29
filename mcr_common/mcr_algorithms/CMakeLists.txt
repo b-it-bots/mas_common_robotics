@@ -19,6 +19,7 @@ add_library(mcr_segmentation
   common/src/segmentation/laserscan_segmentation.cpp
   common/src/segmentation/pointcloud_segmentation.cpp
 )
+add_dependencies(mcr_segmentation mcr_perception_msgs_gencpp)
 
 add_library(mcr_geometry 
   common/src/geometry/conversions.cpp
