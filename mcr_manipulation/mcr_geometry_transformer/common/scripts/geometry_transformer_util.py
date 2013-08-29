@@ -2,6 +2,7 @@ def transform_wrench(transform, wrench):
     '''
     Apply a transform to a wrench. It is assumed that the reference point and
     reference frame are collapsed into a single coordinate frame. (See also
+    http://www.ros.org/wiki/tf/Reviews/2010-03-12_API_Review)
     
     :param transform: The desired transform that should be applied.
     [numpy.matrix[4][4]]
