@@ -54,7 +54,7 @@ bool ROS_URDF_Loader::loadModel(ros::NodeHandle& node_handle,
 	kdl_parser::treeFromUrdfModel(robot_model, tree);
 
 	if (!tree.getChain(root_name, tip_name, out_arm)) {
-		std::cout << "ERROR while extracting chain" << std::endl;
+		ROS_FATAL("Could not extract chain");
 	}
 
 	out_joint_limits.clear();
