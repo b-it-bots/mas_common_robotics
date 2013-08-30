@@ -55,6 +55,7 @@ bool ROS_URDF_Loader::loadModel(ros::NodeHandle& node_handle,
 
 	if (!tree.getChain(root_name, tip_name, out_arm)) {
 		ROS_FATAL("Could not extract chain");
+		return false;
 	}
 
 	out_joint_limits.clear();
