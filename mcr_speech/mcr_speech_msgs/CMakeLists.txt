@@ -16,3 +16,4 @@ add_service_files(
 
 generate_messages()
 
+catkin_package()
