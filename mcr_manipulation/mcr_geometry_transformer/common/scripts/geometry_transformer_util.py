@@ -1,3 +1,7 @@
+import geometry_msgs.msg
+import numpy
+
+
 def transform_wrench(transform, wrench):
     '''
     Apply a transform to a wrench. It is assumed that the reference point and
@@ -14,4 +18,22 @@ def transform_wrench(transform, wrench):
     :rtype: geometry_msgs.msg.WrenchStamped
     '''
     
-    return None
+    wrench_out = geometry_msgs.msg.WrenchStamped()
+    
+    force_in = numpy.array([wrench.wrench.force.x, wrench.wrench.force.y, wrench.wrench.force.z])
+    torque_in = numpy.array([wrench.wrench.torque.x, wrench.wrench.torque.y, wrench.wrench.torque.z])
+    
+    M = transform[0:3, 0:3]
+    p = transform[0:3, 3]
+    
+    force_out = numpy.dot(M, force_in)
+    torque_out = numpy.dot(M, torque_in) + numpy.cross(p, force_out)
+    
+    wrench_out.wrench.force.x = force_out[0]
+    wrench_out.wrench.force.y = force_out[1]
+    wrench_out.wrench.force.z = force_out[2]
+    wrench_out.wrench.torque.x = torque_out[0]
+    wrench_out.wrench.torque.y = torque_out[1]
+    wrench_out.wrench.torque.z = torque_out[2]
+    
+    return wrench_out
