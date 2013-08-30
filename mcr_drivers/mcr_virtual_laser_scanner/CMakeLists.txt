@@ -22,7 +22,7 @@ target_link_libraries(virtual_laser_scanner_node
   ${catkin_LIBRARIES}
   ${PCL_LIBRARIES}
 )
-add_dependencies(virtual_laser_scanner_node ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS}) 
+add_dependencies(virtual_laser_scanner_node ${PROJECT_NAME}_gencfg ${catkin_EXPORTED_TARGETS}) 
 
 install(DIRECTORY ros/launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
