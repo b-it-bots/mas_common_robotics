@@ -15,8 +15,6 @@
 #include <ros/ros.h>
 #include <urdf_model/joint.h>
 
-namespace arm_cc {
-
 class ROS_URDF_Loader {
 public:
 	ROS_URDF_Loader();
@@ -30,5 +28,4 @@ public:
 
 };
 
-} /* namespace arm_cc */
 #endif /* ROSURDFLOADER_H_ */

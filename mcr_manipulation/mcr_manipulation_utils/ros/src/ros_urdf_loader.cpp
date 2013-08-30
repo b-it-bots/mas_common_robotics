@@ -10,8 +10,6 @@
 #include <urdf/model.h>
 #include <kdl_parser/kdl_parser.hpp>
 
-namespace arm_cc {
-
 ROS_URDF_Loader::ROS_URDF_Loader() {
 
 }
@@ -71,5 +69,3 @@ bool ROS_URDF_Loader::loadModel(ros::NodeHandle& node_handle,
 
 	return true;
 }
-
-} /* namespace arm_cc */
