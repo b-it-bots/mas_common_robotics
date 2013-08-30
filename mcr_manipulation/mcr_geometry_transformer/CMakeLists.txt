@@ -47,4 +47,4 @@ target_link_libraries(geometry_transformer_util_test
   ${catkin_LIBRARIES}
 )
 
-catkin_add_nosetests(common/scripts/geometry_transformer_util)
+catkin_add_nosetests(common/scripts/test)
