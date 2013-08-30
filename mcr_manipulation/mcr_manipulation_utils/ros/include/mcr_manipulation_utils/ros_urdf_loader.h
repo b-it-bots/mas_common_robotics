@@ -13,7 +13,7 @@
 #include <kdl/chain.hpp>
 
 #include <ros/ros.h>
-#include <urdf_interface/joint.h>
+#include <urdf_model/joint.h>
 
 namespace arm_cc {
 
