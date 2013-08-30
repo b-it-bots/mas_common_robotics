@@ -3,7 +3,9 @@ project(mcr_node_monitor)
 
 find_package(catkin REQUIRED COMPONENTS sensor_msgs)
 
-catkin_package()
+catkin_package(
+  CATKIN_DEPENDS sensor_msgs
+)
 
 catkin_python_setup()
 
