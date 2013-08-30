@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
+import rospy
+import tf
 import geometry_msgs.msg
+import geometry_transformer_util
 
 
 class GeometryTransformer:
@@ -24,4 +27,14 @@ class GeometryTransformer:
         :return: The transformed wrench.
         :rtype: geometry_msgs.msg.WrenchStamped
         '''
-        return geometry_msgs.msg.WrenchStamped()
+        self.listener.waitForTransform(target_frame, wrench_in.header.frame_id,
+                                       wrench_in.header.stamp,
+                                       rospy.Duration(5.0))
+        t = self.listener.asMatrix(target_frame, wrench_in.header)
+        
+        wrench_out = geometry_msgs.msg.WrenchStamped()
+        wrench_out = geometry_transformer_util.transform_wrench(t, wrench_in)
+        wrench_out.header.frame_id = target_frame
+        wrench_out.header.stamp = wrench_in.header.stamp
+        
+        return wrench_out
