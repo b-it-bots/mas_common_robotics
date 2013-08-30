@@ -9,7 +9,7 @@ generate_dynamic_reconfigure_options(
 )
 
 catkin_package(
-  CATKIN_DEPENDS dynamic_reconfigure sensor_msgs
+  CATKIN_DEPENDS dynamic_reconfigure message_runtime sensor_msgs std_srvs
 )
 
 include_directories(
