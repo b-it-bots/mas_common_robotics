@@ -21,8 +21,8 @@ ROS_URDF_Loader::~ROS_URDF_Loader() {
 }
 
 bool ROS_URDF_Loader::loadModel(ros::NodeHandle& node_handle,
-		std::string root_name,
-		std::string tip_name,
+		const std::string &root_name,
+		const std::string &tip_name,
 		KDL::Chain& out_arm,
 		std::vector<boost::shared_ptr<urdf::JointLimits> >& out_joint_limits) {
 	urdf::Model robot_model;
