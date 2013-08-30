@@ -52,17 +52,10 @@ bool ROS_URDF_Loader::loadModel(ros::NodeHandle& node_handle,
 
 	KDL::Tree tree;
 	kdl_parser::treeFromUrdfModel(robot_model, tree);
-	//std::cout << "Norm: "<< jntVel.data.norm() << std::endl;
 
-	if (!tree.getChain(root_name, tip_name, out_arm)) { // /7gripper_palm_link//tree.getChain("arm_link_0","arm_link_5", youbot_arm)
+	if (!tree.getChain(root_name, tip_name, out_arm)) {
 		std::cout << "ERROR while extracting chain" << std::endl;
 	}
-/*
-	for (unsigned int i = 0; i < out_arm.segments.size(); i++) {
-		std::cout << "Segment " << i << " " << out_arm.segments[i].getName()
-				<< std::endl;
-	}
-*/
 
 	out_joint_limits.clear();
 	for (unsigned int i = 0; i < out_arm.getNrOfJoints(); i++) {
@@ -75,7 +68,6 @@ bool ROS_URDF_Loader::loadModel(ros::NodeHandle& node_handle,
 
 	}
 
-	//std::cout << tree. << std::endl;
 	return true;
 }
 
