@@ -3,13 +3,9 @@ project(mcr_node_monitor)
 
 find_package(catkin REQUIRED COMPONENTS sensor_msgs)
 
-catkin_python_setup()
+catkin_package()
 
-## Generate added messages and services with any dependencies listed here
-generate_messages(
-   DEPENDENCIES
-   sensor_msgs
-)
+catkin_python_setup()
 
 install(PROGRAMS
     ros/scripts/mcr_node_status
