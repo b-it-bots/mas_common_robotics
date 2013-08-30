@@ -46,7 +46,7 @@ bool ROS_URDF_Loader::loadModel(ros::NodeHandle& node_handle,
 	TiXmlElement *root = xml.FirstChildElement("robot");
 	if (!root || !root_element) {
 		ROS_FATAL("Could not parse the xml from %s\n", urdf_xml.c_str());
-		exit(1);
+		return false;
 	}
 	robot_model.initXml(root);
 
