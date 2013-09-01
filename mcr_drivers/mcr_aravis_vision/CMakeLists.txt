@@ -60,8 +60,8 @@ install(DIRECTORY ros/launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
 )
 
-install(DIRECTORY ros/scripts/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/scripts
+install(DIRECTORY ros/tools/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/tools
 )
 
 install(FILES ros/config/stemmer_cvc_eh6500.yaml
