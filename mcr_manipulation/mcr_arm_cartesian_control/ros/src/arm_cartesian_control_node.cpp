@@ -217,7 +217,7 @@ int main(int argc, char **argv) {
 
 
 	//load URDF model
-	arm_cc::ROS_URDF_Loader loader;
+	ROS_URDF_Loader loader;
 	loader.loadModel(node_handle, root_name, tooltip_name, arm_chain, joint_limits);
 
 	//init

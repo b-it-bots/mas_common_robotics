@@ -6,23 +6,23 @@ find_package(catkin REQUIRED roscpp std_msgs)
 include($ENV{ROS_ROOT}/core/rosbuild/FindPkgConfig.cmake)
 pkg_check_modules (LIBUSB REQUIRED libusb-1.0)
 
-catkin_package()
+catkin_package(
+  CATKIN_DEPENDS std_msgs
+)
 
 include_directories(
   ${LIBUSB_INCLUDE_DIRS}
-)
-
-link_libraries(
-  ${LIBUSB_LIBRARY_DIRS}
 )
 
 add_executable(kinect_led_node
   ros/src/kinect_led_node.cpp
 )
 
+add_dependencies(kinect_led_node ${catkin_EXPORTED_TARGETS})
+
 target_link_libraries(kinect_led_node
   ${catkin_LIBRARIES}
-  usb-1.0
+  ${LIBUSB_LIBRARIES}
 )
 
 install(DIRECTORY ros/launch/

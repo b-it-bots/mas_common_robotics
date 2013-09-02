@@ -5,6 +5,7 @@ find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs message_generation
 add_service_files(
   FILES
   ReturnString.srv
+  ReturnBool.srv
 )
 
 generate_messages(
@@ -13,5 +14,5 @@ generate_messages(
 )
 
 catkin_package(
-    CATKIN_DEPENDS message_runtime
+    CATKIN_DEPENDS message_runtime std_msgs
 )

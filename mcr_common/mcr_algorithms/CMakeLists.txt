@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_algorithms)
-find_package(catkin REQUIRED COMPONENTS libsvm geometry_msgs sensor_msgs mcr_perception_msgs)
+find_package(catkin REQUIRED COMPONENTS geometry_msgs sensor_msgs mcr_perception_msgs)
 find_package(PCL 1.6 REQUIRED)
 
 catkin_package(
-  CATKIN_DEPENDS message_runtime libsvm geometry_msgs sensor_msgs mcr_perception_msgs
+  CATKIN_DEPENDS message_runtime geometry_msgs sensor_msgs mcr_perception_msgs
   INCLUDE_DIRS common/include/
   LIBRARIES mcr_geometry mcr_segmentation mcr_machine_learning
 )
@@ -19,7 +19,7 @@ add_library(mcr_segmentation
   common/src/segmentation/laserscan_segmentation.cpp
   common/src/segmentation/pointcloud_segmentation.cpp
 )
-add_dependencies(mcr_segmentation mcr_perception_msgs_gencpp)
+add_dependencies(mcr_segmentation ${catkin_EXPORTED_TARGETS})
 
 add_library(mcr_geometry 
   common/src/geometry/conversions.cpp
@@ -47,7 +47,6 @@ add_library(mcr_io
 add_library(mcr_machine_learning 
   common/src/machine_learning/random_trees.cpp
   common/src/machine_learning/adaboost.cpp
-  common/src/machine_learning/svm.cpp
 )
 
 add_library(mcr_data_fitting 
