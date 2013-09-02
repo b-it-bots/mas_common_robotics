@@ -1,23 +1,28 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_arm_cartesian_control)
 
-find_package(catkin REQUIRED COMPONENTS roscpp sensor_msgs brics_actuator tf urdf kdl_parser mcr_manipulation_utils orocos_kdl)
+find_package(catkin REQUIRED COMPONENTS roscpp sensor_msgs mcr_manipulation_utils brics_actuator tf urdf kdl_parser  orocos_kdl)
 find_package(eigen REQUIRED)
+
+
 
 catkin_package(
   CATKIN_DEPENDS  mcr_manipulation_utils
 )
 
 include_directories(
+ ${PROJECT_SOURCE_DIR}/ros/include ${PROJECT_SOURCE_DIR}/common/include
  ${EIGEN_INCLUDE_DIRS}
  ${catkin_INCLUDE_DIRS}
- ${PROJECT_SOURCE_DIR}/ros/include ${PROJECT_SOURCE_DIR}/common/include
 )
 
 add_executable(arm_cartesian_control
     ros/src/arm_cartesian_control_node.cpp
     common/src/arm_cartesian_control.cpp)
     
+
+add_dependencies(arm_cartesian_control ${catkin_EXPORTED_TARGETS})
+
 target_link_libraries(arm_cartesian_control ${catkin_LIBRARIES})
 
 

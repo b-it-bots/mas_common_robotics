@@ -3,6 +3,8 @@ project(mcr_algorithms)
 find_package(catkin REQUIRED COMPONENTS geometry_msgs sensor_msgs mcr_perception_msgs)
 find_package(PCL 1.6 REQUIRED)
 
+catkin_python_setup()
+
 catkin_package(
   CATKIN_DEPENDS message_runtime geometry_msgs sensor_msgs mcr_perception_msgs
   INCLUDE_DIRS common/include/
