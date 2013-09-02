@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(mcr_common_msgs)
 find_package(catkin REQUIRED 
   COMPONENTS
+    geometry_msgs
     roscpp
     rospy
     std_msgs
@@ -23,7 +24,7 @@ generate_messages(
 
 catkin_package(
   CATKIN_DEPENDS
+    geometry_msgs
     message_runtime
     std_msgs
-    geometry_msgs
 )
