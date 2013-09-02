@@ -118,11 +118,11 @@ def main():
 
             if rosnode_ping(item) == True:
               diag_msg.level = DiagnosticStatus.OK
-              diag_msg.name = 'brsu_node_status_' + item
+              diag_msg.name = 'mcr_node_status_' + item
               diag_msg.message = "node is UP"
             else:
               diag_msg.level = DiagnosticStatus.ERROR
-              diag_msg.name = 'brsu_node_status_' + item
+              diag_msg.name = 'mcr_node_status_' + item
               diag_msg.message = "node is DOWN"
             
             diag_list.status.append(diag_msg)

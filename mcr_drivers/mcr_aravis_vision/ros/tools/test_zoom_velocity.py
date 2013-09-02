@@ -4,8 +4,8 @@ from std_msgs.msg import Int32
 
 
 def zoom():
-    rospy.init_node('brsu_test_zoom')
-    pub = rospy.Publisher('/brsu_rgb_camera/zoom/velocity', Int32)
+    rospy.init_node('mcr_test_zoom')
+    pub = rospy.Publisher('/mcr_rgb_camera/zoom/velocity', Int32)
 
     rospy.sleep(1)
 
