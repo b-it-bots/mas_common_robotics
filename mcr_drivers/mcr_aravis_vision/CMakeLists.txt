@@ -6,6 +6,7 @@ find_package(catkin REQUIRED
     aravis_vision_library
     dynamic_reconfigure
     image_transport
+    mcr_node_diagnostic
     roscpp
     rostest
     sensor_msgs
