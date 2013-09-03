@@ -1,21 +1,30 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_perception_msgs)
-find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs geometry_msgs message_generation sensor_msgs)
+
+find_package(catkin REQUIRED 
+  COMPONENTS
+    geometry_msgs
+    message_generation
+    roscpp
+    rospy
+    sensor_msgs
+    std_msgs
+)
 
 add_message_files(
   FILES
   BoundingBox.msg
   BoundingBoxList.msg
-  Person.msg
-  PersonList.msg
+  Face.msg
+  FaceList.msg
   LaserScanSegment.msg
   LaserScanSegmentList.msg
   Object.msg
   ObjectList.msg
+  Person.msg
+  PersonList.msg
   Plane.msg
   PlanarPolygon.msg
-  Face.msg
-  FaceList.msg
 )
 
 add_service_files(
@@ -25,6 +34,9 @@ add_service_files(
   FindWorkspace.srv
   GetPersonList.srv
   GetObjectList.srv
+  GetFaceName.srv
+  GetFacialExpression.srv
+  GetNearestObject.srv
   MakeBoundingBoxes.srv
   SetFaceName.srv
 )
@@ -37,5 +49,6 @@ generate_messages(
 )
 
 catkin_package(
-  CATKIN_DEPENDS message_runtime
+  CATKIN_DEPENDS 
+    message_runtime
 )
