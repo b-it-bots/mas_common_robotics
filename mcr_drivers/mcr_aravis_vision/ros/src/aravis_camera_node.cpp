@@ -11,7 +11,7 @@
 #include <sensor_msgs/image_encodings.h>
 #include <dynamic_reconfigure/server.h>
 #include <std_msgs/Int32.h>
-//#include <hbrs_node_diagnostic/NodeDiagnostic.h>
+#include <mcr_node_diagnostic/NodeDiagnostic.h>
 
 #include "mcr_aravis_vision/AravisVisionConfig.h"
 #include "mcr_aravis_vision/aravis_wrapper.h"
@@ -33,27 +33,27 @@ void connectToCamera()
 		if (connection_status == ConnectionErrorCodes::ALREADY_CONNECTED)
 		{
 			ROS_ERROR("Connection to this camera is already established. Exiting ...");
-			//hbrs::NodeDiagnostic::error(DIAGNOSTICS_ID, hbrs::NodeDiagnostic::COMMUNICATION, "Connection to this camera is already established. Exiting ...");
+			mcr::NodeDiagnostic::error(DIAGNOSTICS_ID, mcr::NodeDiagnostic::COMMUNICATION, "Connection to this camera is already established. Exiting ...");
 			exit(0);
 		}
 		else if (connection_status == ConnectionErrorCodes::NO_CAMERA_FOUND)
 		{
 			ROS_ERROR("No GigE camera found. Retry every second");
-			//hbrs::NodeDiagnostic::error(DIAGNOSTICS_ID, hbrs::NodeDiagnostic::COMMUNICATION, "No GigE camera found. Retry every second");
+			mcr::NodeDiagnostic::error(DIAGNOSTICS_ID, mcr::NodeDiagnostic::COMMUNICATION, "No GigE camera found. Retry every second");
 			sleep(1);
 		}
 		else if (connection_status == ConnectionErrorCodes::DEVICE_BUSY)
 		{
 			ROS_ERROR("Could not create stream thread (check if the device is not already used)");
-			//hbrs::NodeDiagnostic::error(DIAGNOSTICS_ID, hbrs::NodeDiagnostic::COMMUNICATION,
-			//                            "Could not create stream thread (check if the device is not already used)");
+			mcr::NodeDiagnostic::error(DIAGNOSTICS_ID, mcr::NodeDiagnostic::COMMUNICATION,
+			                            "Could not create stream thread (check if the device is not already used)");
 			exit(0);
 		}
 	}
 	while ((connection_status != ConnectionErrorCodes::CONNECTION_ESTABLISHED) && ros::ok());
 
 	ROS_INFO_STREAM("Camera " << gige_cam->getCameraDescription() << " successfully connected");
-	//hbrs::NodeDiagnostic::ok(DIAGNOSTICS_ID, hbrs::NodeDiagnostic::COMMUNICATION, "Camera successfully connected");
+	mcr::NodeDiagnostic::ok(DIAGNOSTICS_ID, mcr::NodeDiagnostic::COMMUNICATION, "Camera successfully connected");
 
 }
 
@@ -115,7 +115,7 @@ void dynamicReconfigureCallback(mcr_aravis_vision::AravisVisionConfig &config, u
 
 static void lostCameraControlCallback(ArvGvDevice *gv_device)
 {
-	//hbrs::NodeDiagnostic::error(DIAGNOSTICS_ID, hbrs::NodeDiagnostic::COMMUNICATION, "Lost connection to the camera");
+	mcr::NodeDiagnostic::error(DIAGNOSTICS_ID, mcr::NodeDiagnostic::COMMUNICATION, "Lost connection to the camera");
 }
 
 static void imageCallback(ArvStream *stream, ApplicationData *data)
@@ -200,14 +200,14 @@ int main(int argc, char **argv)
 		{
 			gige_cam->startAcquisition();
 			ROS_DEBUG("image acquisition started");
-			//hbrs::NodeDiagnostic::ok(DIAGNOSTICS_ID, hbrs::NodeDiagnostic::COMMUNICATION, "image acquisition started");
+			mcr::NodeDiagnostic::ok(DIAGNOSTICS_ID, mcr::NodeDiagnostic::COMMUNICATION, "image acquisition started");
 		}
 		// check if the last subscriber unsubscribed
 		else if (pub_img_raw.getNumSubscribers() == 0 && prev_num_subscriber >= 1)
 		{
 			gige_cam->stopAcquisition();
 			ROS_DEBUG("image acquisition stopped");
-			//hbrs::NodeDiagnostic::warn(DIAGNOSTICS_ID, hbrs::NodeDiagnostic::COMMUNICATION, "image acquisition stopped");
+			mcr::NodeDiagnostic::warn(DIAGNOSTICS_ID, mcr::NodeDiagnostic::COMMUNICATION, "image acquisition stopped");
 		}
 		prev_num_subscriber = curr_num_subscriber;
 
@@ -218,7 +218,7 @@ int main(int argc, char **argv)
 	// clean up
 	gige_cam->disconnect();
 	pub_img_raw.shutdown();
-	//hbrs::NodeDiagnostic::reset(DIAGNOSTICS_ID);
+	mcr::NodeDiagnostic::reset(DIAGNOSTICS_ID);
 
 	return 0;
 }

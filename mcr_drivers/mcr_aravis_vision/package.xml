@@ -15,6 +15,7 @@
   <build_depend>aravis_vision_library</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
   <build_depend>image_transport</build_depend>
+  <build_depend>mcr_node_diagnostic</build_depend>
   <build_depend>rostest</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>sensor_msgs</build_depend>

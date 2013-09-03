@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- start gazebo with empty world -->
+	<node name="gazebo" pkg="gazebo" type="gazebo" args="$(find gazebo)/gazebo/share/gazebo-1.5/worlds/empty.world" respawn="false" output="screen">
+		<remap from="base_controller/command" to="/cmd_vel"/>
+		<remap from="base_odometry/odom" to="/odom" />
+    </node>
+
+</launch>
