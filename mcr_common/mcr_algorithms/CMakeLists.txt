@@ -6,9 +6,17 @@ find_package(PCL 1.6 REQUIRED)
 catkin_python_setup()
 
 catkin_package(
-  CATKIN_DEPENDS message_runtime geometry_msgs sensor_msgs mcr_perception_msgs
-  INCLUDE_DIRS common/include/
-  LIBRARIES mcr_geometry mcr_segmentation mcr_machine_learning
+  CATKIN_DEPENDS 
+    geometry_msgs 
+    mcr_perception_msgs
+    message_runtime 
+    sensor_msgs 
+  INCLUDE_DIRS 
+    common/include/
+  LIBRARIES 
+    mcr_geometry
+    mcr_machine_learning
+    mcr_segmentation
 )
 
 include_directories(
@@ -21,7 +29,9 @@ add_library(mcr_segmentation
   common/src/segmentation/laserscan_segmentation.cpp
   common/src/segmentation/pointcloud_segmentation.cpp
 )
-add_dependencies(mcr_segmentation ${catkin_EXPORTED_TARGETS})
+add_dependencies(mcr_segmentation 
+  ${catkin_EXPORTED_TARGETS}
+)
 
 add_library(mcr_geometry 
   common/src/geometry/conversions.cpp
