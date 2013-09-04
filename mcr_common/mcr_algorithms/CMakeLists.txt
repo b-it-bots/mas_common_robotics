@@ -14,6 +14,7 @@ catkin_package(
   INCLUDE_DIRS 
     common/include/
   LIBRARIES 
+    mcr_controller
     mcr_geometry
     mcr_machine_learning
     mcr_segmentation
