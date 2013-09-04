@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+
+	<node name="mcr_follow_person" pkg="mcr_follow_person" type="follow_person_node" output="screen">		
+		<param name="max_translational_velocity" value="0.5" />	
+		<param name="max_rotational_velocity" value="1.0" />
+		
+		<param name="translational_deacceleration_factor" value="1.0" />
+		<param name="rotational_deacceleration_factor" value="1.0" />
+		
+		<param name="minimum_distance_to_person" value="0.9" />	<!-- in meter -->
+		<param name="allowed_angular_variance" value="5.0" />   <!-- in degree !-->
+		
+		<param name="driving_backward_enabled" value="false" />   <!-- bool !-->
+		<param name="distance_when_driving_backward" value="0.9" />	<!-- in meter -->
+	</node>
+</launch>
