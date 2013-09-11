@@ -56,7 +56,7 @@ In order to understand at least the different core components of ROS, you have t
 First of all you have to clone the repository.
 
     cd ~/catkin_ws/src;
-    git clone git@github.com:b-it-bots/mas_common_robotics.git
+    git clone git@github.com:mas-group/mas_common_robotics.git
 
 Then go on with installing further external dependencies:
        
@@ -69,3 +69,5 @@ And finally compile the repository:
 
     cd ~/catkin_ws
     catkin_make
+    
+If no errors appear everything is ready to use. Great job!
