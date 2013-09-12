@@ -89,9 +89,9 @@ PersonFollowBehavior::PersonFollowBehavior(ros::NodeHandle &nh)
 
 	// subscribe and advertise
 	this->_subPersonTracker = this->_nh->subscribe < mcr_perception_msgs::PersonList
-	        > ("/brsu_waist_tracker/people_positions", 1, &PersonFollowBehavior::personTrackerCallback, this);
-	this->_subOdom = this->_nh->subscribe < nav_msgs::Odometry > ("/base_controller/odometry", 1, &PersonFollowBehavior::odometryCallback, this);
-	this->_pubBaseCommands = this->_nh->advertise < geometry_msgs::Twist > ("/base_controller/command", 1);
+	        > ("people_positions", 1, &PersonFollowBehavior::personTrackerCallback, this);
+	this->_subOdom = this->_nh->subscribe < nav_msgs::Odometry > ("odometry", 1, &PersonFollowBehavior::odometryCallback, this);
+	this->_pubBaseCommands = this->_nh->advertise < geometry_msgs::Twist > ("cmd_vel", 1);
 
 	// init Transformation Listener
 	this->_pTransformListener = new tf::TransformListener();
