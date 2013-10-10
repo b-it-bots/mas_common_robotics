@@ -1,7 +1,7 @@
 # /bin/bash
 
 ### install debian packages
-sudo apt-get install -y  python-setuptools ros-groovy-ros ros-groovy-simulator-gazebo ros-groovy-vision-opencv python-rosinstall python-vcstools ros-groovy-brics-actuator
+sudo apt-get install -y  python-setuptools ros-groovy-ros ros-groovy-simulator-gazebo ros-groovy-vision-opencv python-rosinstall python-vcstools ros-groovy-brics-actuator liblog4cpp5-dev
 
 ### install further repositories
 rosinstall .. /opt/ros/groovy repository.rosinstall
