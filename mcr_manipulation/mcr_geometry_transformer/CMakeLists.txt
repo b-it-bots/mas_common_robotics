@@ -6,10 +6,12 @@ find_package(catkin REQUIRED
     roscpp
     tf
     tf_conversions
-    orocos_kdl
+#    orocos_kdl
     geometry_msgs
     rosunit
 )
+
+find_package(orocos_kdl)
 
 catkin_python_setup()
 
@@ -20,7 +22,7 @@ catkin_package(
     rospy
     tf
     tf_conversions
-    orocos_kdl
+#    orocos_kdl
     geometry_msgs
     rosunit
 )
