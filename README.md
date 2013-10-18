@@ -30,7 +30,7 @@ If you have never worked with git before, we recommend to go through the followi
 
 
 ## ROS - Robot Operating System
-### Install ROS Fuerte
+### Install ROS
 The repository has been tested successfully with the following ROS distributions. Use the link behind a ROS distribution to get to the particular ROS installation instructions.
 
 - ROS Groovy - http://www.ros.org/wiki/groovy/Installation/Ubuntu
