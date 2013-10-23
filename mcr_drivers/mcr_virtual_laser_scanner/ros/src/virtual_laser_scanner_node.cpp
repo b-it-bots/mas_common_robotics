@@ -22,6 +22,8 @@
 #include <sensor_msgs/LaserScan.h>
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl_conversions/pcl_conversions.h>
+
 #include <tf/transform_listener.h>
 #include <pcl_ros/transforms.h>
 #include <std_srvs/Empty.h>
@@ -69,7 +71,8 @@ void pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr& cloud_msg)
 	sensor_msgs::LaserScanPtr output(new sensor_msgs::LaserScan());
 
 	//Copy Header
-	output->header = cloud_pcl.header;
+	pcl_conversions::fromPCL(cloud_pcl.header, output->header);
+
 	output->angle_min = -M_PI / 2;
 	output->angle_max = M_PI / 2;
 	output->angle_increment = M_PI / 180.0 * 0.5;		// angular resolution of 0.5 degree
