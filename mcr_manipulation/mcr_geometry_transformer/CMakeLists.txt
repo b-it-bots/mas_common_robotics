@@ -26,8 +26,8 @@ catkin_package(
 )
 
 include_directories(
-  "${PROJECT_SOURCE_DIR}/common/include/"
-  "${PROJECT_SOURCE_DIR}/ros/include/"
+  common/include
+  ros/include
 )
 
 add_library(geometry_transformer
@@ -40,8 +40,8 @@ add_library(geometry_transformer
 # Unit testing
 catkin_add_gtest(geometry_transformer_util_test
   common/test/geometry_transformer_util_test.cpp
- )
- 
+)
+
 target_link_libraries(geometry_transformer_util_test
   geometry_transformer
   ${catkin_LIBRARIES}
