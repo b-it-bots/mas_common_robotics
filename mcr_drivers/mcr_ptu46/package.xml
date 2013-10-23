@@ -1,0 +1,22 @@
+<package>
+  <name>mcr_ptu46</name>
+  <version>0.1.0</version>
+  <description>
+     brsu_ptu46
+  </description>
+  <author>Fred Hegger</author>
+  <maintainer email="matthias.fueller@h-brs.de">Matthias Füller</maintainer>
+  
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>tf</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>actionlib</build_depend>
+  <build_depend>message_generation</build_depend>
+
+</package>
+
