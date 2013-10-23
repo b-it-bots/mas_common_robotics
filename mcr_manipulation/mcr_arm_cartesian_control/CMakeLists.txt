@@ -15,16 +15,21 @@ include_directories(
  ${EIGEN_INCLUDE_DIRS}
  ${catkin_INCLUDE_DIRS}
 )
+link_directories(
+  ${orocos_kdl_LIBRARY_DIRS}
+)
 
 add_executable(arm_cartesian_control
     ros/src/arm_cartesian_control_node.cpp
-    common/src/arm_cartesian_control.cpp)
-    
-
-add_dependencies(arm_cartesian_control ${catkin_EXPORTED_TARGETS})
-
-target_link_libraries(arm_cartesian_control ${catkin_LIBRARIES})
-
+    common/src/arm_cartesian_control.cpp
+) 
+add_dependencies(arm_cartesian_control 
+  ${catkin_EXPORTED_TARGETS}
+)
+target_link_libraries(arm_cartesian_control 
+  ${catkin_LIBRARIES}
+  ${orocos_kdl_LIBRARIES}
+)
 
 install(TARGETS arm_cartesian_control arm_cartesian_control
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
