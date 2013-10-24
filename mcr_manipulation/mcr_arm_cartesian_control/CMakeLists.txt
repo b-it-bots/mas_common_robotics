@@ -24,7 +24,7 @@ add_executable(arm_cartesian_control
 
 add_dependencies(arm_cartesian_control ${catkin_EXPORTED_TARGETS})
 
-target_link_libraries(arm_cartesian_control ${catkin_LIBRARIES})
+target_link_libraries(arm_cartesian_control ${catkin_LIBRARIES} orocos-kdl)
 
 
 install(TARGETS arm_cartesian_control arm_cartesian_control
