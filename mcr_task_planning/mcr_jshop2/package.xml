@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+  <name>mcr_jshop2</name>
+  <version>0.0.1</version>
+  <description>
+    Wrapper around the JSHOP2 task planner to use it in other ROS packages.
+  </description>
+  <license>GPLv2</license>
+
+  <author email="sven.schneider@h-brs.de">Sven Schneider</author>
+  <maintainer email="sven.schneider@h-brs.de">Sven Schneider</maintainer>
+  <maintainer email="frederik.hegger@h-brs.de">Frederik Hegger</maintainer>
+  <maintainer email="matthias.fueller@h-brs.de">Matthias Füller</maintainer>
+  <maintainer email="rhama.dwiputra@h-brs.de">Rhama Dwiputra</maintainer>
+  <maintainer email="nico.hochgeschwender@h-brs.de">Nico Hochgeschwender</maintainer>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>mk</build_depend>
+</package>
