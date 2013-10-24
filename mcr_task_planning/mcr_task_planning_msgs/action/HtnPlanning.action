@@ -1,0 +1,16 @@
+# goal
+
+State initial_state
+Task task
+
+---
+
+# result
+
+#Plan plan
+#uint32 total_iteration_count 
+int8 success
+
+---
+
+# feedback
