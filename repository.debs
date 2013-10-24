@@ -1,7 +1,7 @@
 # /bin/bash
 
 ### install debian packages
-sudo apt-get install -y  python-setuptools ros-hydro-ros ros-hydro-simulator-gazebo ros-hydro-vision-opencv python-rosinstall python-vcstools ros-hydro-brics-actuator liblog4cpp5-dev
+sudo apt-get install -y  python-setuptools ros-hydro-ros ros-hydro-vision-opencv python-rosinstall python-vcstools ros-hydro-brics-actuator liblog4cpp5-dev
 
 ### install further repositories
 rosinstall .. /opt/ros/hydro repository.rosinstall
