@@ -2,8 +2,3 @@
     local-name: mas_third_party_software
     uri: git@github.com:mas-group/mas_third_party_software.git
     version: hydro
-
-- git:
-    local-name: rosjava_core
-    uri: git@github.com:rosjava/rosjava_core.git
-    version: hydro
