@@ -6,7 +6,9 @@ find_package(catkin REQUIRED
     mk
 )
 
-catkin_package()
+catkin_package(
+  CFG_EXTRAS UseJSHOP2.cmake
+)
 
 
 # IMPORTANT: If one of these paths is changed, also update the
