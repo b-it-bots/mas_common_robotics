@@ -14,10 +14,12 @@ catkin_package()
 # only defined after the catkin_package macro, so these paths can not be moved
 # before the execution of this macro!!!
 set(JSHOP2_JAR_PATH "${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/JSHOP2.jar")
+set(ANTLR_JAR_PATH "${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/antlr.jar")
 
 
 add_custom_target(build_jshop2 ALL
   COMMAND cmake -E chdir "${PROJECT_SOURCE_DIR}" make -f Makefile.git
   
   COMMAND cmake -E copy "${PROJECT_SOURCE_DIR}/build/jshop2/bin.build/JSHOP2.jar" "${JSHOP2_JAR_PATH}"
+  COMMAND cmake -E copy "${PROJECT_SOURCE_DIR}/build/jshop2/antlr.jar" "${ANTLR_JAR_PATH}"
 )
