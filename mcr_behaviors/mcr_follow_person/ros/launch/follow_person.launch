@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 
-	<node name="mcr_follow_person" pkg="mcr_follow_person" type="follow_person_node" output="screen">		
+	<node name="follow_person" pkg="mcr_follow_person" type="follow_person_node" ns="mcr_behaviors" output="screen">		
 		<param name="max_translational_velocity" value="0.5" />	
 		<param name="max_rotational_velocity" value="1.0" />
 		
