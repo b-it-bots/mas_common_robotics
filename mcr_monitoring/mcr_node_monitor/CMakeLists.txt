@@ -10,8 +10,8 @@ catkin_package(
 catkin_python_setup()
 
 install(PROGRAMS
-    ros/scripts/mcr_node_status
-    ros/src/mcr_node_monitor/mcr_node_status.py
+    ros/scripts/node_status
+    ros/src/mcr_node_monitor/node_status.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 # install(DIRECTORY
