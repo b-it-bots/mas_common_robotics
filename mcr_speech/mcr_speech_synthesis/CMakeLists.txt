@@ -34,10 +34,9 @@ link_libraries(
 
 add_executable(speech_synthesis_node 
   ros/src/speech_synthesis_node.cpp
-  {CMAKE_SOURCE_DIR}/../brsu_speech_common/src/StringOperations.cpp
-  ${CMAKE_SOURCE_DIR}/../brsu_speech_common/include/StringOperations.h
-  ${CMAKE_SOURCE_DIR}/../brsu_speech_common/src/ConfigFileReader.cpp
-  ${CMAKE_SOURCE_DIR}/../brsu_speech_common/include/ConfigFileReader.h
+)
+target_link_libraries(
+  speech_recognition_tools
 )
 
 endif(WIN32)

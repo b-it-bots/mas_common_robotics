@@ -69,14 +69,14 @@ add_library(speech_recognition_tools
 
 
 add_executable(speech_recognition_node
-  speech_recognition_node.cpp
+  ros/src/speech_recognition_node.cpp
 )
 target_link_libraries(speech_recognition_node
   speech_recognition_tools
 )
 
 add_executable(speech_recognition_test 
-  speech_recognition_test.cpp
+  ros/src/speech_recognition_test.cpp
 )
 target_link_libraries(speech_recognition_test
   speech_recognition_tools
