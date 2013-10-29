@@ -14,7 +14,7 @@ geometry_msgs::WrenchStamped transform_wrench(
 	KDL::Wrench kdl_wrench;
 
 	// Create the KDL data types
-	tf::TransformTFToKDL(transform, kdl_frame);
+	tf::transformTFToKDL(transform, kdl_frame);
 	tf::wrenchMsgToKDL(wrench_in.wrench, kdl_wrench);
 
 	// Perform the transform
