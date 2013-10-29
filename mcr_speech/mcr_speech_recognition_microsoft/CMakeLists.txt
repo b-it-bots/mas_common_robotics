@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_speech_recognition_microsoft)
 
+### The code only compiles under windows
+if(WIN32)
+
 
 #set(CMAKE_CXX_FLAGS "/DWIN32 /D_WINDOWS /W3 /EHa /GR")
 #set(EXECUTABLE_OUTPUT_PATH ${CMAKE_HOME_DIRECTORY}/bin)
@@ -78,3 +81,5 @@ add_executable(speech_recognition_test
 target_link_libraries(speech_recognition_test
   speech_recognition_tools
 )
+
+endif(WIN32)
