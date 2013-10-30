@@ -12,6 +12,7 @@ add_message_files(
 add_service_files(
    FILES
    ChangeGrammar.srv  
+   SetRecognitionConfidence.srv
 )
 
 generate_messages()
