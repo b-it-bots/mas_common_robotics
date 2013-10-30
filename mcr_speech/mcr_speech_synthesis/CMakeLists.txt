@@ -4,39 +4,34 @@ project(mcr_speech_synthesis)
 ### The code only compiles under windows
 if(WIN32)
 
-set(CMAKE_CXX_FLAGS "/DWIN32 /D_WINDOWS /W3 /EHa /GR")
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_HOME_DIRECTORY}/bin) #executables
-add_definitions( "/W3 /D_CRT_SECURE_NO_WARNINGS /wd4251 /wd4275 /wd4099  /DROS_BUILD_SHARED_LIBS=1" ) #suppress annoying warnings
+  set(EXECUTABLE_OUTPUT_PATH ${CMAKE_HOME_DIRECTORY}/bin) #executables
+  add_definitions( "/W3 /D_CRT_SECURE_NO_WARNINGS /wd4251 /wd4275 /wd4099  /DROS_BUILD_SHARED_LIBS=1" )
+  
+  include_directories(
+    C:/opt/rosdeps/hydro/x86/include
+    C:/opt/ros/hydro/x86/include
+    C:/catkin_ws/devel/include
+    ../mcr_speech_recognition_microsoft/common/include
+  )
 
-find_package(catkin REQUIRED)
+  link_directories(
+    C:/opt/ros/hydro/x86/lib
+    C:/opt/rosdeps/hydro/x86/lib
+    ../mcr_speech_recognition_microsoft/build/Release
+  )
 
-catkin_package()
+  link_libraries(
+    roscpp
+    rosconsole
+    rostime
+    roscpp_serialization
+  )
 
-include_directories(
-  C:/opt/rosdeps/fuerte/x86/include
-  C:/opt/ros/fuerte/x86/include
-  ${CMAKE_SOURCE_DIR}/../../brsu_common/brsu_msgs/msg_gen/cpp/include/brsu_msgs
-  ${CMAKE_SOURCE_DIR}/../../brsu_common/brsu_srvs/srv_gen/cpp/include/brsu_srvs
-  ${CMAKE_SOURCE_DIR}/../brsu_speech_common/include
-)
-
-link_directories(
-	C:/opt/rosdeps/fuerte/x86/lib
-	C:/opt/ros/fuerte/x86/lib;
-)
-
-link_libraries(
-	roscpp.lib
-	roscpp_serialization.lib
-	rosconsole.lib
-	rostime.lib
-)
-
-add_executable(speech_synthesis_node 
-  ros/src/speech_synthesis_node.cpp
-)
-target_link_libraries(
-  speech_recognition_tools
-)
+  add_executable(speech_synthesis_node 
+    ros/src/speech_synthesis_node.cpp
+  )
+  target_link_libraries(speech_synthesis_node
+    speech_recognition_tools
+  )
 
 endif(WIN32)
