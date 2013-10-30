@@ -2,7 +2,7 @@
 #include <sphelper.h> //indludes speech relevant API
 #include <string>
 
-#include <GrammarParser.h>
+#include "mcr_speech_recognition_microsoft/grammar_parser.h"
 
 class SpeechRecognition
 {

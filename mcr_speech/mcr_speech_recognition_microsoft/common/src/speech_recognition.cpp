@@ -6,7 +6,6 @@
 * Created: 2011-02-07
 * Modified: 
 *************************************************/
-#define ROS_BUILD_SHARED_LIBS
 #include <iostream>
 #include <sphelper.h> //indludes speech relevant API
 
@@ -16,8 +15,8 @@
 
 #include <vector>
 
-#include "SpeechRecognition.h"
-#include "StringOperations.h"
+#include "mcr_speech_recognition_microsoft/speech_recognition.h"
+#include "mcr_speech_recognition_microsoft/string_operations.h"
 
 SpeechRecognition::SpeechRecognition() : noSpeechKeyword ("no_speech"), notUnderstoodKeyword("not_understood")
 {

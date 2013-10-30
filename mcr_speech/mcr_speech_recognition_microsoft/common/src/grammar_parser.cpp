@@ -1,5 +1,5 @@
-#include "GrammarParser.h"
-#include "StringOperations.h"
+#include "mcr_speech_recognition_microsoft/grammar_parser.h"
+#include "mcr_speech_recognition_microsoft/string_operations.h"
 
 GrammarParser::GrammarParser() : ruleRefKey("RULEREF"), urlKey("URL")
 {

@@ -1,4 +1,4 @@
-#include "StringOperations.h"
+#include "mcr_speech_recognition_microsoft/string_operations.h"
 
 std::string StringOperations::trim(std::string stringToTrim)
 {

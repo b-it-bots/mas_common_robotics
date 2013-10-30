@@ -26,22 +26,22 @@
  */
 
 /* Initial WIN32 port by Hozefa Indorewala, Robotics Equipment Corporation GmbH, www.servicerobotics.eu */
-#define ROS_BUILD_SHARED_LIBS
-#include "ros/ros.h"
-#include "std_msgs/String.h"
-#include "ros/network.h"
+#include <ros/ros.h>
+#include <std_msgs/String.h>
+#include <ros/network.h>
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
 
-#include <SpeechRecognition.h> //include speech
-#include <ChangeGrammar.h> //include service definition
-#include <ReturnFloat.h> //include service definition
-#include <RecognizedSpeech.h> //include message definition
-#include <StringOperations.h>
-#include <ConfigFileReader.h>
+#include <mcr_speech_msgs/ChangeGrammar.h> //include service definition
+#include <mcr_speech_msgs/SetRecognitionConfidence.h> //include service definition
+#include <mcr_speech_msgs/RecognizedSpeech.h> //include message definition
+
+#include "mcr_speech_recognition_microsoft/speech_recognition.h" //include speech
+#include "mcr_speech_recognition_microsoft/string_operations.h"
+#include "mcr_speech_recognition_microsoft/config_file_reader.h"
 
 SpeechRecognition* recognizer;
 std::string grammarFile ="robot_inspection.xml";
@@ -73,16 +73,16 @@ std::string CONFIG_FILE = "config.cfg";
  */
 
 
-bool changeGrammar(brsu_srvs::ChangeGrammar::Request  &req,
-		brsu_srvs::ChangeGrammar::Response &res )
+bool changeGrammar(mcr_speech_msgs::ChangeGrammar::Request  &req,
+		mcr_speech_msgs::ChangeGrammar::Response &res )
 {
 	recognizer->loadGrammar(req.grammar);
 	res.result = 0;
 	return true;
 }
 
-bool changeRecognitionThreshold(brsu_srvs::ReturnFloat::Request  &req,
-		brsu_srvs::ReturnFloat::Response &res )
+bool changeRecognitionThreshold(mcr_speech_msgs::SetRecognitionConfidence::Request  &req,
+		mcr_speech_msgs::SetRecognitionConfidence::Response &res )
 {
 	recognizer->setConfidenceThreshold(req.threshold);
 	return true;
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
    * than we can send them, the number here specifies how many messages to
    * buffer up before throwing some away.
    */
-//  ros::Publisher pub = n.advertise<brsu_msgs::RecognizedSpeech>("/brsu_speech_recognition/recognized_speech", 1000);
+//  ros::Publisher pub = n.advertise<mcr_speech_msgs::RecognizedSpeech>("/brsu_speech_recognition/recognized_speech", 1000);
 
   /**
    * A count of how many messages we have sent. This is used to create
@@ -200,7 +200,7 @@ int main(int argc, char **argv)
     /**
      * This is a message object. You stuff it with data, and then publish it.
      */
-	brsu_msgs::RecognizedSpeech msg;
+	mcr_speech_msgs::RecognizedSpeech msg;
 
     std::stringstream ss;	
 

@@ -1,5 +1,5 @@
-#include "ConfigFileReader.h"
-#include <StringOperations.h>
+#include "mcr_speech_recognition_microsoft/config_file_reader.h"
+#include "mcr_speech_recognition_microsoft/string_operations.h"
 
 ConfigFileReader::ConfigFileReader()
 {
