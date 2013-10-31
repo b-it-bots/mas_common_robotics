@@ -9,6 +9,14 @@
     <!-- send NAMES parameters to parameter server -->
     <rosparam command="load" file="$(find mcr_default_env_config)/$(arg robot_env)/speech_names.yaml"/>
 
+    <!-- send PLACES parameters to parameter server -->
+    <rosparam command="load" file="$(find mcr_default_env_config)/$(arg robot_env)/speech_places.yaml"/>
+
+    <!-- send ACTION parameters to parameter server -->
+    <rosparam command="load" file="$(find mcr_default_env_config)/$(arg robot_env)/speech_actions.yaml"/>
+
+    <!-- send OBJECTS parameters to parameter server -->
+    <rosparam command="load" file="$(find mcr_default_env_config)/$(arg robot_env)/speech_objects.yaml"/>
   </group>
 
 </launch>
