@@ -98,12 +98,12 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		std::cout<<"*** No config file passed as argument, please use \"SpeechSynthesisROS.exe configfile.cfg\" !!!" << std::endl << "Searching in current folder..." << std::endl;
+		std::cout<<"*** No config file passed as argument, please use \"speech_recognition_node.exe configfile.cfg\" !!!" << std::endl << "Searching in current folder..." << std::endl;
 	}
 	
 	readConfigFile();
     
-  ros::init(argc, argv, "speech_recognition");
+  ros::init(argc, argv, "mcr_speech_speech_recognition");
   ros::NodeHandle n("~");
 
 	ros::ServiceServer serviceChangeGrammar = n.advertiseService("change_grammar", changeGrammar);
