@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 	initVoice();
 	pVoice->Speak(L" ", 0, NULL);
 
-  ros::init(argc, argv, "speech_synthesis");
+  ros::init(argc, argv, "mcr_speech_speech_synthesis");
   ros::NodeHandle n;
 
   ros::Subscriber subSay = n.subscribe("/say", 100, sayCallback);
