@@ -5,7 +5,7 @@
   <description>
     Trajectory controllers implemented as plugins for the ros_control framework.
   </description>
-  <license>GPLv3</license>
+  <license>BSD</license>
 
   <maintainer email="sven.schneider@h-brs.de">Sven Schneider</maintainer>
   <author email="sven.schneider@h-brs.de">Sven Schneider</author>
