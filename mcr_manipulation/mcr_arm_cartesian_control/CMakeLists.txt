@@ -6,7 +6,8 @@ find_package(eigen REQUIRED)
 find_package(orocos_kdl REQUIRED)
 
 catkin_package(
-  CATKIN_DEPENDS  mcr_manipulation_utils
+  CATKIN_DEPENDS  
+    mcr_manipulation_utils
 )
 
 include_directories(
@@ -23,9 +24,11 @@ add_executable(arm_cartesian_control
     ros/src/arm_cartesian_control_node.cpp
     common/src/arm_cartesian_control.cpp)
     
-target_link_libraries(arm_cartesian_control ${catkin_LIBRARIES} orocos-kdl)
-    common/src/arm_cartesian_control.cpp
-) 
+target_link_libraries(arm_cartesian_control
+  ${catkin_LIBRARIES} 
+  ${orocos_kdl_LIBRARIES}  
+)
+
 
 add_dependencies(arm_cartesian_control 
   ${catkin_EXPORTED_TARGETS}
