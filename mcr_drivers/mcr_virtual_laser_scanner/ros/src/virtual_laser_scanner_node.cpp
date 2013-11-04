@@ -136,7 +136,7 @@ bool stop(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
 
 int main(int argc, char** argv)
 {
-	ros::init(argc, argv, "mcr_virtual_laser_scanner");
+	ros::init(argc, argv, "virtual_laser_scanner");
 	ros::NodeHandle nh("~");
 	nh_ptr = &nh;
 

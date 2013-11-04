@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_speech_msgs)
 
-find_package(catkin REQUIRED message_generation)
+find_package(catkin REQUIRED 
+  message_generation
+  std_msgs
+)
 
 add_message_files(
   FILES
@@ -12,8 +15,14 @@ add_message_files(
 add_service_files(
    FILES
    ChangeGrammar.srv  
+   GetRecognizedSpeech.srv
+   SetRecognitionConfidence.srv
 )
 
 generate_messages()
 
-catkin_package()
+catkin_package(
+  CATKIN_DEPENDS
+    message_runtime
+    std_msgs
+)
