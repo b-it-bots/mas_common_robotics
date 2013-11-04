@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 	int prev_num_subscriber = 0;
 
 	// init ROS node with a name and a node handle
-	ros::init(argc, argv, "mcr_aravis_vision");
+	ros::init(argc, argv, "aravis_vision");
 	ros::NodeHandle nh("~");
 
 	// create a Publisher
