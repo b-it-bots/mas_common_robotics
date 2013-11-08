@@ -33,6 +33,7 @@ include_directories(
 add_library(aravis_wrapper 
   common/src/aravis_wrapper.cpp
 )
+add_dependencies(aravis_wrapper ${catkin_EXPORTED_TARGETS})
 
 add_executable(aravis_camera_node 
   ros/src/aravis_camera_node.cpp 
