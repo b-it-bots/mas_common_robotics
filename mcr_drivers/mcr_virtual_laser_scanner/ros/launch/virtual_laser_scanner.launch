@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <launch>
 
-	<node pkg="mcr_virtual_laser_scanner" type="virtual_laser_scanner_node" name="virtual_laser_scanner" ns="mcr_drivers" output="screen">
-		<remap from="~/pointcloud_xyz" to="/head_cam3d/depth_registered/points" />
-	</node>
+  <node pkg="mcr_virtual_laser_scanner" type="virtual_laser_scanner_node" name="virtual_laser_scanner" ns="mcr_drivers" output="screen">
+    <remap from="~/pointcloud_xyz" to="/head_cam3d/depth_registered/points" />
+  </node>
 
 </launch>
