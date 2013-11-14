@@ -13,5 +13,10 @@
 		
 		<param name="driving_backward_enabled" value="false" />   <!-- bool !-->
 		<param name="distance_when_driving_backward" value="0.9" />	<!-- in meter -->
+	
+		<remap from="~people_positions" to="/mcr_perception/waist_tracking/people_positions" />
+		<remap from="~odometry" to="/base_controller/odometry" />
+		<remap from="~cmd_vel" to="/cmd_vel" />
+
 	</node>
 </launch>
