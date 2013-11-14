@@ -121,7 +121,7 @@ void dynamic_reconfig_callback(mcr_virtual_laser_scanner::VirtualLaserScannerCon
 
 bool start(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
 {
-	sub_pointcloud = nh_ptr->subscribe < sensor_msgs::PointCloud2 > ("/camera/depth/points", 1, pointcloudCallback);
+	sub_pointcloud = nh_ptr->subscribe < sensor_msgs::PointCloud2 > ("pointcloud_xyz", 1, pointcloudCallback);
 
 	ROS_INFO("virtual laser scanner ENABLED");
 	return true;
