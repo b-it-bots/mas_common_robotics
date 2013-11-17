@@ -5,6 +5,11 @@ find_package(catkin REQUIRED)
 
 include(ExternalProject)
 
+# ensure that package destination variables are defined
+catkin_destinations()
+
+set(JSHOP2_JAR_PATH ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/JSHOP2.jar)
+set(ANTLR_JAR_PATH ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/antlr.jar)
 set(BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/jshop2/src/jshop2)
 
 ExternalProject_Add(jshop2
@@ -19,15 +24,6 @@ ExternalProject_Add(jshop2
 catkin_package(
   CFG_EXTRAS UseJSHOP2.cmake
 )
-
-
-# IMPORTANT: If one of these paths is changed, also update the
-# cmake/UseJSHOP2.cmake.in file!!! The ${CATKIN_PACKAGE_SHARE_DESTINATION} is
-# only defined after the catkin_package macro, so these paths can not be moved
-# before the execution of this macro!!!
-set(JSHOP2_JAR_PATH "${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/JSHOP2.jar")
-set(ANTLR_JAR_PATH "${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/antlr.jar")
-
 
 add_custom_target(copy_jshop2 ALL
   DEPENDS jshop2
