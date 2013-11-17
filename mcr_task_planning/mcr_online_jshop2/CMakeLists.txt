@@ -27,6 +27,8 @@ add_jar(online_jshop2
 
 set(ONLINE_JSHOP2_JAR_PATH "${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/online_jshop2.jar")
 
+add_dependencies(online_jshop2 jshop2)
+
 add_custom_target(install_online_jshop2 ALL
   COMMAND cmake -E copy "${PROJECT_BINARY_DIR}/online_jshop2.jar" "${ONLINE_JSHOP2_JAR_PATH}"
   DEPENDS online_jshop2
