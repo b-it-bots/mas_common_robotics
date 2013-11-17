@@ -1,9 +1,19 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_jshop2)
 
-find_package(catkin REQUIRED
-  COMPONENTS
-    mk
+find_package(catkin REQUIRED)
+
+include(ExternalProject)
+
+set(BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/jshop2/src/jshop2)
+
+ExternalProject_Add(jshop2
+  PREFIX ${CMAKE_CURRENT_BINARY_DIR}/jshop2
+  GIT_REPOSITORY https://github.com/mas-group/jshop2.git
+  GIT_TAG master
+  CONFIGURE_COMMAND install -dm755 ${BUILD_DIR}/bin.build
+  BUILD_COMMAND CLASSPATH=${BUILD_DIR}:${BUILD_DIR}/antlr.jar make -C ${BUILD_DIR}
+  INSTALL_COMMAND ""
 )
 
 catkin_package(
@@ -19,9 +29,9 @@ set(JSHOP2_JAR_PATH "${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/
 set(ANTLR_JAR_PATH "${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_SHARE_DESTINATION}/antlr.jar")
 
 
-add_custom_target(build_jshop2 ALL
-  COMMAND cmake -E chdir "${PROJECT_SOURCE_DIR}" make -f Makefile.git
+add_custom_target(copy_jshop2 ALL
+  DEPENDS jshop2
   
-  COMMAND cmake -E copy "${PROJECT_SOURCE_DIR}/build/jshop2/bin.build/JSHOP2.jar" "${JSHOP2_JAR_PATH}"
-  COMMAND cmake -E copy "${PROJECT_SOURCE_DIR}/build/jshop2/antlr.jar" "${ANTLR_JAR_PATH}"
+  COMMAND cmake -E copy ${BUILD_DIR}/bin.build/JSHOP2.jar ${JSHOP2_JAR_PATH}
+  COMMAND cmake -E copy ${BUILD_DIR}/antlr.jar ${ANTLR_JAR_PATH}
 )
