@@ -122,6 +122,7 @@ void TeleopKeyboard::keyboardLoop()
   puts("---------------------------");
   puts("Use 'WASD' to translate");
   puts("Use 'QE' to yaw");
+  puts("Use 'Space' to stop");
   puts("Press 'Shift' to run");
 
 
