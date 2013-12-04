@@ -77,7 +77,7 @@ void Arm_Cartesian_Control::process(
 	out_jnt_velocities.q.data = joint_positions.data;
 
 	double max_lin_frame_velocitiy = 0.1;  // m/s
-	double max_joint_vel = 0.1; // radian/s
+	double max_joint_vel = 0.25; // radian/s
 	double eps_velocity = 0.0001;
 
 	// calc Jacobian
