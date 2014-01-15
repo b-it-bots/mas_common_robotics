@@ -17,6 +17,7 @@ ExternalProject_Add(jshop2
   GIT_REPOSITORY https://github.com/mas-group/jshop2.git
   GIT_TAG master
   CONFIGURE_COMMAND install -dm755 ${BUILD_DIR}/bin.build
+  UPDATE_COMMAND ""
   BUILD_COMMAND CLASSPATH=${BUILD_DIR}:${BUILD_DIR}/antlr.jar make -C ${BUILD_DIR}
   INSTALL_COMMAND ""
 )
