@@ -1,0 +1,12 @@
+<library path="lib/libmcr_multi_joint_forward_controller">
+
+  <class name="forward_command_controller/MultiJointForwardController"
+         type="forward_command_controller::MultiJointForwardController"
+         base_class_type="controller_interface::ControllerBase">
+    <description>
+      The JointVelocityController forwards a set of joint velocities to the
+      hardware interface.
+    </description>
+  </class>
+
+</library>
