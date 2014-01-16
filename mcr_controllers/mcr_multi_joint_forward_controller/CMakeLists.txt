@@ -3,6 +3,7 @@ project(mcr_multi_joint_forward_controller)
 
 find_package(catkin REQUIRED
   COMPONENTS
+    actionlib
     controller_interface
     hardware_interface
     brics_actuator
@@ -12,6 +13,7 @@ find_package(catkin REQUIRED
 catkin_package(
   INCLUDE_DIRS ros/include
   CATKIN_DEPENDS
+    actionlib
     controller_interface
     hardware_interface
     brics_actuator
