@@ -22,9 +22,6 @@ catkin_package(
 include_directories(ros/include)
 
 # install
-install(DIRECTORY ros/include/${PROJECT_NAME}/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-)
 
 # test
 add_rostest_gtest(multi_joint_forward_controller_test
