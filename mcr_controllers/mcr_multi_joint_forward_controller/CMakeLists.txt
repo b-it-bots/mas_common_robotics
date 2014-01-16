@@ -21,7 +21,20 @@ catkin_package(
 # build
 include_directories(ros/include)
 
+add_library(mcr_multi_joint_forward_controller
+  ros/src/multi_joint_forward_controller.cpp
+)
+
+target_link_libraries(mcr_multi_joint_forward_controller
+  ${catkin_LIBRARIES}
+)
+
 # install
+install(TARGETS mcr_multi_joint_forward_controller
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 # test
 add_rostest_gtest(multi_joint_forward_controller_test
