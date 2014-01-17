@@ -87,7 +87,7 @@ bool MultiJointForwardCommandController<RosInterfaceT, HardwareInterfaceT>::init
 
     void (*cb)(const boost::shared_ptr<RosInterfaceT const> &,
             std::vector<double> *) = commandCallback;
-    sub_command_ = root_nh.subscribe<RosInterfaceT>("command", 1,
+    sub_command_ = root_nh.subscribe<RosInterfaceT>("command_vel", 1,
             boost::bind(cb, _1, &command_));
 
     return true;
