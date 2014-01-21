@@ -26,6 +26,8 @@ catkin_package(
   CFG_EXTRAS UseJSHOP2.cmake
 )
 
+list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS copy_jshop2)
+
 add_custom_target(copy_jshop2 ALL
   DEPENDS jshop2
   
