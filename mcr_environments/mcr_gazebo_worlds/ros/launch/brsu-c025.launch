@@ -6,6 +6,8 @@
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
 
+  <arg name="robot_env" default="brsu-c025" />
+
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
@@ -15,11 +17,8 @@
     <arg name="world_name" value="worlds/empty.world"/>
   </include>
 
-    <!-- send world urdf to param server -->
-	<param name="world_description" command="$(find xacro)/xacro.py $(find mcr_gazebo_worlds)/common/worlds/brsu-c025.urdf.xacro" />
-
-    <!-- spawn uploaded world model -->
-	<node pkg="gazebo_ros" type="spawn_model" name="gazebo_world_model" args="-urdf -param world_description -model world -x 0.0 -y 0.0 -z 0.2" respawn="false" output="screen" />    
-
+  <include file="$(find mcr_gazebo_worlds)/ros/launch/world_urdf.launch">
+      <arg name="robot_env" value="$(arg robot_env)" />
+  </include>
 
 </launch>
