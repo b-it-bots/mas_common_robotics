@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="robot_env"/>
+    <arg name="robot_env" />
 
     <!-- send world urdf to param server -->
     <param name="world_description" command="$(find xacro)/xacro.py $(find mcr_gazebo_worlds)/common/worlds/$(arg robot_env).urdf.xacro" />
