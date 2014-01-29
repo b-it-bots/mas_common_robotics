@@ -1,4 +1,4 @@
-# /bin/bash
+#!/bin/bash
 
 # create list of packages to install
 packagelist=(
@@ -12,6 +12,7 @@ packagelist=(
   ros-hydro-rosjava-core 
   ros-hydro-bfl 
   ros-hydro-roscpp 
+  ros-hydro-robot-state-publisher
   ros-hydro-image-transport 
   ros-hydro-tf 
   ros-hydro-tf-conversions 
@@ -26,6 +27,7 @@ packagelist=(
   ros-hydro-std-srvs 
   ros-hydro-nav-msgs 
   ros-hydro-angles 
+  ros-hydro-rviz
   ros-hydro-trajectory-msgs
   ros-hydro-ros-control
   ros-hydro-joint-trajectory-controller 

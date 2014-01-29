@@ -30,6 +30,7 @@ add_message_files(
 add_service_files(
   FILES
     AccumulateTabletopCloud.srv
+    AnalyzeCloudColor.srv
     BaseScanLinearRegression.srv
     ClusterTabletopCloud.srv
     FindWorkspace.srv
@@ -40,6 +41,8 @@ add_service_files(
     GetNearestObject.srv
     IsPersonInFront.srv
     MakeBoundingBoxes.srv
+    PublishGoal.srv
+    RecognizeObject.srv
     SetFaceName.srv
 )
 

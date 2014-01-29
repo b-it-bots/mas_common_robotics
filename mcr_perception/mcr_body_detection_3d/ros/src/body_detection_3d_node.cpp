@@ -159,7 +159,7 @@ void dynamic_reconfig_callback(mcr_body_detection_3d::BodyDetection3DConfig &con
 
 bool start(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
 {
-	sub_pointcloud2 = nh_ptr->subscribe<sensor_msgs::PointCloud2> ("/camera/depth/points", 1, pointcloud2Callback);
+	sub_pointcloud2 = nh_ptr->subscribe<sensor_msgs::PointCloud2> ("pointcloud_xyzrgb", 1, pointcloud2Callback);
 
 	ROS_INFO("3D body detector ENABLED");
 	return true;
@@ -197,7 +197,7 @@ int main(int argc, char** argv)
 	// Subscriber and Publisher
 	pub_person_msg = nh.advertise<mcr_perception_msgs::PersonList>("people_positions", 1);
 	pub_segmented_cloud = nh.advertise<sensor_msgs::PointCloud2>("debug/segmented_cloud", 1);
-	pub_visualization_marker = nh.advertise<visualization_msgs::MarkerArray>("/visualization_marker_array", 1);
+	pub_visualization_marker = nh.advertise<visualization_msgs::MarkerArray>("visualization_marker_array", 1);
 
 	//Service Server
 	ros::ServiceServer srv_start = nh.advertiseService("start", start);
