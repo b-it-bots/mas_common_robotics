@@ -68,7 +68,7 @@ TEST(multi_joint_forward_controller_test, test_sending_command)
     ASSERT_TRUE(c.init(&hw, nh, nh));
     c.starting(time);
 
-    ros::Publisher pub = nh.advertise<brics_actuator::JointVelocities>("command", 1);
+    ros::Publisher pub = nh.advertise<brics_actuator::JointVelocities>("command_vel", 1);
 
     brics_actuator::JointVelocities vel;
     vel.velocities.resize(2);
