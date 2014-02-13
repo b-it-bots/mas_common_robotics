@@ -125,6 +125,11 @@ void commandCallback<brics_actuator::JointPositions>(
         const brics_actuator::JointPositionsConstPtr &msg,
         std::vector<double> *command)
 {
+    if (msg->positions.size() != command->size()) {
+        ROS_ERROR("Input command ignored, because it has the wrong number of joint values!");
+        return;
+    }
+
     for (size_t i = 0; i < msg->positions.size(); i++) {
         (*command)[i] = msg->positions[i].value;
     }
@@ -135,6 +140,11 @@ void commandCallback<brics_actuator::JointVelocities>(
         const brics_actuator::JointVelocitiesConstPtr &msg,
         std::vector<double> *command)
 {
+    if (msg->velocities.size() != command->size()) {
+        ROS_ERROR("Input command ignored, because it has the wrong number of joint values!");
+        return;
+    }
+
     for (size_t i = 0; i < msg->velocities.size(); i++) {
         (*command)[i] = msg->velocities[i].value;
     }
@@ -145,6 +155,11 @@ void commandCallback<brics_actuator::JointTorques>(
         const brics_actuator::JointTorquesConstPtr &msg,
         std::vector<double> *command)
 {
+    if (msg->torques.size() != command->size()) {
+        ROS_ERROR("Input command ignored, because it has the wrong number of joint values!");
+        return;
+    }
+
     for (size_t i = 0; i < msg->torques.size(); i++) {
         (*command)[i] = msg->torques[i].value;
     }
