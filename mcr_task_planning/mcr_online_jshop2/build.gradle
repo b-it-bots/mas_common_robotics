@@ -1,0 +1,44 @@
+apply plugin: 'application'
+apply plugin: 'catkin'
+apply plugin: 'ros-java'
+
+group 'mas_common_robotics.mcr_online_jshop2'
+version project.catkin.pkg.version
+
+mainClassName = 'de.hbrs.task_planning.online_jshop2.OnlineJSHOP2'
+
+buildscript {
+    def rosMavenPath = "$System.env.ROS_MAVEN_PATH".split(':').collect { 'file://' + it }
+    def rosMavenRepository = "$System.env.ROS_MAVEN_REPOSITORY"
+    repositories {
+        rosMavenPath.each { p ->
+            maven {
+                url p
+            }
+        }
+        mavenLocal()
+        maven {
+            url rosMavenRepository
+        }
+    }
+    dependencies {
+        classpath group: 'org.ros.rosjava_bootstrap', name: 'gradle_plugins', version: '[0.1,0.2)'
+    }
+}
+
+dependencies {
+    compile 'mas_common_robotics.mcr_jshop2:mcr_jshop2:[0.1,)'
+    compile 'org.ros.rosjava_core:rosjava:[0.1,)'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'common/'
+        }
+    }
+}
+
+installApp {
+    destinationDir = file('install')
+}
