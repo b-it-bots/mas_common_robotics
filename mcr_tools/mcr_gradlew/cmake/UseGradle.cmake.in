@@ -62,25 +62,23 @@ macro(_rosjava_env)
     endif()
 endmacro()
 
-##############################################################################
-# RosJava Package
-##############################################################################
-# Calls the gradle wrapper to compile just the package
-# that it is called in with install and installApp targets.
-macro(catkin_rosjava_setup)
+# Calls the gradle wrapper in a specified of the working directory. With this
+# macro sources can e.g. be checked out to the build directory and can then be
+# built there using gradle.
+macro(catkin_rosjava_setup_dir WORKING_DIR)
     _rosjava_env()
     find_gradle()
-    if( ${ARGC} EQUAL 0 )
+    if( ${ARGC} EQUAL 1 )
       # Note : COMMAND is a list of variables (semi-colon separated)
       set(gradle_tasks "publishMavenJavaPublicationToMavenRepository") # old targets "install;installApp;uploadArchives"
     else()
-      set(gradle_tasks ${ARGV})
+      set(gradle_tasks ${ARGN})
     endif()
     add_custom_target(gradle-${PROJECT_NAME}
         ALL
         COMMAND ${ROSJAVA_ENV} ${CATKIN_ENV} "env" "|" "grep" "ROS" 
         COMMAND ${ROSJAVA_ENV} ${CATKIN_ENV} ${${PROJECT_NAME}_gradle_BINARY} ${gradle_tasks} 
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        WORKING_DIRECTORY ${WORKING_DIR}
         VERBATIM
     )
     catkin_package_xml()
@@ -95,9 +93,18 @@ macro(catkin_rosjava_setup)
     endif()
     add_custom_target(gradle-clean-${PROJECT_NAME}
         COMMAND ${CATKIN_ENV} ${${PROJECT_NAME}_gradle_BINARY} clean
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        WORKING_DIRECTORY ${WORKING_DIR}
     )
     add_dependencies(gradle-clean gradle-clean-${PROJECT_NAME})
+endmacro()
+
+##############################################################################
+# RosJava Package
+##############################################################################
+# Calls the gradle wrapper to compile just the package
+# that it is called in with install and installApp targets.
+macro(catkin_rosjava_setup)
+    catkin_rosjava_setup_dir(${CMAKE_CURRENT_SOURCE_DIR} ${ARGN})
 endmacro()
 
 ##############################################################################
