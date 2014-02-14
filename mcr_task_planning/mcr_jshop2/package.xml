@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>mcr_jshop2</name>
-  <version>0.0.1</version>
+  <version>0.1.0</version>
   <description>
     Wrapper around the JSHOP2 task planner to use it in other ROS packages.
   </description>
