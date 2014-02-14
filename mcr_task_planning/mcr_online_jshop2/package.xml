@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>mcr_online_jshop2</name>
-  <version>0.0.1</version>
+  <version>0.1.0</version>
   <description>
     Library to use JSHOP2 online i.e. the domain-dependent planner is generated
     and compiled in memory.
