@@ -13,6 +13,9 @@
   <maintainer email="matthias.fueller@h-brs.de">Matthias Füller</maintainer>
   <maintainer email="rhama.dwiputra@h-brs.de">Rhama Dwiputra</maintainer>
   <maintainer email="nico.hochgeschwender@h-brs.de">Nico Hochgeschwender</maintainer>
-  
+
   <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>mcr_gradlew</build_depend>
+  <build_depend>rosjava_bootstrap</build_depend>
 </package>

@@ -1,0 +1,54 @@
+apply plugin: 'antlr'
+apply plugin: 'catkin'
+apply plugin: 'ros-java'
+
+group 'mas_common_robotics.mcr_jshop2'
+version project.catkin.pkg.version
+
+buildscript {
+    def rosMavenPath = "$System.env.ROS_MAVEN_PATH".split(':').collect { 'file://' + it }
+    def rosMavenRepository = "$System.env.ROS_MAVEN_REPOSITORY"
+    repositories {
+        rosMavenPath.each { p ->
+            maven {
+                url p
+            }
+        }
+        mavenLocal()
+        maven {
+            url rosMavenRepository
+        }
+    }
+    dependencies {
+        classpath group: 'org.ros.rosjava_bootstrap', name: 'gradle_plugins', version: '[0.1,0.2)'
+    }
+}
+
+dependencies {
+    antlr 'antlr:antlr:2.7.7'
+    compile files('./jshop2/src/jshop2/antlr.jar')
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'jshop2/src/jshop2/src/'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    antlr
+}
+
+task compileJSHOP2Grammar(type: AntlrTask) {
+    source = fileTree(dir: './jshop2/src/jshop2/src/JSHOP2/', include: '**/JSHOP2.g')
+    outputDirectory = file('./jshop2/src/jshop2/src/')
+    antlrClasspath = files(configurations.antlr.getAsPath())
+}
+
+assemble.dependsOn compileJSHOP2Grammar
