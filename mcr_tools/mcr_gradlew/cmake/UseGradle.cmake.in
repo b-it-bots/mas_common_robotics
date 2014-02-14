@@ -11,9 +11,9 @@ set(CATKIN_GLOBAL_GRADLE_DESTINATION ${CATKIN_GLOBAL_SHARE_DESTINATION}/gradle C
 macro(find_gradle)
     find_file(${PROJECT_NAME}_gradle_BINARY gradlew
           PATHS 
-          ${CMAKE_CURRENT_SOURCE_DIR}
-          ${CMAKE_CURRENT_SOURCE_DIR}/..
-          ${CMAKE_CURRENT_SOURCE_DIR}/../..
+          @CMAKE_CURRENT_SOURCE_DIR@
+          @CMAKE_CURRENT_SOURCE_DIR@/..
+          @CMAKE_CURRENT_SOURCE_DIR@/../..
           NO_DEFAULT_PATH
           )
      if(NOT ${PROJECT_NAME}_gradle_BINARY)
