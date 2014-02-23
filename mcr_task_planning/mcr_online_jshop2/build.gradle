@@ -2,7 +2,7 @@ apply plugin: 'application'
 apply plugin: 'catkin'
 apply plugin: 'ros-java'
 
-group 'mas_common_robotics.mcr_online_jshop2'
+group 'mcr_online_jshop2'
 version project.catkin.pkg.version
 
 mainClassName = 'mcr_online_jshop2.Main'
