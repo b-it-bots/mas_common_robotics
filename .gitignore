@@ -2,5 +2,7 @@
 .cproject
 .project
 .pydevproject
+.classpath
 *.pyc
 .settings/
+/bin
