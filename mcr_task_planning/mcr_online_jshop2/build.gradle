@@ -5,7 +5,7 @@ apply plugin: 'ros-java'
 group 'mas_common_robotics.mcr_online_jshop2'
 version project.catkin.pkg.version
 
-mainClassName = 'de.hbrs.task_planning.online_jshop2.OnlineJSHOP2'
+mainClassName = 'mcr_online_jshop2.OnlineJSHOP2'
 
 buildscript {
     def rosMavenPath = "$System.env.ROS_MAVEN_PATH".split(':').collect { 'file://' + it }
@@ -34,7 +34,7 @@ dependencies {
 sourceSets {
     main {
         java {
-            srcDir 'common/'
+            srcDir 'common/src/'
         }
     }
 }
