@@ -5,7 +5,7 @@ apply plugin: 'ros-java'
 group 'mcr_online_jshop2'
 version project.catkin.pkg.version
 
-mainClassName = 'mcr_online_jshop2.Main'
+mainClassName = 'org.ros.RosRun'
 
 buildscript {
     def rosMavenPath = "$System.env.ROS_MAVEN_PATH".split(':').collect { 'file://' + it }
@@ -34,7 +34,7 @@ dependencies {
 sourceSets {
     main {
         java {
-            srcDir 'common/src/'
+            srcDirs = ['common/src/', 'ros/src/']
         }
     }
 }
