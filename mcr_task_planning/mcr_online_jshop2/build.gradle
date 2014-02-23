@@ -27,7 +27,7 @@ buildscript {
 }
 
 dependencies {
-    compile 'mas_common_robotics.mcr_jshop2:mcr_jshop2:[0.1,)'
+    compile 'mcr_jshop2:mcr_jshop2:[0.1,)'
     compile 'org.ros.rosjava_core:rosjava:[0.1,)'
 }
 
