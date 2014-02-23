@@ -5,7 +5,7 @@ apply plugin: 'ros-java'
 group 'mas_common_robotics.mcr_online_jshop2'
 version project.catkin.pkg.version
 
-mainClassName = 'mcr_online_jshop2.OnlineJSHOP2'
+mainClassName = 'mcr_online_jshop2.Main'
 
 buildscript {
     def rosMavenPath = "$System.env.ROS_MAVEN_PATH".split(':').collect { 'file://' + it }
