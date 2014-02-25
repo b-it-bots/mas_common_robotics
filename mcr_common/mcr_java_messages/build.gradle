@@ -1,0 +1,37 @@
+apply plugin: 'application'
+apply plugin: 'catkin'
+apply plugin: 'ros-java'
+
+group 'mcr_java_messages'
+version project.catkin.pkg.version
+
+buildscript {
+    def rosMavenPath = "$System.env.ROS_MAVEN_PATH".split(':').collect { 'file://' + it }
+    def rosMavenRepository = "$System.env.ROS_MAVEN_REPOSITORY"
+    repositories {
+        rosMavenPath.each { p ->
+            maven {
+                url p
+            }
+        }
+        mavenLocal()
+        maven {
+            url rosMavenRepository
+        }
+    }
+    dependencies {
+        classpath group: 'org.ros.rosjava_bootstrap', name: 'gradle_plugins', version: '[0.1,0.2)'
+    }
+}
+
+project.catkin.tree.generate()
+
+try {
+    project.catkin.tree.pkgs['mcr_task_planning_msgs'].generateMessageArtifactInSubFolder(project, 'mcr_task_planning_msgs', [])
+} catch (NullPointerException e) {
+    println("Couldn't find mcr_task_planning_msgs on the ROS_PACKAGE_PATH")
+}
+
+installApp {
+    destinationDir = file('install')
+}
