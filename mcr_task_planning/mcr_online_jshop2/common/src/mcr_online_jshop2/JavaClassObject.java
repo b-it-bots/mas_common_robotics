@@ -1,4 +1,4 @@
-package de.hbrs.task_planning.online_jshop2;
+package mcr_online_jshop2;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
