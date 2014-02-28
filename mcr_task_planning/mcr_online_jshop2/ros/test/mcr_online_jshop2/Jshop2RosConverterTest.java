@@ -12,6 +12,10 @@ import mcr_task_planning_msgs.Task;
 
 import org.junit.Test;
 
+import JSHOP2.Term;
+import JSHOP2.TermConstant;
+import JSHOP2.TermList;
+
 public class Jshop2RosConverterTest {
 
     @Test
@@ -152,5 +156,88 @@ public class Jshop2RosConverterTest {
         s.setAtoms(atoms);
 
         assertEquals("((atom1))", convert.stateFromRosToJshop2(s));
+    }
+
+
+
+    @Test
+    public void testJshop2ToRosNullTerm() {
+        Jshop2RosConverter convert = new Jshop2RosConverter();
+        List<String> data = convert.termFromJshop2ToRos(null);
+
+        assertEquals(0, data.size());
+    }
+
+    @Test
+    public void testJshop2ToRosSimpleTermConstant() {
+        Jshop2RosConverter convert = new Jshop2RosConverter();
+        JSHOP2.Domain domain = new DomainMockup();
+        String[] constants = new String[] { "const" };
+        Term t = new TermConstant(0);
+
+        domain.setProblemConstants(constants);
+        JSHOP2.JSHOP2.initialize(domain, null);
+
+        List<String> data = convert.termFromJshop2ToRos(t);
+
+        assertEquals(1, data.size());
+        assertEquals("const", data.get(0));
+    }
+
+    @Test
+    public void testJshop2ToRosTermListWithOneElement() {
+        Jshop2RosConverter convert = new Jshop2RosConverter();
+        JSHOP2.Domain domain = new DomainMockup();
+        String[] constants = new String[] { "const" };
+        Term t = new TermConstant(0);
+        TermList tl = new TermList(t, TermList.NIL);
+
+        domain.setProblemConstants(constants);
+        JSHOP2.JSHOP2.initialize(domain, null);
+
+        List<String> data = convert.termFromJshop2ToRos(tl);
+
+        assertEquals(1, data.size());
+        assertEquals("const", data.get(0));
+    }
+
+    @Test
+    public void testJshop2ToRosTermListWithTwoElements() {
+        Jshop2RosConverter convert = new Jshop2RosConverter();
+        JSHOP2.Domain domain = new DomainMockup();
+        String[] constants = new String[] { "const0", "const1" };
+        Term t0 = new TermConstant(0);
+        Term t1 = new TermConstant(1);
+        TermList tl = new TermList(t0, t1);
+
+        domain.setProblemConstants(constants);
+        JSHOP2.JSHOP2.initialize(domain, null);
+
+        List<String> data = convert.termFromJshop2ToRos(tl);
+
+        assertEquals(2, data.size());
+        assertEquals("const0", data.get(0));
+        assertEquals("const1", data.get(1));
+    }
+
+    @Test
+    public void testJshop2ToRosTermListWithRecursiveList() {
+        Jshop2RosConverter convert = new Jshop2RosConverter();
+        JSHOP2.Domain domain = new DomainMockup();
+        String[] constants = new String[] { "const0", "const1", "const2" };
+        Term t0 = new TermConstant(0);
+        Term t1 = new TermConstant(1);
+        Term t2 = new TermConstant(2);
+        TermList tl = new TermList(t0, new TermList(t1, t2));
+
+        domain.setProblemConstants(constants);
+        JSHOP2.JSHOP2.initialize(domain, null);
+
+        List<String> data = convert.termFromJshop2ToRos(tl);
+
+        assertEquals(3, data.size());
+        assertEquals("const0", data.get(0));
+        assertEquals("const1", data.get(1));
+        assertEquals("const2", data.get(2));
     }
 }

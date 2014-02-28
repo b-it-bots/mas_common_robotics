@@ -1,5 +1,11 @@
 package mcr_online_jshop2;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import JSHOP2.Term;
+import JSHOP2.TermConstant;
+import JSHOP2.TermList;
 import mcr_task_planning_msgs.Atom;
 import mcr_task_planning_msgs.State;
 import mcr_task_planning_msgs.Task;
@@ -78,5 +84,34 @@ public class Jshop2RosConverter {
         buf.append(")");
 
         return buf.toString();
+    }
+
+    /**
+     * Convert a JSHOP2 term to a list of strings.
+     * 
+     * @param term The JSHOP2 term.
+     * 
+     * @return The list of strings representing the term.
+     */
+    public List<String> termFromJshop2ToRos(Term term) {
+        List<String> parameters = new LinkedList<String>();
+
+        if (term == null) return parameters;
+
+        if (term instanceof TermConstant) {
+            TermConstant tc = (TermConstant)term;
+
+            parameters.add(tc.toString());
+        } else if (term instanceof TermList) {
+            TermList tl = (TermList)term;
+
+            parameters.add(tl.getList().getHead().toString());
+
+            if (tl.getList().getTail() != TermList.NIL) {
+                parameters.addAll(termFromJshop2ToRos(tl.getList().getTail()));
+            }
+        }
+
+        return parameters;
     }
 }
