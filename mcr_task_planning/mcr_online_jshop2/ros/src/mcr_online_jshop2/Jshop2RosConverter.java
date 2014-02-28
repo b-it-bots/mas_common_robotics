@@ -1,6 +1,7 @@
 package mcr_online_jshop2;
 
 import mcr_task_planning_msgs.Atom;
+import mcr_task_planning_msgs.State;
 import mcr_task_planning_msgs.Task;
 
 public class Jshop2RosConverter {
@@ -50,6 +51,28 @@ public class Jshop2RosConverter {
                 for (String p : a.getParameters()) {
                     buf.append(" " + p);
                 }
+            }
+        }
+        buf.append(")");
+
+        return buf.toString();
+    }
+
+    /**
+     * Convert a ROS mcr_task_planning_msgs state message to a string
+     * representation which can be provided to JSHOP2.
+     * 
+     * @param t The ROS representation of the state.
+     * 
+     * @return A JSHOP2 compatible string representation of the state.
+     */
+    public String stateFromRosToJshop2(State s) {
+        StringBuffer buf = new StringBuffer();
+
+        buf.append("(");
+        if (s.getAtoms() != null) {
+            for (Atom a: s.getAtoms()) {
+                buf.append(atomFromRosToJshop2(a));
             }
         }
         buf.append(")");

@@ -3,9 +3,11 @@ package mcr_online_jshop2;
 import static org.junit.Assert.*;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import mcr_online_jshop2.Jshop2RosConverter;
 import mcr_task_planning_msgs.Atom;
+import mcr_task_planning_msgs.State;
 import mcr_task_planning_msgs.Task;
 
 import org.junit.Test;
@@ -126,5 +128,29 @@ public class Jshop2RosConverterTest {
 
         a.setName(" abc def ");
         assertEquals("()", convert.atomFromRosToJshop2(a));
+    }
+
+
+
+    @Test
+    public void testRosToJshop2EmptyState() {
+        Jshop2RosConverter convert = new Jshop2RosConverter();
+        State s = new StateMockup();
+
+        assertEquals("()", convert.stateFromRosToJshop2(s));
+    }
+
+    @Test
+    public void testRosToJshop2ValidStates() {
+        Jshop2RosConverter convert = new Jshop2RosConverter();
+        State s = new StateMockup();
+        Atom a = new AtomMockup();
+        a.setName("atom1");
+
+        List<Atom> atoms = new LinkedList<Atom>();
+        atoms.add(a);
+        s.setAtoms(atoms);
+
+        assertEquals("((atom1))", convert.stateFromRosToJshop2(s));
     }
 }
