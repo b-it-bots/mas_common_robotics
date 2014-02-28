@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.LinkedList;
 
 import mcr_online_jshop2.Jshop2RosConverter;
+import mcr_task_planning_msgs.Atom;
 import mcr_task_planning_msgs.Task;
 
 import org.junit.Test;
@@ -71,4 +72,59 @@ public class Jshop2RosConverterTest {
         assertEquals("()", convert.taskFromRosToJshop2(t));
     }
 
+
+
+    @Test
+    public void testRosToJshop2WithEmptyAtom() {
+        Jshop2RosConverter converter = new Jshop2RosConverter();
+        Atom a = new AtomMockup();
+
+        assertEquals("()", converter.atomFromRosToJshop2(a));
+    }
+
+    @Test
+    public void testRosToJshop2WithAtomAndNoParameters() {
+        Jshop2RosConverter convert = new Jshop2RosConverter();
+        Atom a = new AtomMockup();
+
+        a.setName("task1");
+        assertEquals("(task1)", convert.atomFromRosToJshop2(a));
+
+        a.setName("task2");
+        assertEquals("(task2)", convert.atomFromRosToJshop2(a));
+    }
+
+    @Test
+    public void testRosToJshop2WithAtomAndParameters() {
+        Jshop2RosConverter convert = new Jshop2RosConverter();
+        Atom a = new AtomMockup();
+
+        a.setName("task1");
+
+        LinkedList<String> parameters = new LinkedList<String>();
+        parameters.add("param1");
+        a.setParameters(parameters);
+        assertEquals("(task1 param1)", convert.atomFromRosToJshop2(a));
+
+        parameters.add("param2");
+        a.setParameters(parameters);
+        assertEquals("(task1 param1 param2)", convert.atomFromRosToJshop2(a));
+    }
+
+    @Test
+    public void testRosToJshop2WithoutAtomAndWithParameters() {
+        Jshop2RosConverter convert = new Jshop2RosConverter();
+        Atom a = new AtomMockup();
+
+        LinkedList<String> parameters = new LinkedList<String>();
+        parameters.add("param1");
+        a.setParameters(parameters);
+        assertEquals("()", convert.atomFromRosToJshop2(a));
+
+        a.setName("");
+        assertEquals("()", convert.atomFromRosToJshop2(a));
+
+        a.setName(" abc def ");
+        assertEquals("()", convert.atomFromRosToJshop2(a));
+    }
 }
