@@ -6,6 +6,7 @@ import org.ros.node.Node;
 import org.ros.node.NodeMain;
 
 public class Jshop2Node implements NodeMain {
+    private Jshop2Loop loop;
 
     @Override
     public GraphName getDefaultNodeName() {
@@ -14,6 +15,8 @@ public class Jshop2Node implements NodeMain {
 
     @Override
     public void onStart(ConnectedNode node) {
+        loop = new Jshop2Loop(node);
+        node.executeCancellableLoop(loop);
     }
 
     @Override
