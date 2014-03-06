@@ -4,7 +4,6 @@ import org.ros.namespace.GraphName;
 import org.ros.node.ConnectedNode;
 import org.ros.node.Node;
 import org.ros.node.NodeMain;
-import org.ros.message.MessageListener;
 
 public class Jshop2Node implements NodeMain {
 
