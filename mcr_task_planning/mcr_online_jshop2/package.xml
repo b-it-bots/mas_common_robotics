@@ -14,8 +14,11 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <build_depend>rosjava_core</build_depend>
+  <build_depend>roscpp</build_depend>
   <build_depend>mcr_gradlew</build_depend>
   <build_depend>mcr_jshop2</build_depend>
+  <build_depend>mcr_java_messages</build_depend>
 
   <run_depend>mcr_jshop2</run_depend>
+  <run_depend>mcr_java_messages</run_depend>
 </package>
