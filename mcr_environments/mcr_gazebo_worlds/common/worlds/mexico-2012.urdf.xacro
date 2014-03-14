@@ -12,7 +12,7 @@
 									Wall 3
 -->
 
-<robot name="brsu-c025">	
+<robot name="mexico-2012">	
 
   	<link name="wall_1">
     		<inertial>

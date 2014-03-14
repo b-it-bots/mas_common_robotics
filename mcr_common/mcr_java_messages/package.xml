@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+  <name>mcr_java_messages</name>
+  <version>0.1.0</version>
+  <description>
+    Messages from the mas_common_robotics repository which are used in
+    rosjava_core projects. Each dependent ROS message package must be added to
+    the build_depends and run_depends. Then the build.gradle script must be
+    adapted accordingly.
+  </description>
+  <license>GPLv3</license>
+
+  <maintainer email="sven.schneider@h-brs.de">Sven Schneider</maintainer>
+  <author email="sven.schneider@h-brs.de">Sven Schneider</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>rosjava_bootstrap</build_depend>
+  <build_depend>rosjava_messages</build_depend>
+  <build_depend>mcr_gradlew</build_depend>
+  <build_depend>mcr_task_planning_msgs</build_depend>
+
+  <run_depend>mcr_task_planning_msgs</run_depend>
+</package>

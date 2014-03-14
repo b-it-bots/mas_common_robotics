@@ -2,5 +2,10 @@
 .cproject
 .project
 .pydevproject
+.classpath
+.gradle/
 *.pyc
 .settings/
+/bin
+build/
+install/

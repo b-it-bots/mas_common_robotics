@@ -2,7 +2,7 @@ apply plugin: 'antlr'
 apply plugin: 'catkin'
 apply plugin: 'ros-java'
 
-group 'mas_common_robotics.mcr_jshop2'
+group 'mcr_jshop2'
 version project.catkin.pkg.version
 
 buildscript {
