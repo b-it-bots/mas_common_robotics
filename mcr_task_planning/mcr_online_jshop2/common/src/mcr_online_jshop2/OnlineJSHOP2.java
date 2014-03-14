@@ -1,7 +1,5 @@
 package mcr_online_jshop2;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;

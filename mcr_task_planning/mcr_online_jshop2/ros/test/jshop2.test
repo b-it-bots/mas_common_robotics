@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<launch>
+    <node name="jshop2" pkg="mcr_online_jshop2" ns="mcr_task_planning"
+            type="mcr_online_jshop2" args="mcr_online_jshop2.Jshop2Node"
+            respawn="false" output="screen">
+        <rosparam command="load" file="$(find mcr_online_jshop2)/ros/test/basic.yaml" />
+    </node>
+
+    <test test-name="jshop2_test" pkg="mcr_online_jshop2" type="jshop2_test" />
+</launch>

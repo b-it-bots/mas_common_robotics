@@ -3,6 +3,7 @@ project(mcr_online_jshop2)
 
 find_package(catkin REQUIRED
   COMPONENTS
+    roscpp
     mcr_gradlew
     mcr_jshop2
 )
@@ -13,3 +14,14 @@ catkin_package(
   CATKIN_DEPENDS
     mcr_jshop2
 )
+
+add_executable(jshop2_test
+  ros/test/jshop2_test.cpp
+)
+
+target_link_libraries(jshop2_test
+  ${GTEST_LIBRARIES}
+  ${catkin_LIBRARIES}
+)
+
+add_rostest(ros/test/jshop2.test)
