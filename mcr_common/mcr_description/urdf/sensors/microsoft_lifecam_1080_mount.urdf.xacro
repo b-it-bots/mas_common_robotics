@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <root xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
-       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
-       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
-       xmlns:xacro="http://ros.org/wiki/xacro">
+      xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+      xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+      xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:macro name="microsoft_lifecam_1080_mount" params="name parent *origin">
-  	<link name="${name}_link">
+    <link name="${name}_link">
       <inertial>
         <mass value="0.1" />
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -15,7 +15,7 @@
       <visual>
         <origin xyz="-0.015 0.04 -0.055" rpy="0 0 -1.57079633" />
         <geometry>
-			<mesh filename="package://mcr_description/meshes/sensors/microsoft_lifecam_1080_mount.dae" scale="0.001 0.001 0.001" />
+          <mesh filename="package://mcr_description/meshes/sensors/microsoft_lifecam_1080_mount.dae" scale="0.001 0.001 0.001" />
         </geometry>
         <material name="Black" />
       </visual>
@@ -23,7 +23,7 @@
       <collision>
         <origin xyz="-0.015 0.04 -0.055" rpy="0 0 -1.57079633" />
         <geometry>
-			<mesh filename="package://mcr_description/meshes/sensors/microsoft_lifecam_1080_mount.dae" scale="0.001 0.001 0.001"/>
+          <mesh filename="package://mcr_description/meshes/sensors/microsoft_lifecam_1080_mount.dae" scale="0.001 0.001 0.001"/>
         </geometry>
       </collision >
     </link>
@@ -33,6 +33,7 @@
       <parent link="${parent}"/>
       <child link="${name}_link"/>
     </joint>
+    
   </xacro:macro>
 
 </root>
