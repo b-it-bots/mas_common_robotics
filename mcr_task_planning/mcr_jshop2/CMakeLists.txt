@@ -34,4 +34,10 @@ configure_file(
 
 catkin_rosjava_setup_dir(${CMAKE_CURRENT_BINARY_DIR} publishMavenJavaPublicationToMavenRepository)
 
+# "gradle-${PROJECT_NAME}" is a target provided by "catkin_rosjava_setup_dir"
+# (see above) for building jshop2
+# adding this dependency makes sure that the jshop2 code is downloaded before
+# the build
+add_dependencies(gradle-${PROJECT_NAME} jshop2)
+
 catkin_package()
