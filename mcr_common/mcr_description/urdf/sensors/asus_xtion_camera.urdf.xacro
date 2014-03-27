@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <root xmlns:xacro="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface">
   
-  <xacro:include filename="$(find mcr_description)/urdf/sensors/asus_xtion_camera.gazebo.xacro" />
+  <xacro:include filename="$(find youbot_description)/urdf/sensors/asus_xtion_camera.gazebo.xacro" />
   
   <property name="eye_x_offset" value="0.03" />
   <property name="eye_y_offset" value="0.035" />
@@ -22,7 +22,6 @@
 	</joint>		
   </xacro:macro>
     
-
   <xacro:macro name="asus_xtion_camera" params="name parent *origin tilt">
   	<link name="${name}_foot_link">
       <inertial>
@@ -105,7 +104,7 @@
       <collision>
         <origin xyz="0.02 -0.03 0" rpy="${M_PI/2} 0 ${M_PI/2}" />
         <geometry>
-           <mesh filename="package://mcr_description/meshes/sensors/asus_xtion_pro_live_camera.dae" scale="0.001 0.001 0.001"/>
+           <mesh filename="package://mcr_description/meshes/sensors/asus_xtion_pro_live_camera_convexhull.dae" scale="0.002 0.002 0.002"/>
         </geometry>
       </collision >
     </link>
