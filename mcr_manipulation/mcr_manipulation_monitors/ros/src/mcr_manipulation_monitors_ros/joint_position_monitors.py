@@ -35,7 +35,7 @@ class JointPositionMonitor(object):
         rospy.Subscriber("~event_in", std_msgs.msg.String, self.event_in_cb)
         rospy.Subscriber("~configuration", sensor_msgs.msg.JointState,
                          self.configure_joint_monitor_cb)
-        rospy.Subscriber("~joints_states", sensor_msgs.msg.JointState,
+        rospy.Subscriber("~joint_states", sensor_msgs.msg.JointState,
                          self.read_joint_positions_cb)
 
     def start_joint_position_monitor(self):
@@ -52,19 +52,23 @@ class JointPositionMonitor(object):
                 if self.current_joint_positions and \
                    self.desired_joint_positions:
                     state = 'IDLE'
+                    rospy.logdebug("Joint position monitor: state=" + str(state))
             elif state == 'IDLE':
                 if self.monitor_event == 'e_start':
                     state = 'RUNNING'
+                    rospy.logdebug("Joint position monitor: event e_start, state=" + str(state))
             elif state == 'RUNNING':
                 if check_joint_positions(self.current_joint_positions,
                                          self.desired_joint_positions,
                                          self.epsilon):
+                    rospy.logdebug("Joint position monitor finished: state=" + str(state))
                     self.event_out.publish('e_done')
 
                 if self.monitor_event == 'e_stop':
                     self.current_joint_positions = None
                     self.desired_joint_positions = None
                     state = 'INIT'
+                    rospy.logdebug("Joint position monitor: event e_done, state=" + str(state))
 
             rospy.sleep(self.loop_rate)
 
@@ -110,13 +114,17 @@ def check_joint_positions(actual, reference, tolerance):
 
     """
     for j, desired in enumerate(reference.name):
+        found_name = False
         for i, current in enumerate(actual.name):
             if desired == current:
+                found_name = True
                 below_limit = (actual.position[i] >= reference.position[j] + tolerance)
                 above_limit = (actual.position[i] <= reference.position[j] - tolerance)
 
                 if below_limit or above_limit:
                     return False
+        if (found_name == False):
+            return False
 
     return True
 
