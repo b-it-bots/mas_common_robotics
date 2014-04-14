@@ -4,7 +4,7 @@ import sys
 import rospy
 import os
 
-from gazebo.srv import *
+from gazebo_msgs.srv import *
 from geometry_msgs.msg import *
 import tf.transformations as tft
 
