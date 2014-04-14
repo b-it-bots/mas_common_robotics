@@ -1,7 +1,5 @@
 #!/usr/bin/python
 import sys
-import roslib
-roslib.load_manifest('mcr_gazebo_objects')
 
 import rospy
 import os
