@@ -19,6 +19,10 @@ add_executable(jshop2_test
   ros/test/jshop2_test.cpp
 )
 
+add_dependencies(jshop2_test
+  ${catkin_EXPORTED_TARGETS}
+)
+
 target_link_libraries(jshop2_test
   ${GTEST_LIBRARIES}
   ${catkin_LIBRARIES}
