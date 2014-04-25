@@ -11,6 +11,10 @@ find_package(catkin REQUIRED
 
 catkin_rosjava_setup(publishMavenJavaPublicationToMavenRepository installApp)
 
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+)
+
 catkin_package(
   CATKIN_DEPENDS
     mcr_jshop2
