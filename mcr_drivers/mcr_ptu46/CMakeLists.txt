@@ -25,14 +25,16 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-
-add_library(brsu_ptu46 
+add_library(ptu46 
 	common/src/ptu46_driver.cc
 )
 
-add_executable(ptu46_node ros/src/ptu46_node.cc)
-target_link_libraries(ptu46_node brsu_ptu46
-   ${catkin_LIBRARIES}
+add_executable(ptu46_node 
+  ros/src/ptu46_node.cc
+)
+target_link_libraries(ptu46_node
+  ptu46
+  ${catkin_LIBRARIES}
 )
 
 install(TARGETS ptu46_node
