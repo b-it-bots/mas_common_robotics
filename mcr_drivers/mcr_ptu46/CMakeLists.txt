@@ -18,6 +18,10 @@ generate_messages(
 )
 
 catkin_package(
+  CATKIN_DEPENDS
+    sensor_msgs
+    actionlib_msgs
+    message_runtime
 )
 
 include_directories(
