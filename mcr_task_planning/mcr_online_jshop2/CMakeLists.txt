@@ -6,6 +6,7 @@ find_package(catkin REQUIRED
     roscpp
     mcr_gradlew
     mcr_jshop2
+    mcr_task_planning_msgs
 )
 
 catkin_rosjava_setup(publishMavenJavaPublicationToMavenRepository installApp)
