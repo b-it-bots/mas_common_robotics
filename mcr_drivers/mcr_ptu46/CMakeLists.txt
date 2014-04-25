@@ -1,20 +1,31 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_ptu46)
 
+find_package(catkin REQUIRED 
+  COMPONENTS
+    roscpp 
+    rospy 
+    sensor_msgs
+    message_generation
+    actionlib
+    actionlib_msgs
+    tf
+)
 
 add_action_files(
-   DIRECTORY action
-   FILES
-   PtuGotoPosition.action  
-   PtuGotoPositionByName.action  
-   PtuReset.action  
-   PtuSetVel.action
+  DIRECTORY
+    action
+  FILES
+    PtuGotoPosition.action  
+    PtuGotoPositionByName.action  
+    PtuReset.action  
+    PtuSetVel.action
 )
 
 generate_messages(
-   DEPENDENCIES
-   sensor_msgs
-   actionlib_msgs
+  DEPENDENCIES
+    sensor_msgs
+    actionlib_msgs
 )
 
 catkin_package(
