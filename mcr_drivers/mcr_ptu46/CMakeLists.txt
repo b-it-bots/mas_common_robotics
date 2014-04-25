@@ -94,7 +94,13 @@ target_link_libraries(ptu46_node brsu_ptu46
    ${catkin_LIBRARIES}
 )
 
+install(TARGETS ptu46_node
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
+install(TARGETS ptu46
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
 #############
 ## Install ##
 #############
