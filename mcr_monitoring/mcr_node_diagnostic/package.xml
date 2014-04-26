@@ -3,7 +3,7 @@
   <version>0.1.0</version>
   
   <description>
-     mcr_node_diagnostic
+     Node diagnostic package
   </description>
 
   <author email="matthias.fueller@h-brs.de">Matthias Füller</author>
