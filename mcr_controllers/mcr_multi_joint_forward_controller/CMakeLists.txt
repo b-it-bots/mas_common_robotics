@@ -44,6 +44,17 @@ install(TARGETS mcr_multi_joint_forward_controller
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+install(DIRECTORY ros/include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+  PATTERN ".svn" EXCLUDE
+)
+
+install(FILES ros_control_plugins.xml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+
 # test
 add_rostest_gtest(multi_joint_forward_controller_test
   ros/test/multi_joint_forward_controller.test
