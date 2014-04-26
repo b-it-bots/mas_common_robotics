@@ -14,13 +14,3 @@ install(PROGRAMS
     ros/src/mcr_node_monitor/node_status.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
-# install(DIRECTORY
-#    ros/scripts
-#    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-
-# install(DIRECTORY
-#    ros/src
-#    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-
