@@ -11,7 +11,8 @@ find_package(catkin REQUIRED
 )
 
 catkin_package(
-  INCLUDE_DIRS ros/include
+  INCLUDE_DIRS 
+    ros/include
   CATKIN_DEPENDS
     actionlib
     controller_interface
@@ -21,7 +22,9 @@ catkin_package(
 )
 
 # build
-include_directories(ros/include)
+include_directories(
+  ros/include
+)
 
 add_library(mcr_multi_joint_forward_controller
   ros/src/multi_joint_forward_controller.cpp
