@@ -16,12 +16,13 @@ include_directories(
 )
 
 add_library(mcr_node_analyzer
-   ros/src/mcr_node_analyzer.cpp)
+  ros/src/mcr_node_analyzer.cpp
+)
   
 add_executable(cpp_example ros/examples/cpp_example.cpp)
 
 target_link_libraries(cpp_example
-   ${catkin_LIBRARIES}
+  ${catkin_LIBRARIES}
 )
 
 
@@ -32,7 +33,7 @@ install(TARGETS mcr_node_analyzer
 )
 
 install(DIRECTORY ros/include/${PROJECT_NAME}/
-   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-   FILES_MATCHING PATTERN "*.h"
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
 )
 
