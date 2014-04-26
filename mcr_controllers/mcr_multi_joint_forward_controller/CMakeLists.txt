@@ -13,6 +13,8 @@ find_package(catkin REQUIRED
 catkin_package(
   INCLUDE_DIRS 
     ros/include
+  LIBRARIES
+    mcr_multi_joint_forward_controller
   CATKIN_DEPENDS
     actionlib
     controller_interface
