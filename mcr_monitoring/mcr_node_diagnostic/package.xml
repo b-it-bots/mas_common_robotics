@@ -28,12 +28,7 @@
   <run_depend>pluginlib</run_depend>
 
   <export> 
-    <!-- You may already have an "export" tag. If so, just add this inside it-->
      <diagnostic_aggregator plugin="${prefix}/mcr_node_analyzer_plugin.xml" />
-     <!--
-     <python path="${prefix}/ros/scripts"/> 
-     <cpp cflags="-I${prefix}/ros/include"/>
-     -->
   </export>
  
 </package>
