@@ -14,6 +14,8 @@ find_package(catkin REQUIRED
 catkin_package(
   INCLUDE_DIRS
     ros/include
+  LIBRARIES
+    mcr_node_analyzer
 )
 
 catkin_python_setup()
