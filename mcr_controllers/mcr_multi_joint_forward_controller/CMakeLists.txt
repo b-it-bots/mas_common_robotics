@@ -24,6 +24,7 @@ catkin_package(
 # build
 include_directories(
   ros/include
+  ${catkin_INCLUDE_DIRS}
 )
 
 add_library(mcr_multi_joint_forward_controller
