@@ -16,6 +16,11 @@ catkin_package(
     ros/include
   LIBRARIES
     mcr_node_analyzer
+  CATKIN_DEPENDS
+    diagnostic_aggregator
+    diagnostic_msgs
+    pluginlib
+    rospy
 )
 
 catkin_python_setup()
