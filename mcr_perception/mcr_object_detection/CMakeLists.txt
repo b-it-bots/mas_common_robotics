@@ -8,6 +8,7 @@ catkin_python_setup()
 catkin_package(
   CATKIN_DEPENDS
     mcr_perception_msgs
+    mcr_scene_segmentation
     rospy
     smach
     smach_ros
@@ -19,9 +20,6 @@ install(PROGRAMS
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install(DIRECTORY ros/config/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/config
-)
 install(DIRECTORY ros/launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
 )

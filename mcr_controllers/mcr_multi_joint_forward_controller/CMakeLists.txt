@@ -11,7 +11,10 @@ find_package(catkin REQUIRED
 )
 
 catkin_package(
-  INCLUDE_DIRS ros/include
+  INCLUDE_DIRS 
+    ros/include
+  LIBRARIES
+    mcr_multi_joint_forward_controller
   CATKIN_DEPENDS
     actionlib
     controller_interface
@@ -21,7 +24,10 @@ catkin_package(
 )
 
 # build
-include_directories(ros/include)
+include_directories(
+  ros/include
+  ${catkin_INCLUDE_DIRS}
+)
 
 add_library(mcr_multi_joint_forward_controller
   ros/src/multi_joint_forward_controller.cpp
@@ -37,6 +43,17 @@ install(TARGETS mcr_multi_joint_forward_controller
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+install(DIRECTORY ros/include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+  PATTERN ".svn" EXCLUDE
+)
+
+install(FILES ros_control_plugins.xml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
 
 # test
 add_rostest_gtest(multi_joint_forward_controller_test

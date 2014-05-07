@@ -1,12 +1,10 @@
 #!/usr/bin/python
 import sys
-import roslib
-roslib.load_manifest('mcr_gazebo_objects')
 
 import rospy
 import os
 
-from gazebo.srv import *
+from gazebo_msgs.srv import *
 from geometry_msgs.msg import *
 import tf.transformations as tft
 

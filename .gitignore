@@ -2,8 +2,12 @@
 .cproject
 .project
 .pydevproject
+.classpath
+.gradle/
 *.pyc
 .settings/
 
-bin/
+/bin
 build/
+install/
+rospack_nosubdirs

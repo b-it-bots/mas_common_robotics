@@ -9,7 +9,7 @@ packagelist=(
   python-vcstools 
   ros-hydro-brics-actuator 
   liblog4cpp5-dev 
-  ros-hydro-rosjava-core 
+  ros-hydro-rosjava
   ros-hydro-bfl 
   ros-hydro-roscpp 
   ros-hydro-robot-state-publisher

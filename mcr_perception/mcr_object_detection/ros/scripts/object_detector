@@ -1,16 +1,8 @@
 #!/usr/bin/env python
 
-PACKAGE = 'mcr_object_detection'
 NODE = 'object_detector'
 
-import roslib
-roslib.load_manifest(PACKAGE)
-import sys
-from os.path import join
-
-# Import states for calling services from mcr_scene_segmentation
-sys.path.append(join(roslib.packages.get_pkg_dir(PACKAGE), 'ros', 'src'))
-import service_states
+import mcr_object_detection.service_states
 
 import rospy
 import numpy as np
@@ -19,8 +11,8 @@ from smach import State, StateMachine
 from tf.transformations import quaternion_from_matrix
 import tf
 
-from label_visualizer import LabelVisualizer
-from mcr_perception_msgs.srv import GetObjects, GetObjectsResponse
+from mcr_scene_segmentation.label_visualizer import LabelVisualizer
+from mcr_perception_msgs.srv import GetObjectList, GetObjectListResponse
 from mcr_perception_msgs.msg import Object
 from mcr_perception_msgs.srv import RecognizeObject
 
@@ -48,10 +40,10 @@ class RecognizeObjects(State):
                        input_keys=['clusters', 'bounding_boxes', 'names'],
                        output_keys=['names'],
                        outcomes=['done'])
-        self.label_vis = LabelVisualizer('object_labels', 'teal')
+        self.label_vis = LabelVisualizer('/visualization_marker_array', 'teal')
         try:
-            rospy.wait_for_service('recognize_object', timeout=5)
-            self.recognize = rospy.ServiceProxy('recognize_object',
+            rospy.wait_for_service('/mcr_perception/object_recognizer/recognize_object', timeout=5)
+            self.recognize = rospy.ServiceProxy('/mcr_perception/object_recognizer/recognize_object',
                                                 RecognizeObject)
         except rospy.ROSException:
             rospy.logwarn('Object recognition service is not available, '
@@ -85,7 +77,7 @@ class PackResponse(State):
                        outcomes=['done'])
 
     def execute(self, ud):
-        ud.response = GetObjectsResponse()
+        ud.response = GetObjectListResponse()
         for c, b, n in zip(ud.clusters, ud.bounding_boxes, ud.names):
             obj = Object()
             q = self.get_orientation(b.vertices)
@@ -141,7 +133,7 @@ if __name__ == '__main__':
                       output_keys=['response'])
     with sm:
         StateMachine.add('FIND_WORKSPACE',
-                         service_states.find_workspace,
+                         mcr_object_detection.service_states.find_workspace,
                          transitions={'succeeded': 'ACCUMULATE_CLOUD',
                                       'aborted': 'FIND_WORKSPACE_ABORTED'})
         StateMachine.add('FIND_WORKSPACE_ABORTED',
@@ -149,13 +141,13 @@ if __name__ == '__main__':
                          transitions={'retry': 'FIND_WORKSPACE',
                                       'failed': 'aborted'})
         StateMachine.add('ACCUMULATE_CLOUD',
-                         service_states.accumulate_tabletop_cloud,
+                         mcr_object_detection.service_states.accumulate_tabletop_cloud,
                          transitions={'succeeded': 'CLUSTER_CLOUD'})
         StateMachine.add('CLUSTER_CLOUD',
-                         service_states.cluster_tabletop_cloud,
+                         mcr_object_detection.service_states.cluster_tabletop_cloud,
                          transitions={'succeeded': 'MAKE_BOUNDING_BOXES'})
         StateMachine.add('MAKE_BOUNDING_BOXES',
-                         service_states.make_bounding_boxes,
+                         mcr_object_detection.service_states.make_bounding_boxes,
                          transitions={'succeeded': 'RECOGNIZE_OBJECTS'})
         StateMachine.add('RECOGNIZE_OBJECTS',
                          RecognizeObjects(),
@@ -175,6 +167,6 @@ if __name__ == '__main__':
         else:
             raise rospy.ServiceException('Object detection failed')
 
-    s = rospy.Service('detect_objects', GetObjects, detect_objects_cb)
+    s = rospy.Service('~detect_objects', GetObjectList, detect_objects_cb)
     rospy.loginfo('Started [detect_objects] service.')
     rospy.spin()

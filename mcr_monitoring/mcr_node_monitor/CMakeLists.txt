@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_node_monitor)
 
-find_package(catkin REQUIRED COMPONENTS sensor_msgs)
+find_package(catkin REQUIRED)
 
 catkin_package(
-  CATKIN_DEPENDS sensor_msgs
+  CATKIN_DEPENDS
+    diagnostic_msgs
+    rospy
 )
 
 catkin_python_setup()
@@ -14,13 +16,3 @@ install(PROGRAMS
     ros/src/mcr_node_monitor/node_status.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
-# install(DIRECTORY
-#    ros/scripts
-#    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-
-# install(DIRECTORY
-#    ros/src
-#    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-

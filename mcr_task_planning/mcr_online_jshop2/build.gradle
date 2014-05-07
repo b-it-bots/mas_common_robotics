@@ -1,0 +1,45 @@
+apply plugin: 'application'
+apply plugin: 'catkin'
+apply plugin: 'ros-java'
+
+group 'mcr_online_jshop2'
+version project.catkin.pkg.version
+
+mainClassName = 'org.ros.RosRun'
+
+buildscript {
+    def rosMavenPath = "$System.env.ROS_MAVEN_PATH".split(':').collect { 'file://' + it }
+    def rosMavenRepository = "$System.env.ROS_MAVEN_REPOSITORY"
+    repositories {
+        rosMavenPath.each { p ->
+            maven {
+                url p
+            }
+        }
+        mavenLocal()
+        maven {
+            url rosMavenRepository
+        }
+    }
+    dependencies {
+        classpath group: 'org.ros.rosjava_bootstrap', name: 'gradle_plugins', version: '[0.1,0.2)'
+    }
+}
+
+dependencies {
+    compile 'mcr_jshop2:mcr_jshop2:[0.1,)'
+    compile 'mcr_java_messages:mcr_java_messages:[0.1,)'
+    compile 'org.ros.rosjava_core:rosjava:[0.1,)'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['common/src/', 'ros/src/']
+        }
+    }
+}
+
+installApp {
+    destinationDir = file('install')
+}

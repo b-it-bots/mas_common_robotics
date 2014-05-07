@@ -3,7 +3,7 @@
   <version>0.1.0</version>
   
   <description>
-     mcr_node_diagnostic
+     Node diagnostic package
   </description>
 
   <author email="matthias.fueller@h-brs.de">Matthias Füller</author>
@@ -17,27 +17,18 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <build_depend>roscpp</build_depend>
-  <build_depend>rospy</build_depend>
-  <build_depend>diagnostic_msgs"</build_depend>
+  <build_depend>diagnostic_msgs</build_depend>
   <build_depend>diagnostic_aggregator</build_depend>
   <build_depend>diagnostic_analysis</build_depend>
   <build_depend>pluginlib</build_depend>
 
-  <run_depend>roscpp</run_depend>
-  <run_depend>rospy</run_depend>
-  <run_depend>diagnostic_msgs"</run_depend>
   <run_depend>diagnostic_aggregator</run_depend>
-  <run_depend>diagnostic_analysis</run_depend>
+  <run_depend>rospy</run_depend>
+  <run_depend>diagnostic_msgs</run_depend>
   <run_depend>pluginlib</run_depend>
 
-
   <export> 
-    <!-- You may already have an "export" tag. If so, just add this inside it-->
      <diagnostic_aggregator plugin="${prefix}/mcr_node_analyzer_plugin.xml" />
-     <!--
-     <python path="${prefix}/ros/scripts"/> 
-     <cpp cflags="-I${prefix}/ros/include"/>
-     -->
   </export>
  
 </package>

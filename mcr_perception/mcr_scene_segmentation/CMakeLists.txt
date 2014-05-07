@@ -5,7 +5,6 @@ find_package(catkin REQUIRED
   COMPONENTS
     dynamic_reconfigure
     mcr_perception_msgs
-    pcl_ros
     polyclipping
     roscpp
     rospy
@@ -15,21 +14,30 @@ find_package(PCL 1.6 REQUIRED)
 find_package(VTK REQUIRED)
 find_package(OpenCV REQUIRED)
 
+catkin_python_setup()
+
 generate_dynamic_reconfigure_options(
   ros/config/PlaneExtraction.cfg
 )
 
+
 catkin_package(
-  CATKIN_DEPENDS 
+  INCLUDE_DIRS
+    ros/include
+    common/include
+  LIBRARIES
+    scene_segmentation
+    bounding_box
+  CATKIN_DEPENDS
     dynamic_reconfigure
+    mcr_perception_msgs
     polyclipping
     visualization_msgs
 )
 
 include_directories(
-  ros/include/${PROJECT_NAME}/impl/
-  ros/include/${PROJECT_NAME}/
-  common/include/${PROJECT_NAME}/
+  ros/include
+  common/include
   ${catkin_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
   ${VTK_INCLUDE_DIRS}
@@ -40,10 +48,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     execute_process(COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE GCC_VERSION)
     if(GCC_VERSION VERSION_GREATER 4.6 OR GCC_VERSION VERSION_EQUAL 4.6)
         add_definitions(-std=gnu++0x)
-    else(GCC_VERSION VERSION_GREATER 4.6 OR GCC_VERSION VERSION_EQUAL 4.6)
+    else()
         message(SEND_ERROR "You need GCC version 4.6 or greater to compile this package.")
-    endif(GCC_VERSION VERSION_GREATER 4.6 OR GCC_VERSION VERSION_EQUAL 4.6)
-endif(CMAKE_COMPILER_IS_GNUCXX)
+    endif()
+endif()
 
 add_definitions(-fpermissive)
 
@@ -95,6 +103,7 @@ add_executable(tabletop_cloud_clusterer
   ros/src/tabletop_cloud_clusterer_node.cpp
 )
 target_link_libraries(tabletop_cloud_clusterer
+  ${catkin_LIBRARIES}
   scene_segmentation
 )
 
@@ -103,6 +112,7 @@ add_executable(bounding_box_maker
 )
 target_link_libraries(bounding_box_maker
   ${catkin_LIBRARIES}
+  ${PCL_LIBRARIES}
   bounding_box 
 )
 
@@ -126,6 +136,42 @@ target_link_libraries(online_plane_extraction_test
   scene_segmentation
 )
 
+install(DIRECTORY common/include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+  PATTERN ".svn" EXCLUDE
+)
+
+install(DIRECTORY ros/include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+  PATTERN ".svn" EXCLUDE
+)
+
 install(DIRECTORY ros/launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
+)
+
+install(TARGETS scene_segmentation
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+install(TARGETS bounding_box
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+install(TARGETS workspace_finder
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(TARGETS bounding_box_maker
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(TARGETS tabletop_cloud_clusterer
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(TARGETS tabletop_cloud_accumulator
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

@@ -7,6 +7,11 @@ find_package(catkin REQUIRED
     roscpp
 )
 
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+)
+
+
 catkin_package(
   CATKIN_DEPENDS
     geometry_msgs

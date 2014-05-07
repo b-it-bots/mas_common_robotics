@@ -7,8 +7,6 @@ find_package(catkin REQUIRED
     geometry_msgs
     image_transport
     mcr_perception_msgs
-    #object_manipulation_msgs  # not yet catkinized
-    pcl_ros
     roscpp
     sensor_msgs
     std_srvs
@@ -29,19 +27,18 @@ catkin_package(
   CATKIN_DEPENDS
     geometry_msgs
     mcr_perception_msgs
-    #object_manipulation_msgs  # not yet catkinized
     sensor_msgs
     std_srvs
 )
 
 include_directories(
-  ros/include/${PROJECT_NAME}
+  ros/include/
   ${catkin_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
 )
 
-add_library(mcr_toolbox_ros 
+add_library(mcr_toolbox_ros
   ros/src/toolbox_ros.cpp
 )
 target_link_libraries(mcr_toolbox_ros 
@@ -77,9 +74,23 @@ target_link_libraries(tabletop_segmentation_node
   mcr_toolbox_ros
 )
 
-install(TARGETS tabletop_segmentation_node tabletop_segmentation_node
+
+install(TARGETS tabletop_segmentation_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+install(TARGETS mcr_toolbox_ros
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+install(TARGETS mcr_plane_extraction
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+install(TARGETS mcr_object_candidate_extraction
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
 install(DIRECTORY ros/include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   FILES_MATCHING PATTERN "*.h"

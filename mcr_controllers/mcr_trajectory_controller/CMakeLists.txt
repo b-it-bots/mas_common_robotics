@@ -31,3 +31,15 @@ add_library(mcr_trajectory_controller
 target_link_libraries(mcr_trajectory_controller
   ${catkin_LIBRARIES}
 )
+
+
+install(TARGETS mcr_trajectory_controller
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(FILES ros_control_plugins.xml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+

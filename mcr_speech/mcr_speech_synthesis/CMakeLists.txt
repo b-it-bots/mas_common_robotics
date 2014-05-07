@@ -34,4 +34,4 @@ if(WIN32)
     speech_recognition_tools
   )
 
-endif(WIN32)
+endif()

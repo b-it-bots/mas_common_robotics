@@ -5,7 +5,7 @@
  *      Author: Christian Mueller
  */
 
-#include "toolbox_ros.h"
+#include "mcr_tabletop_segmentation/toolbox_ros.h"
 
 double CToolBoxROS::euclDistanceBtwPoints(pcl::PointXYZ &p1, pcl::PointXYZ &p2)
 {
@@ -853,6 +853,32 @@ pcl::PointXYZ CToolBoxROS::pointCloudCentroid(pcl::PointCloud<pcl::PointXYZ> &po
 	unsigned int sizePointCloud = point_cloud.points.size();
 
 	pcl::PointXYZ centroid;
+	centroid.x = 0;
+	centroid.y = 0;
+	centroid.z = 0;
+
+	for (unsigned int iter_point = 0; iter_point < sizePointCloud; iter_point++)
+	{
+		if (!isnan(point_cloud.points[iter_point].x))
+		{
+			centroid.x += (point_cloud.points[iter_point].x);
+			centroid.y += (point_cloud.points[iter_point].y);
+			centroid.z += (point_cloud.points[iter_point].z);
+		}
+	}
+
+	centroid.x /= sizePointCloud;
+	centroid.y /= sizePointCloud;
+	centroid.z /= sizePointCloud;
+
+	return centroid;
+}
+
+pcl::PointXYZRGB CToolBoxROS::pointCloudCentroid(pcl::PointCloud<pcl::PointXYZRGB> &point_cloud)
+{
+	unsigned int sizePointCloud = point_cloud.points.size();
+
+	pcl::PointXYZRGB centroid;
 	centroid.x = 0;
 	centroid.y = 0;
 	centroid.z = 0;

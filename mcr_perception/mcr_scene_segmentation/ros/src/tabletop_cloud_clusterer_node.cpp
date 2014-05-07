@@ -9,11 +9,11 @@
 #include <pcl/segmentation/extract_clusters.h>
 #include <pcl/filters/radius_outlier_removal.h>
 
-#include <clustered_point_cloud_visualizer.h>
 #include <mcr_perception_msgs/ClusterTabletopCloud.h>
 
-#include "aliases.h"
-#include "helpers.hpp"
+#include "mcr_scene_segmentation/clustered_point_cloud_visualizer.h"
+#include "mcr_scene_segmentation/aliases.h"
+#include "mcr_scene_segmentation/impl/helpers.hpp"
 
 using namespace mcr::visualization;
 
@@ -47,7 +47,7 @@ public:
   TabletopCloudClustererNode()
   : cluster_visualizer_("tabletop_clusters")
   {
-    ros::NodeHandle nh;
+    ros::NodeHandle nh("~");
     cluster_server_ = nh.advertiseService("cluster_tabletop_cloud", &TabletopCloudClustererNode::clusterCallback, this);
     ROS_INFO("Service [cluster_tabletop_cloud] started.");
   }

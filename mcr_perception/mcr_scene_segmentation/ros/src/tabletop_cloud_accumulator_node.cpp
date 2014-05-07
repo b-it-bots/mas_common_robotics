@@ -6,12 +6,14 @@
 #include <pcl/PCLPointCloud2.h>
 #include <pcl/conversions.h>
 #include <pcl/segmentation/extract_polygonal_prism_data.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/common/common.h>
 
 #include <mcr_perception_msgs/AccumulateTabletopCloud.h>
 
-#include "aliases.h"
-#include "cloud_accumulation.h"
-#include "helpers.hpp"
+#include "mcr_scene_segmentation/aliases.h"
+#include "mcr_scene_segmentation/cloud_accumulation.h"
+#include "mcr_scene_segmentation/impl/helpers.hpp"
 
 /** This node provides a service to accumulate parts of pointclouds that are
   * above some given planar polygon.
@@ -40,7 +42,7 @@ public:
 
   TabletopCloudAccumulatorNode()
   {
-    ros::NodeHandle nh;
+    ros::NodeHandle nh("~");
     accumulate_service_ = nh.advertiseService("accumulate_tabletop_cloud", &TabletopCloudAccumulatorNode::accumulateCallback, this);
     accumulated_cloud_publisher_ = nh.advertise<sensor_msgs::PointCloud2>("accumulated_cloud", 1);
     ROS_INFO("Service [accumulate_tabletop_cloud] started.");
@@ -58,8 +60,17 @@ private:
     polygon_cloud->points = polygon.getContour();
     eppd_.setInputPlanarHull(polygon_cloud);
     ca_ = CloudAccumulation::UPtr(new CloudAccumulation(octree_resolution_));
-    ros::NodeHandle nh;
-    ros::Subscriber subscriber = nh.subscribe("/camera/depth_registered/points", 1, &TabletopCloudAccumulatorNode::cloudCallback, this);
+    
+    pcl::PointXYZRGB polygon_min_point;
+    pcl::PointXYZRGB polygon_max_point;
+    pcl::getMinMax3D(*polygon_cloud, polygon_min_point, polygon_max_point);
+    passthrough_filter_x_.setFilterFieldName("x");
+    passthrough_filter_y_.setFilterFieldName("y"); 
+    passthrough_filter_x_.setFilterLimits(polygon_min_point.x, polygon_max_point.x);
+    passthrough_filter_y_.setFilterLimits(polygon_min_point.y, polygon_max_point.y);
+   
+    ros::NodeHandle nh("~");
+    ros::Subscriber subscriber = nh.subscribe("input_pointcloud", 1, &TabletopCloudAccumulatorNode::cloudCallback, this);
 
     // Wait some time while data is being accumulated.
     ros::Time start = ros::Time::now();
@@ -95,6 +106,11 @@ private:
     pcl::fromPCLPointCloud2(pc2, *cloud);
     frame_id_ = ros_cloud->header.frame_id;
 
+    passthrough_filter_x_.setInputCloud(cloud);
+    passthrough_filter_x_.filter(*cloud);
+    passthrough_filter_y_.setInputCloud(cloud);
+    passthrough_filter_y_.filter(*cloud);
+
     pcl::PointIndices::Ptr tabletop_indices(new pcl::PointIndices);
     eppd_.setInputCloud(cloud);
     eppd_.segment(*tabletop_indices);
@@ -128,6 +144,9 @@ private:
 
   pcl::ExtractPolygonalPrismData<PointT> eppd_;
   CloudAccumulation::UPtr ca_;
+
+  pcl::PassThrough<PointT> passthrough_filter_x_;
+  pcl::PassThrough<PointT> passthrough_filter_y_;
 
   ros::ServiceServer accumulate_service_;
   ros::Publisher accumulated_cloud_publisher_;

@@ -14,6 +14,7 @@ find_package(orocos_kdl REQUIRED)
 catkin_python_setup()
 
 catkin_package(
+  INCLUDE_DIRS ros/include
   LIBRARIES geometry_transformer
   CATKIN_DEPENDS
     roscpp

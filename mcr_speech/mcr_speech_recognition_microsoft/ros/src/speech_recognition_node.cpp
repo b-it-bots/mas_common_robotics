@@ -103,7 +103,7 @@ int main(int argc, char **argv)
 	
 	readConfigFile();
     
-  ros::init(argc, argv, "mcr_speech_speech_recognition");
+  ros::init(argc, argv, "mcr_speech_recognition");
   ros::NodeHandle n("~");
 
 	ros::ServiceServer serviceChangeGrammar = n.advertiseService("change_grammar", changeGrammar);
