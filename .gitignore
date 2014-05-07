@@ -7,7 +7,7 @@
 *.pyc
 .settings/
 
-/bin
+bin/
 build/
 install/
 rospack_nosubdirs
