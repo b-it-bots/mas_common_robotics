@@ -50,7 +50,7 @@ void pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr& cloud_msg)
 
 	try
 	{
-		ROS_INFO("waitForTransform: target %s source: %s", target_frame.c_str(), cloud_msg->header.frame_id.c_str());
+		ROS_DEBUG("waitForTransform: target %s source: %s", target_frame.c_str(), cloud_msg->header.frame_id.c_str());
 		transform_listener->waitForTransform(target_frame, cloud_msg->header.frame_id, cloud_msg->header.stamp, ros::Duration(1.0));
 		pcl_ros::transformPointCloud(target_frame, *cloud_msg, cloud2_transformed, *transform_listener);
 
