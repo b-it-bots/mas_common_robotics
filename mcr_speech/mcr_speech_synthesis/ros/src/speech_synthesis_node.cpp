@@ -6,6 +6,8 @@
 #include <string>
 #include <sapi.h>
 
+#include <std_msgs/String.h>
+
 #include <mcr_speech_msgs/say.h> //include service definition
 #include <mcr_speech_recognition_microsoft/string_operations.h>
 
@@ -16,6 +18,8 @@ std::string rosMaster="";
 std::string localIP="";
 ISpVoice * pVoice = NULL;
 
+ros::Publisher pubEvent;
+std_msgs::String event_out;
 /**
 * Method to say something and publish it on ROS info
 **/
@@ -28,11 +32,15 @@ void say(std::string data)
 
   pVoice->Speak(stemp.c_str(), 0, NULL);
   pVoice->WaitUntilDone(30000); //30sec timeout
+    
+  event_out.data = "e_done";
+  pubEvent.publish(event_out);
 }
 
 void sayCallback(const mcr_speech_msgs::Say::ConstPtr  &msg)
 {
 	say(msg->phrase);
+
 }
 
 bool initVoice()
@@ -56,11 +64,12 @@ int main(int argc, char **argv)
 	initVoice();
 	pVoice->Speak(L" ", 0, NULL);
 
-  ros::init(argc, argv, "mcr_speech_speech_synthesis");
-  ros::NodeHandle n;
+  ros::init(argc, argv, "mcr_speech_synthesis");
+  ros::NodeHandle n("~");
 
   ros::Subscriber subSay = n.subscribe("/say", 100, sayCallback);
-  
+  pubEvent = n.advertise<std_msgs::String>("event_out", 1);
+
   ROS_INFO("Speech Synthesis started");
   
   ros::spin();
