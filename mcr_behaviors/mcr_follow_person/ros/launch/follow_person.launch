@@ -16,7 +16,7 @@
 	
     <remap from="~people_positions" to="/mcr_perception/waist_tracking/people_positions" />
     <remap from="~odometry" to="/base_controller/odometry" />
-    <remap from="~cmd_vel" to="/cmd_vel" />
+    <remap from="~cmd_vel" to="/base_controller/command_direct" />
 
   </node>
 
