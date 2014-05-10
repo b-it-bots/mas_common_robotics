@@ -10,7 +10,6 @@ find_package(catkin REQUIRED
 add_message_files(
   FILES
    RecognizedSpeech.msg  
-   Say.msg
 )
 
 add_service_files(
