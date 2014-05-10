@@ -8,7 +8,6 @@
 
 #include <std_msgs/String.h>
 
-#include <mcr_speech_msgs/say.h> //include service definition
 #include <mcr_speech_recognition_microsoft/string_operations.h>
 
 #define DEFAULT_ROS_MASTER "http://cob3-1-pc1:11311/"
@@ -37,10 +36,9 @@ void say(std::string data)
   pubEvent.publish(event_out);
 }
 
-void sayCallback(const mcr_speech_msgs::Say::ConstPtr  &msg)
+void sayCallback(const std_msgs::String::ConstPtr &msg)
 {
-	say(msg->phrase);
-
+	say(msg->data);
 }
 
 bool initVoice()
