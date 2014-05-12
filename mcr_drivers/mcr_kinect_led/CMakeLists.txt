@@ -1,13 +1,18 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_kinect_led)
 
-find_package(catkin REQUIRED roscpp std_msgs)
+find_package(catkin REQUIRED
+  COMPONENTS
+    roscpp
+    std_msgs
+)
 
 include($ENV{ROS_ROOT}/core/rosbuild/FindPkgConfig.cmake)
 pkg_check_modules (LIBUSB REQUIRED libusb-1.0)
 
 catkin_package(
-  CATKIN_DEPENDS std_msgs
+  CATKIN_DEPENDS
+    std_msgs
 )
 
 include_directories(
