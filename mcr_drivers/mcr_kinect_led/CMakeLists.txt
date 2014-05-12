@@ -11,6 +11,7 @@ catkin_package(
 )
 
 include_directories(
+  ${catkin_INCLUDE_DIRS}
   ${LIBUSB_INCLUDE_DIRS}
 )
 

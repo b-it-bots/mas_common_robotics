@@ -10,6 +10,7 @@ find_package(catkin REQUIRED
 find_package(OpenCV REQUIRED)
 
 include_directories(
+  ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
 )
 
