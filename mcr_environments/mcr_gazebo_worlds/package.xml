@@ -16,8 +16,6 @@
   <run_depend>ivcon</run_depend>
   <run_depend>gazebo_ros</run_depend>
   <run_depend>gazebo_plugins</run_depend>
-  <run_depend>gazebo_tools</run_depend>
-  <run_depend>ogre_tools</run_depend>
   <run_depend>xacro</run_depend>
 
 </package>
