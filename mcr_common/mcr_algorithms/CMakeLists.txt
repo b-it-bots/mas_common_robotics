@@ -75,7 +75,17 @@ add_library(mcr_controller
   common/src/controller/pi_controller.cpp
 )
 
+
 install(DIRECTORY common/include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   FILES_MATCHING PATTERN "*.h"
+)
+
+install(
+	TARGETS
+		mcr_geometry 
+		mcr_segmentation
+		mcr_controller
+		mcr_machine_learning
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
