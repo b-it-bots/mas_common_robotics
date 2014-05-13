@@ -2,8 +2,8 @@
 
 import rospy
 
-import mcr_node_monitor.mcr_node_status
+import mcr_node_monitor.node_status
 
 if __name__ == "__main__":
 
-    mcr_node_monitor.mcr_node_status.main()
+    mcr_node_monitor.node_status.main()
