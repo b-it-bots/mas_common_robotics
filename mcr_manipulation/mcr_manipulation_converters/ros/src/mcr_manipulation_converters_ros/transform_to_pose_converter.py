@@ -44,7 +44,7 @@ class TransformToPoseConverter(object):
         Starts the transform to pose converter.
 
         """
-        rospy.loginfo("Transform to pose converter ready to start...")
+        rospy.loginfo("Ready to start...")
         state = 'INIT'
 
         while not rospy.is_shutdown():
