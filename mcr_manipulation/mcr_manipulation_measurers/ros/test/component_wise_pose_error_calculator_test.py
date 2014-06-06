@@ -12,7 +12,7 @@ import geometry_msgs.msg
 import mcr_manipulation_msgs.msg
 import tf
 
-PKG = 'mcr_manipulation_monitors'
+PKG = 'mcr_manipulation_measurers'
 
 
 class TestComponentWisePoseErrorCalculator(unittest.TestCase):

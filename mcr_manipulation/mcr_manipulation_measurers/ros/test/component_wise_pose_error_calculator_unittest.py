@@ -4,14 +4,14 @@ Test unit for the functions/methods used in component_wise_pose_error_calculator
 
 """
 
-PKG = 'mcr_manipulation_monitors'
+PKG = 'mcr_manipulation_measurers'
 
 import math
 import unittest
 import rosunit
 import geometry_msgs.msg
 import mcr_manipulation_msgs.msg
-import mcr_manipulation_monitors_ros.component_wise_pose_error_calculator \
+import mcr_manipulation_measurers_ros.component_wise_pose_error_calculator \
     as component_wise_pose_error_calculator
 
 
