@@ -3,10 +3,18 @@ project(mcr_manipulation_measurers)
 
 find_package(catkin REQUIRED
   COMPONENTS
+    rospy
+    rostest
 )
 
 catkin_package(
   CATKIN_DEPENDS
+    rospy
+    std_msgs
+    sensor_msgs
+    geometry_msgs
+    mcr_manipulation_msgs
+    tf
 )
 
 install(PROGRAMS

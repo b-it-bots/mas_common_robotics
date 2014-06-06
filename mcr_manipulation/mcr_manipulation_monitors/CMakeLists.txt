@@ -14,9 +14,6 @@ catkin_package(
     rospy
     std_msgs
     sensor_msgs
-    geometry_msgs
-    mcr_manipulation_msgs
-    tf
 )
 
 install(PROGRAMS
