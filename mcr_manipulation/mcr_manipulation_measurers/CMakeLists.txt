@@ -7,6 +7,8 @@ find_package(catkin REQUIRED
     rostest
 )
 
+catkin_python_setup()
+
 catkin_package(
   CATKIN_DEPENDS
     rospy
@@ -18,5 +20,6 @@ catkin_package(
 )
 
 install(PROGRAMS
+  ros/scripts/component_wise_pose_error_calculator_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
