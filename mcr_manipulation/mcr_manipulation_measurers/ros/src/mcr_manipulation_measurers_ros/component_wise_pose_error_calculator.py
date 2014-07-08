@@ -188,6 +188,7 @@ def calculate_component_wise_pose_error(current_pose, target_pose):
     current_quaternion = []
     target_quaternion = []
     error = mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference()
+    error.header.frame_id = current_pose.header.frame_id
 
     point_dimensions = ['x', 'y', 'z']
     quaternion_dimensions = ['x', 'y', 'z', 'w']
