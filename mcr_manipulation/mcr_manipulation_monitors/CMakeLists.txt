@@ -14,10 +14,13 @@ catkin_package(
     rospy
     std_msgs
     sensor_msgs
+    geometry_msgs
+    tf
 )
 
 install(PROGRAMS
   ros/scripts/joint_position_monitors_node
+  ros/scripts/cartesian_distance_monitor_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
