@@ -5,6 +5,7 @@
 .classpath
 .gradle/
 *.pyc
+.idea/
 .settings/
 
 bin/
