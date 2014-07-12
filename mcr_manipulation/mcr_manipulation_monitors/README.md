@@ -14,5 +14,15 @@ by publishing a twist to reduce the difference between two poses.
 5. Start the component:
 ```rostopic pub /cartesian_distance_monitor/event_in std_msgs/String 'e_start'```
 
+## Usage (with mock-up)
+**Note:** It assumes the robot has been brought up (to obtain the pose from a frame).
+
+1. Launch the mock-up:
+```roslaunch mcr_manipulation_monitors pose_mock_up_gui.launch```
+2. Subscribe to the result of the component:
+```rostopic echo /cartesian_distance_monitor/event_out```
+3. Start the component:
+```rostopic pub /cartesian_distance_monitor/event_in std_msgs/String 'e_start'```
+
 ### To stop the component:
 ```rostopic pub /cartesian_distance_monitor/event_in std_msgs/String 'e_stop'```
