@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_manipulation_utils)
 
-find_package(catkin REQUIRED COMPONENTS roscpp std_msgs urdf kdl_parser)
+find_package(catkin REQUIRED
+  COMPONENTS
+    roscpp
+    std_msgs
+    urdf
+    kdl_parser
+)
 
 catkin_package(
   INCLUDE_DIRS ros/include
