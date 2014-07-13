@@ -1,12 +1,28 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_manipulation_utils)
 
-find_package(catkin REQUIRED COMPONENTS roscpp std_msgs urdf kdl_parser)
+find_package(catkin REQUIRED
+  COMPONENTS
+    roscpp
+    rospy
+    std_msgs
+    urdf
+    kdl_parser
+)
+
+catkin_python_setup()
 
 catkin_package(
   INCLUDE_DIRS ros/include
   LIBRARIES mcr_manipulation_utils
-  CATKIN_DEPENDS roscpp urdf kdl_parser
+  CATKIN_DEPENDS
+    roscpp
+    rospy
+    urdf
+    kdl_parser
+    geometry_msgs
+    sensor_msgs
+    moveit_msgs
 )
 
 include_directories(
