@@ -3,8 +3,8 @@
     <node pkg="mcr_twist_controller" type="pose_error_mock_up_gui_node"
             name="pose_error_mock_up_gui" output="screen">
 
-        <!-- the cycle rate of the node (in seconds) -->
-        <param name="loop_rate" value="0.1"/>
+        <!-- the cycle time of the node (in seconds) -->
+        <param name="cycle_time" type="double" value="0.1"/>
 
         <remap from="~pose_error" to="/twist_controller/pose_error"/>
 

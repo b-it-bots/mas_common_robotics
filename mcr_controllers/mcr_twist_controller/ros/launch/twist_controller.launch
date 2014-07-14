@@ -3,8 +3,8 @@
     <node pkg="mcr_twist_controller" type="twist_controller_node"
             name="twist_controller" output="screen">
 
-        <!-- the cycle rate of the node (in seconds) -->
-        <param name="loop_rate" value="0.1"/>
+        <!-- the cycle time of the node (in seconds) -->
+        <param name="cycle_time" type="double" value="0.1"/>
 
         <remap from="~controlled_velocity" to="/arm_1/arm_controller/cartesian_velocity_command"/>
 

@@ -14,7 +14,7 @@ import Tkinter
 RESOLUTION = 0.005  # in meters
 MAX_ERROR = 0.1     # in meters
 MIN_ERROR = -0.1     # in meters
-LOOP_RATE = 0.1     # in seconds
+CYCLE_TIME = 0.1     # in seconds
 
 pose_error = mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference()
 

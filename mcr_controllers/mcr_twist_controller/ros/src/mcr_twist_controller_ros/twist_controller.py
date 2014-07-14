@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 """
-This module contains a component that controls
-the arm, in Cartesian Space, to reduce the
-difference between two poses.
+This module contains a component that calculates a
+twist to reduce the difference between two poses.
 
 """
 #-*- encoding: utf-8 -*-
@@ -12,11 +11,17 @@ import rospy
 import std_msgs.msg
 import geometry_msgs.msg
 import mcr_manipulation_msgs.msg
+import mcr_algorithms.controller.pid_controller as pid_controller
+
+# This value is used as the 'current_value' for the 'pid_controller'
+# from 'mcr_algorithms.controller.pid_controller', since this twist
+# controller only receives an error which is used as 'set_value'.
+ZERO = 0.0
 
 
 class TwistController(object):
     """
-    Controls the arm in Cartesian space, based on the Cartesian distance
+    Calculates a twist, based on the Cartesian distance
     error between two poses.
 
     """
@@ -25,21 +30,18 @@ class TwistController(object):
         self.event = None
         self.pose_error = None
 
-        # Proportional gain for the Cartesian linear velocity in the X axis.
+        # proportional gains for the Cartesian linear velocities
         self.p_gain_x = rospy.get_param('~p_gain_x', -0.8)
-        # Proportional gain for the Cartesian linear velocity in the Y axis.
         self.p_gain_y = rospy.get_param('~p_gain_y', -0.8)
-        # Proportional gain for the Cartesian linear velocity in the Z axis.
         self.p_gain_z = rospy.get_param('~p_gain_z', -0.8)
-        # Maximum Cartesian linear velocity allowed in the X axis (in meters).
-        self.epsilon_x = rospy.get_param('~epsilon_x', 0.02)
-        # Maximum Cartesian linear velocity allowed in the Y axis (in meters).
-        self.epsilon_y = rospy.get_param('~epsilon_y', 0.02)
-        # Maximum Cartesian linear velocity allowed in the Z axis (in meters).
-        self.epsilon_z = rospy.get_param('~epsilon_z', 0.02)
 
-        # node cycle rate (in seconds)
-        self.loop_rate = rospy.get_param('~loop_rate')
+        # create controllers
+        self.x_controller = pid_controller.p_controller(self.p_gain_x)
+        self.y_controller = pid_controller.p_controller(self.p_gain_y)
+        self.z_controller = pid_controller.p_controller(self.p_gain_z)
+
+        # node cycle time (in seconds)
+        self.cycle_time = rospy.get_param('~cycle_time')
 
         # publishers
         self.controlled_velocity = rospy.Publisher(
@@ -72,7 +74,7 @@ class TwistController(object):
                 state = self.running_state()
 
             rospy.logdebug("State: {0}".format(state))
-            rospy.sleep(self.loop_rate)
+            rospy.sleep(self.cycle_time)
 
     def event_in_cb(self, msg):
         """
@@ -147,50 +149,15 @@ class TwistController(object):
         cartesian_velocity.header.frame_id = self.pose_error.header.frame_id
         cartesian_velocity.header.stamp = rospy.Time.now()
 
-        velocity_x = calculate_control_velocity(
-            self.pose_error.linear.x, self.p_gain_x, self.epsilon_x
-        )
-        velocity_y = calculate_control_velocity(
-            self.pose_error.linear.y, self.p_gain_y, self.epsilon_y
-        )
-        velocity_z = calculate_control_velocity(
-            self.pose_error.linear.z, self.p_gain_z, self.epsilon_z
-        )
+        velocity_x = self.x_controller.control(self.pose_error.linear.x, ZERO)
+        velocity_y = self.y_controller.control(self.pose_error.linear.y, ZERO)
+        velocity_z = self.z_controller.control(self.pose_error.linear.z, ZERO)
 
         cartesian_velocity.twist.linear.x = velocity_x
         cartesian_velocity.twist.linear.y = velocity_y
         cartesian_velocity.twist.linear.z = velocity_z
 
         return cartesian_velocity
-
-
-def calculate_control_velocity(error, p_gain, epsilon):
-    """
-    Calculates a control velocity, based on a position error.
-
-    :param error: The distance error.
-    :type error: float
-
-    :param p_gain: Proportional gain.
-    :type p_gain: float
-
-    :param max_velocity: Maximum velocity allowed.
-    :type max_velocity: float
-
-    :param epsilon: Minimum error, i.e. the minimum distance required
-    to send a zero velocity.
-    :type epsilon: float
-
-    :return: The control velocity.
-    :rtype: float
-
-    """
-    control_velocity = error * p_gain
-
-    if abs(error) < epsilon:
-        control_velocity = 0
-
-    return control_velocity
 
 
 def main():
