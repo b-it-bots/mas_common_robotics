@@ -79,6 +79,26 @@ class TestTransformToPoseConverter(unittest.TestCase):
             self.result.pose.orientation.w, expected_result.pose.orientation.w
         )
 
+        # reset component
+        self.event_out.publish('e_stop')
+        rospy.sleep(0.5)
+        self.wait_for_result = False
+
+        # update tf
+        translation = (2.0, 0.0, 0.0)
+        expected_result.pose.position.x = 2.0
+
+        while not self.wait_for_result:
+            broadcaster.sendTransform(
+                translation, rotation, rospy.Time.now(),
+                target_frame, reference_frame
+            )
+            self.event_out.publish('e_start')
+
+        self.assertAlmostEqual(
+            self.result.pose.position.x, expected_result.pose.position.x
+        )
+
     def result_callback(self, msg):
         self.result = msg
         self.wait_for_result = True
