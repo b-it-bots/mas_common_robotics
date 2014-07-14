@@ -4,8 +4,6 @@ import sys
 
 class p_controller:
 	def __init__ (self, proportional_constant):
-		if proportional_constant > 1.0 or proportional_constant < 0.0:
-			sys.exit('error, proportional constant should be less than 1.0 and larger than 0.0')
 		self.proportional_constant = proportional_constant
 		
 	def control(self, set_value, current_value):
@@ -16,10 +14,6 @@ class p_controller:
 		
 class pd_controller:
 	def __init__ (self, proportional_constant, derivative_constant, sampling_time):
-		if proportional_constant > 1.0 or proportional_constant < 0.0:
-                        sys.exit('error, proportional constant should be less than 1.0 and larger than 0.0')
-                if derivative_constant > 1.0 or derivative_constant < 0.0:
-                        sys.exit('error, derivative constant should be less than 1.0 and larger than 0.0')
 		self.sampling_time = sampling_time
 		self.error_list = [0.0] * self.sampling_time
 		self.proportional_constant = proportional_constant
