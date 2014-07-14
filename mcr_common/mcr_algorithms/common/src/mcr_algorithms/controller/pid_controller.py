@@ -1,8 +1,4 @@
 #! /usr/bin/python
-import math
-import sys
-
-
 class p_controller:
     def __init__(self, proportional_constant):
         self.proportional_constant = proportional_constant
