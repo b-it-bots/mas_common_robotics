@@ -22,11 +22,14 @@ class JointPositionMonitor(object):
         self.monitor_event = None
         self.desired_joint_positions = None
         self.current_joint_positions = None
+        self.mapping_table = {}
 
         # node cycle rate (in seconds)
         self.loop_rate = rospy.get_param('~loop_rate')
         # tolerance for the joint positions
         self.epsilon = rospy.get_param('~epsilon')
+        # target joint names
+        self.target_joint_names = rospy.get_param('~target_joint_names')
 
         # publishers
         self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String)
@@ -37,6 +40,11 @@ class JointPositionMonitor(object):
                          self.configure_joint_monitor_cb)
         rospy.Subscriber("~joint_states", sensor_msgs.msg.JointState,
                          self.read_joint_positions_cb)
+
+        # create a mapping table of the target joint names and their indices
+        self.current_joint_positions = [None for _ in self.target_joint_names]
+        for index, joint in enumerate(self.target_joint_names):
+            self.mapping_table[joint] = index
 
     def start_joint_position_monitor(self):
         """
@@ -59,7 +67,7 @@ class JointPositionMonitor(object):
                     rospy.logdebug("Joint position monitor: event e_start, state=" + str(state))
             elif state == 'RUNNING':
                 if check_joint_positions(self.current_joint_positions,
-                                         self.desired_joint_positions,
+                                         self.desired_joint_positions.position,
                                          self.epsilon):
                     rospy.logdebug("Joint position monitor finished: state=" + str(state))
                     self.event_out.publish('e_done')
@@ -81,10 +89,14 @@ class JointPositionMonitor(object):
 
     def read_joint_positions_cb(self, msg):
         """
-        Obtains the current joint positions values of each joint.
+        Obtains the current joint positions values of the desired joints.
 
         """
-        self.current_joint_positions = msg
+        for desired in self.target_joint_names:
+            for i, current in enumerate(msg.name):
+                if current == desired:
+                    index = self.mapping_table[desired]
+                    self.current_joint_positions[index] = msg.position[i]
 
     def configure_joint_monitor_cb(self, msg):
         """
@@ -100,10 +112,10 @@ def check_joint_positions(actual, reference, tolerance):
     joint position within a tolerance.
 
     :param actual: The current joint positions.
-    :type actual: sensor_msgs.msg.JointState
+    :type actual: []Float
 
     :param reference: The reference joint positions.
-    :type reference: sensor_msgs.msg.JointState
+    :type reference: []Float
 
     :param tolerance: The tolerance allowed between
                       reference and actual joint positions.
@@ -113,18 +125,19 @@ def check_joint_positions(actual, reference, tolerance):
     :rtype: Boolean
 
     """
-    for j, desired in enumerate(reference.name):
-        found_name = False
-        for i, current in enumerate(actual.name):
-            if desired == current:
-                found_name = True
-                below_limit = (actual.position[i] >= reference.position[j] + tolerance)
-                above_limit = (actual.position[i] <= reference.position[j] - tolerance)
+    try:
+        for i, desired in enumerate(reference):
+            below_limit = (actual[i] >= desired + tolerance)
+            above_limit = (actual[i] <= desired - tolerance)
 
-                if below_limit or above_limit:
-                    return False
-        if (found_name == False):
+        if below_limit or above_limit:
             return False
+
+    except IndexError:
+        rospy.logwarn(
+            "The length of the current and reference joint positions do not match."
+        )
+        return False
 
     return True
 
