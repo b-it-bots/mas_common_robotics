@@ -25,4 +25,4 @@ install(PROGRAMS
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-catkin_add_nosetests(ros/test/joint_position_monitors_test.py)
+catkin_add_nosetests(ros/test/joint_position_monitors_unittest.py)
