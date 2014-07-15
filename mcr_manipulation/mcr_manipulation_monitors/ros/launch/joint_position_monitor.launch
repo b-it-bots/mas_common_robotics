@@ -2,7 +2,7 @@
 <launch>
     <node pkg="mcr_manipulation_monitors" type="joint_position_monitors_node"
           name="joint_position_monitors" output="screen">
-        <remap from="~joints_states" to="/joint_states"/>
+        <remap from="~joint_states" to="/joint_states"/>
 
         <!-- the cycle rate of the node (in seconds) -->
         <param name="loop_rate" value="0.1"/>
