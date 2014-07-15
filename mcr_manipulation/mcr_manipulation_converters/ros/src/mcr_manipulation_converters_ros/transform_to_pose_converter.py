@@ -90,8 +90,6 @@ class TransformToPoseConverter(object):
         if self.event == 'e_start':
             return 'RUNNING'
         elif self.event == 'e_stop':
-            self.reference_frame = None
-            self.target_frame = None
             return 'INIT'
         else:
             return 'IDLE'
@@ -105,8 +103,6 @@ class TransformToPoseConverter(object):
 
         """
         if self.event == 'e_stop':
-            self.reference_frame = None
-            self.target_frame = None
             return 'INIT'
         else:
             self.publish_converted_pose()
