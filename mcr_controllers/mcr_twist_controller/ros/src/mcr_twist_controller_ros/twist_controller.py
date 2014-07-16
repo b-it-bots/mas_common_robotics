@@ -34,11 +34,17 @@ class TwistController(object):
         self.p_gain_x = rospy.get_param('~p_gain_x', -0.8)
         self.p_gain_y = rospy.get_param('~p_gain_y', -0.8)
         self.p_gain_z = rospy.get_param('~p_gain_z', -0.8)
+        self.p_gain_roll = rospy.get_param('~p_gain_roll', -0.8)
+        self.p_gain_pitch = rospy.get_param('~p_gain_pitch', -0.8)
+        self.p_gain_yaw = rospy.get_param('~p_gain_yaw', -0.8)
 
         # create controllers
         self.x_controller = pid_controller.p_controller(self.p_gain_x)
         self.y_controller = pid_controller.p_controller(self.p_gain_y)
         self.z_controller = pid_controller.p_controller(self.p_gain_z)
+        self.roll_controller = pid_controller.p_controller(self.p_gain_roll)
+        self.pitch_controller = pid_controller.p_controller(self.p_gain_pitch)
+        self.yaw_controller = pid_controller.p_controller(self.p_gain_yaw)
 
         # node cycle time (in seconds)
         self.cycle_time = rospy.get_param('~cycle_time')
@@ -139,7 +145,7 @@ class TwistController(object):
     def calculate_cartesian_velocity(self):
         """
         Calculates a synchronized Cartesian velocity, based on a position error,
-        for all three linear velocities.
+        for the three linear velocities and the three angular velocities.
 
         :return: The Cartesian velocity to reduce the position error.
         :rtype: geometry_msgs.msg.TwistStamped
@@ -152,10 +158,16 @@ class TwistController(object):
         velocity_x = self.x_controller.control(self.pose_error.linear.x, ZERO)
         velocity_y = self.y_controller.control(self.pose_error.linear.y, ZERO)
         velocity_z = self.z_controller.control(self.pose_error.linear.z, ZERO)
+        velocity_roll = self.roll_controller.control(self.pose_error.angular.x, ZERO)
+        velocity_pitch = self.pitch_controller.control(self.pose_error.angular.y, ZERO)
+        velocity_yaw = self.yaw_controller.control(self.pose_error.angular.z, ZERO)
 
         cartesian_velocity.twist.linear.x = velocity_x
         cartesian_velocity.twist.linear.y = velocity_y
         cartesian_velocity.twist.linear.z = velocity_z
+        cartesian_velocity.twist.angular.x = velocity_roll
+        cartesian_velocity.twist.angular.y = velocity_pitch
+        cartesian_velocity.twist.angular.z = velocity_yaw
 
         return cartesian_velocity
 

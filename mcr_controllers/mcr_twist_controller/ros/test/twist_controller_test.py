@@ -56,14 +56,17 @@ class TestTwistController(unittest.TestCase):
         pose_error.linear.x = 0.2
         pose_error.linear.y = 0.001
         pose_error.linear.z = 0.3
-        pose_error.angular.x = 0.0
+        pose_error.angular.x = 0.2
         pose_error.angular.y = 0.0
-        pose_error.angular.z = 0.0
+        pose_error.angular.z = -0.4
 
         expected_result = geometry_msgs.msg.TwistStamped()
         expected_result.twist.linear.x = 0.16
         expected_result.twist.linear.y = 0.0
         expected_result.twist.linear.z = -0.24
+        expected_result.twist.angular.x = -0.16
+        expected_result.twist.angular.y = 0.0
+        expected_result.twist.angular.z = 0.32
 
         while not self.wait_for_result:
             self.pose_error.publish(pose_error)
@@ -74,6 +77,15 @@ class TestTwistController(unittest.TestCase):
         )
         self.assertAlmostEqual(
             self.result.twist.linear.z, expected_result.twist.linear.z, places=6
+        )
+        self.assertAlmostEqual(
+            self.result.twist.angular.x, expected_result.twist.angular.x, places=6
+        )
+        self.assertAlmostEqual(
+            self.result.twist.angular.y, expected_result.twist.angular.y, places=6
+        )
+        self.assertAlmostEqual(
+            self.result.twist.angular.z, expected_result.twist.angular.z, places=6
         )
 
     def result_callback(self, msg):
