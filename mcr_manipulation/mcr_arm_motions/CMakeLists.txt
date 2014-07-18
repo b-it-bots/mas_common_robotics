@@ -16,6 +16,6 @@ catkin_package(
 )
 
 install(PROGRAMS
-  ros/scripts/cartesian_motions_node
+  ros/scripts/cartesian_motion_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
