@@ -58,7 +58,6 @@ class TeleopKeyboard
   double walk_vel, run_vel, yaw_rate, yaw_rate_run;
   geometry_msgs::Twist cmd;
 
-  ros::NodeHandle n_;
   ros::Publisher vel_pub_;
 
   public:
@@ -66,13 +65,13 @@ class TeleopKeyboard
   { 
     cmd.linear.x = cmd.linear.y = cmd.angular.z = 0;
 
-    vel_pub_ = n_.advertise<geometry_msgs::Twist>("cmd_vel", 1);
+    ros::NodeHandle nh("~");
+    vel_pub_ = nh.advertise<geometry_msgs::Twist>("cmd_vel", 1);
 
-    ros::NodeHandle n_private("~");
-    n_private.param("walk_vel", walk_vel, 0.5);
-    n_private.param("run_vel", run_vel, 1.0);
-    n_private.param("yaw_rate", yaw_rate, 1.0);
-    n_private.param("yaw_run_rate", yaw_rate_run, 1.5);
+    nh.param("walk_vel", walk_vel, 0.5);
+    nh.param("run_vel", run_vel, 1.0);
+    nh.param("yaw_rate", yaw_rate, 1.0);
+    nh.param("yaw_run_rate", yaw_rate_run, 1.5);
 
   }
   
