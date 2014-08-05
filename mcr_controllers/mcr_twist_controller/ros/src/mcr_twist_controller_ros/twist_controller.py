@@ -120,7 +120,6 @@ class TwistController(object):
         if self.event == 'e_start':
             return 'RUNNING'
         elif self.event == 'e_stop':
-            self.pose_error = None
             return 'INIT'
         else:
             return 'IDLE'
@@ -134,7 +133,6 @@ class TwistController(object):
 
         """
         if self.event == 'e_stop':
-            self.pose_error = None
             return 'INIT'
         else:
             cartesian_velocity = self.calculate_cartesian_velocity()
