@@ -63,10 +63,8 @@ Then go on with installing further external dependencies:
     cd ~/catkin_ws/src/mas_common_robotics
     ./repository.debs
     
-    
     source ~/catkin_ws/devel/setup.bash
-    export ROS_PACKAGE_PATH=~/catkin_ws/devel:$ROS_PACKAGE_PATH
-    
+
 The last two commands, should be added to the ~/.bashrc file, so that they do not need to be executed everytime you open a new terminal.
 
 
