@@ -11,6 +11,7 @@ __author__ = 'jsanch'
 import rospy
 import std_msgs.msg
 import geometry_msgs.msg
+import mcr_twist_limiter.limiter as limiter
 
 
 class TwistLimiter(object):
@@ -147,10 +148,10 @@ class TwistLimiter(object):
         ]
 
         for i, dim in enumerate(dimensions):
-            linear_velocity = limit_velocity(
+            linear_velocity = limiter.limit_value(
                 getattr(self.twist.twist.linear, dim), linear_velocities[i]
             )
-            angular_velocity = limit_velocity(
+            angular_velocity = limiter.limit_value(
                 getattr(self.twist.twist.angular, dim), angular_velocities[i]
             )
 
@@ -158,31 +159,6 @@ class TwistLimiter(object):
             setattr(limited_twist.twist.angular, dim, angular_velocity)
 
         return limited_twist
-
-
-def limit_velocity(velocity, max_velocity):
-    """
-    Limits a velocity if it exceeds the specified maximum.
-
-    :param velocity: The input velocity.
-    :type velocity: float
-
-    :param max_velocity: Maximum velocity allowed.
-    :type max_velocity: float
-
-    :return: The limited velocity if exceeds the specified maximum,
-             or the input velocity.
-    :rtype: float
-
-    """
-    if velocity > max_velocity:
-        limited_velocity = max_velocity
-    elif velocity < -max_velocity:
-        limited_velocity = -max_velocity
-    else:
-        return velocity
-
-    return limited_velocity
 
 
 def main():
