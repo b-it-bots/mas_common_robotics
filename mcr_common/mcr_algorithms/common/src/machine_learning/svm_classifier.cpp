@@ -76,6 +76,48 @@ int SVMClassifier::classify(std::vector<double> features, std::string &label) co
     return 0;
 }
 
+int SVMClassifier::classifyWithProbability(std::vector<double> features, std::string &label, double &probability) const
+{
+    if (features.size() != num_features_) {
+        label = "";
+        probability = 0.0;
+        return 1;
+    }
+
+    normalizeFeatures(features);
+
+    // see docs/machine_learning/libsvm_README for structure of svm_node
+    std::vector<svm_node> feature_vector(num_features_ + 1);
+    feature_vector[num_features_].index = -1;
+
+    for (int i = 0; i < num_features_; i++) {
+        feature_vector[i].index = i + 1;
+        feature_vector[i].value = features.at(i);
+    }
+
+    std::vector<double> probabilities(num_features_);
+
+    int label_index = 0;
+
+    if (svm_check_probability_model(model_)) {
+        label_index = svm_predict_probability(model_, &feature_vector[0], &probabilities[0]);
+        probability = probabilities.at(label_index - 1);
+    } else {
+        label_index = svm_predict(model_, &feature_vector[0]);
+        probability = 1.0;
+    }
+
+    if (labels_.empty() || label_index > labels_.size()) {
+        label = "";
+        probability = 0.0;
+        return 2;
+    }
+
+    label = labels_.at(label_index - 1);
+
+    return 0;
+}
+
 void SVMClassifier::normalizeFeatures(std::vector<double> &features) const
 {
     for (int i = 0; i < features.size(); i++) {

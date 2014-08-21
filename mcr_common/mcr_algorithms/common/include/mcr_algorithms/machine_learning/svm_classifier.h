@@ -66,6 +66,27 @@ class SVMClassifier
          */
         int classify(std::vector<double> features, std::string &label) const;
 
+        /**
+         * Classifies and returns label and probability corresponding to the class.
+         *
+         * @param features
+         * Set of features that are to be classified.
+         *
+         * @param label
+         * The label for the class returned by the classifier. It is modified in place and either
+         * set to the correct label (if return is 0) or an empty string (if return is 1 or 2)
+         *
+         * @param probability
+         * The probability that the features correspond to the class returned. It is modified in place
+         * and set to the probability if a label is returned, 1.0 if the SVM model does not have enough
+         * information to return probability information and 0.0 if return of the function is 1 or 2
+         *
+         * @return 0 for success.
+         *         1 if number of features specified is wrong.
+         *         2 if classifier returns a class that doesn't correspond to a label.
+         */
+        int classifyWithProbability(std::vector<double> features, std::string &label, double &probability) const;
+
 
     private:
         /**
