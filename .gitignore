@@ -11,4 +11,6 @@
 bin/
 build/
 install/
+html/
+latex/
 rospack_nosubdirs
