@@ -2,7 +2,9 @@
 
 # create list of packages to install
 packagelist=(
-  python-setuptools 
+  python-setuptools
+  python-scipy 
+  python-sklearn 
   ros-hydro-ros 
   ros-hydro-vision-opencv 
   python-rosinstall 
