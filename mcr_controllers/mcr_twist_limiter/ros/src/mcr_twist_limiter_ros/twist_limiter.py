@@ -104,7 +104,6 @@ class TwistLimiter(object):
         if self.event == 'e_start':
             return 'RUNNING'
         elif self.event == 'e_stop':
-            self.twist = None
             return 'INIT'
         else:
             return 'IDLE'
@@ -118,7 +117,6 @@ class TwistLimiter(object):
 
         """
         if self.event == 'e_stop':
-            self.twist = None
             return 'INIT'
         else:
             limited_twist = self.limit_twist()
