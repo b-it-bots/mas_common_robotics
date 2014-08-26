@@ -26,8 +26,8 @@ class TransformToPoseConverter(object):
         self.target_frame = rospy.get_param('~target_frame')
         self.listener = tf.TransformListener()
 
-        # node cycle rate (in seconds)
-        self.loop_rate = rospy.get_param('~loop_rate', 0.1)
+        # node cycle time (in seconds)
+        self.cycle_time = rospy.get_param('~cycle_time', 0.1)
         # how long to wait for transform (in seconds)
         self.wait_for_transform = rospy.get_param('~wait_for_transform', 0.1)
 
@@ -57,7 +57,7 @@ class TransformToPoseConverter(object):
                 state = self.running_state()
 
             rospy.logdebug("State: {0}".format(state))
-            rospy.sleep(self.loop_rate)
+            rospy.sleep(self.cycle_time)
 
     def event_in_cb(self, msg):
         """

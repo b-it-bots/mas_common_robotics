@@ -3,8 +3,8 @@
     <node pkg="mcr_common_converters" type="transform_to_pose_converter_node"
           name="transform_to_pose_converter" output="screen">
 
-        <!-- the cycle rate of the node (in seconds) -->
-        <param name="loop_rate" type="double" value="0.1"/>
+        <!-- the cycle time of the node (in seconds) -->
+        <param name="cycle_time" type="double" value="0.1"/>
 
     </node>
 </launch>
