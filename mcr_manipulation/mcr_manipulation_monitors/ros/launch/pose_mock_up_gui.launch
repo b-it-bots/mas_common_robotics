@@ -11,7 +11,7 @@
 
     </node>
 
-    <node pkg="mcr_manipulation_converters" type="transform_to_pose_converter_node"
+    <node pkg="mcr_common_converters" type="transform_to_pose_converter_node"
             name="transform_to_pose_converter" output="screen">
 
         <!-- the cycle rate of the node (in seconds) -->

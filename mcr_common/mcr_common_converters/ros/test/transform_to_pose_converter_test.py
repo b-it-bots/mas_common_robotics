@@ -11,7 +11,7 @@ import std_msgs.msg
 import geometry_msgs.msg
 import tf
 
-PKG = 'mcr_manipulation_converters'
+PKG = 'mcr_common_converters'
 
 
 class TestTransformToPoseConverter(unittest.TestCase):

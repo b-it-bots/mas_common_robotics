@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package>
-  <name>mcr_manipulation_converters</name>
+  <name>mcr_common_converters</name>
   <version>0.1.0</version>
   <description>
-    A package to convert manipulation messages
+    A package to convert different messages
     (e.g. a TF to a PoseStamped message).
   </description>
   <license>GPLv3</license>
