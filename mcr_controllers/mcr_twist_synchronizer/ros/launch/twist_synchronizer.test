@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="mcr_twist_synchronizer" type="twist_synchronizer_node"
+            name="twist_synchronizer" output="screen">
+
+        <!-- the cycle time of the node (in seconds) -->
+        <param name="cycle_time" type="double" value="0.1"/>
+
+    </node>
+
+    <test pkg="mcr_twist_synchronizer" type="twist_synchronizer_test.py"
+            test-name="test_twist_synchronizer">
+
+        <remap from="~component_output" to="/twist_synchronizer/synchronized_twist"/>
+        <remap from="~event_out" to="/twist_synchronizer/event_in"/>
+        <remap from="~twist" to="/twist_synchronizer/twist"/>
+        <remap from="~pose_error" to="/twist_synchronizer/pose_error"/>
+
+    </test>
+</launch>
