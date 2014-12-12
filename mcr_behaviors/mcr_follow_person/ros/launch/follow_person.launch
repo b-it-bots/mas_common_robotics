@@ -11,8 +11,8 @@
     <param name="minimum_distance_to_person" value="1.15" />	<!-- in meter -->
     <param name="allowed_angular_variance" value="5.0" />   <!-- in degree !-->
 		
-    <param name="driving_backward_enabled" value="false" />   <!-- bool !-->
-    <param name="distance_when_driving_backward" value="0.9" />	<!-- in meter -->
+    <param name="driving_backward_enabled" value="true" />   <!-- bool !-->
+    <param name="distance_when_driving_backward" value="1.0" />	<!-- in meter -->
 	
     <remap from="~people_positions" to="/mcr_perception/waist_tracking/people_positions" />
     <remap from="~odometry" to="/base_controller/odometry" />
