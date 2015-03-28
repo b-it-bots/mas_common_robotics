@@ -9,11 +9,15 @@
   <license>GPLv3</license>
 
   <maintainer email="jose.sanchez.loza@gmail.com">Jose Sanchez</maintainer>
+  <maintainer email="frederik.hegger@h-brs.de">Frederik Hegger</maintainer>
+  
   <author email="jose.sanchez.loza@gmail.com">Jose Sanchez</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>rospy</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>tf</build_depend>
 
   <test_depend>unittest</test_depend>
 
