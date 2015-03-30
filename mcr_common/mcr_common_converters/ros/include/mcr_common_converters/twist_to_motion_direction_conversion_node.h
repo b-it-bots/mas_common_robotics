@@ -26,7 +26,7 @@ private:
     void twistCallback(const geometry_msgs::TwistPtr &msg);
 
     ros::Subscriber sub_twist_;
-    ros::Publisher pub_motion_direction_;
+    ros::Publisher pub_pose_;
 
     std::string frame_id_;
 };

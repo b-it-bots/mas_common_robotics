@@ -12,7 +12,7 @@ TwistToMotionDirectionConversionNode::TwistToMotionDirectionConversionNode()
     ros::NodeHandle nh("~");
 
     sub_twist_ = nh.subscribe("input/twist", 1, &TwistToMotionDirectionConversionNode::twistCallback, this);
-    pub_motion_direction_ = nh.advertise<geometry_msgs::PoseStamped>("output/pose", 1);
+    pub_pose_ = nh.advertise < geometry_msgs::PoseStamped > ("output/pose", 1);
 
     nh.param < std::string > ("frame_id", frame_id_, "/base_link");
 }
@@ -20,12 +20,12 @@ TwistToMotionDirectionConversionNode::TwistToMotionDirectionConversionNode()
 TwistToMotionDirectionConversionNode::~TwistToMotionDirectionConversionNode()
 {
     sub_twist_.shutdown();
-    pub_motion_direction_.shutdown();
+    pub_pose_.shutdown();
 }
 
 void TwistToMotionDirectionConversionNode::twistCallback(const geometry_msgs::TwistPtr &msg)
 {
-    if(pub_motion_direction_.getNumSubscribers() <= 0)
+    if (pub_pose_.getNumSubscribers() <= 0)
         return;
 
     double motion_direction = 0.0;
@@ -38,7 +38,7 @@ void TwistToMotionDirectionConversionNode::twistCallback(const geometry_msgs::Tw
 
     pose.pose.orientation = tf::createQuaternionMsgFromRollPitchYaw(0.0, 0.0, motion_direction);
 
-    pub_motion_direction_.publish(pose);
+    pub_pose_.publish(pose);
 }
 
 int main(int argc, char** argv)
