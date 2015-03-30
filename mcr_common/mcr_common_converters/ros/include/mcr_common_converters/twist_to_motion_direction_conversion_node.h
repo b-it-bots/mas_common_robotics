@@ -11,6 +11,7 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/PointStamped.h>
 #include <tf/transform_datatypes.h>
 
 #include <mcr_common_converters/motion_direction_calculation.h>
@@ -27,8 +28,10 @@ private:
 
     ros::Subscriber sub_twist_;
     ros::Publisher pub_pose_;
+    ros::Publisher pub_point_;
 
     std::string frame_id_;
+    double distance_to_frame_;
 };
 
 #endif /* TWIST_TO_MOTION_DIRECTION_CONVERSION_NODE_H_ */
