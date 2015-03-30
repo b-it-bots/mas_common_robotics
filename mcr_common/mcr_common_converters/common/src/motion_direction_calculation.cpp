@@ -9,7 +9,7 @@
 
 double getMotionDirectionFromTwist2D(const double &linear_x, const double &linear_y, const double &angular_z)
 {
-    const double max_allowed_angular_angle = M_PI / 2;
+    const double max_allowed_angular_angle = M_PI;
 
     double motion_direction = 0.0;
     double linear_velocity = 0.0, angular_velocity = 0.0;
@@ -47,7 +47,7 @@ double getMotionDirectionFromTwist2D(const double &linear_x, const double &linea
         angular_linear_velocity = sqrt((2 * pow(radius, 2) * (1 - cos(angular_angle))));
 
         // get the opposite angle of the angle between the hypotenuse and one side
-        angular_linear_angle = max_allowed_angular_angle - ((M_PI - angular_angle) / 2);
+        angular_linear_angle = (M_PI / 2) - ((M_PI - angular_angle) / 2);
 
         // add the two angles, i.e. the angle calculated from the linear motion and the linear angle from the angular motion
         motion_direction = angular_linear_angle + linear_angle;
