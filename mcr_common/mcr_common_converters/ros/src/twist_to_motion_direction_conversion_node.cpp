@@ -29,7 +29,7 @@ TwistToMotionDirectionConversionNode::~TwistToMotionDirectionConversionNode()
 void TwistToMotionDirectionConversionNode::twistCallback(const geometry_msgs::TwistPtr &msg)
 {
     // if no one is subscriber, there is not need to do any calculations
-    if (pub_pose_.getNumSubscribers() <= 0 && pub_point_.getNumSubscribers())
+    if ((pub_pose_.getNumSubscribers() <= 0) && (pub_point_.getNumSubscribers() <= 0 ))
         return;
 
     // if there is not motion, return
