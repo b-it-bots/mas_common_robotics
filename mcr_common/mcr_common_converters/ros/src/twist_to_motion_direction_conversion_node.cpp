@@ -32,6 +32,10 @@ void TwistToMotionDirectionConversionNode::twistCallback(const geometry_msgs::Tw
     if (pub_pose_.getNumSubscribers() <= 0)
         return;
 
+    // if there is not motion, return
+    if (fabs(msg->linear.x) + fabs(msg->linear.y) + fabs(msg->angular.z) == 0)
+        return;
+
     double motion_direction = 0.0;
     geometry_msgs::PoseStamped pose;
     geometry_msgs::PointStamped point;
