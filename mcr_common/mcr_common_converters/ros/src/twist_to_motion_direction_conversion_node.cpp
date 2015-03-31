@@ -16,7 +16,7 @@ TwistToMotionDirectionConversionNode::TwistToMotionDirectionConversionNode()
     pub_point_ = nh.advertise < geometry_msgs::PointStamped > ("output/point", 1);
 
     nh.param < std::string > ("frame_id", frame_id_, "/base_link");
-    nh.param < double > ("distance_to_frame", distance_to_frame_, 1.5);
+    nh.param<double>("distance_to_frame", distance_to_frame_, 1.5);
 }
 
 TwistToMotionDirectionConversionNode::~TwistToMotionDirectionConversionNode()
