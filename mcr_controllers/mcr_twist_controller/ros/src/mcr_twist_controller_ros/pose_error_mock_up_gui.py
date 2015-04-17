@@ -68,7 +68,7 @@ def publish_pose_error():
 
     while not rospy.is_shutdown():
         pub.publish(pose_error)
-        rospy.sleep(loop_rate)
+        rospy.sleep(cycle_time)
 
 
 def main():
