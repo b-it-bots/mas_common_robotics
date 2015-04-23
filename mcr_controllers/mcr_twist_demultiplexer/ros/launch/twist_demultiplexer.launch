@@ -4,7 +4,7 @@
         <remap from="~arm_twist" to="/arm_1/arm_controller/cartesian_velocity_command"/>
         <remap from="~base_twist" to="/cmd_vel"/>
         <remap from="~input_twist" to="/twist_limiter/limited_twist"/>
-        <param name="arm_tf" type="string" value="/arm_link_5" />
+        <param name="arm_tf" type="string" value="/tower_cam3d_rgb_optical_frame" />
         <param name="base_tf" type="string" value="/base_link" />
         <param name="minimum_base_velocity_x" type="double" value="0.0"/>
         <param name="minimum_base_velocity_y" type="double" value="0.0"/>
