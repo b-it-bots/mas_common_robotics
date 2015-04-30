@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <launch>
     <node pkg="mcr_twist_demultiplexer" type="twist_demultiplexer_node" name="twist_demultiplexer" ns="mcr_controllers" output="screen" respawn="true">
-        <remap from="~arm_twist" to="/mcr_manipulation/"/>
+        <remap from="~arm_twist" to="/arm_1/arm_controller/cartesian_velocity_command"/>
         <remap from="~base_twist" to="/cmd_vel"/>
-        <remap from="~input_twist" to="/mcr_manipulation/"/>
+        <remap from="~input_twist" to="/twist_limiter/limited_twist"/>
         <param name="arm_tf" type="string" value="/arm_link_5" />
         <param name="base_tf" type="string" value="/base_link" />
-        <param name="minimum_base_velocity_x" type="double" value="0.02"/>
-        <param name="minimum_base_velocity_y" type="double" value="0.02"/>
+        <param name="minimum_base_velocity_x" type="double" value="0.0"/>
+        <param name="minimum_base_velocity_y" type="double" value="0.0"/>
     </node>
 </launch>
