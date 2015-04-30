@@ -2,8 +2,8 @@
 
 TwistDemultiplexerNode::TwistDemultiplexerNode(ros::NodeHandle &nh) : node_handler_(nh)
 {
-    node_handler_.getParam("base_tf_", base_tf_);
-    node_handler_.getParam("arm_tf_", arm_tf_);
+    node_handler_.getParam("base_tf", base_tf_);
+    node_handler_.getParam("arm_tf", arm_tf_);
 
     event_pub_ = node_handler_.advertise<std_msgs::String>("event_out", 1);
     arm_twist_stamped_pub_ = node_handler_.advertise<geometry_msgs::TwistStamped>("arm_twist", 1);
@@ -89,6 +89,8 @@ void TwistDemultiplexerNode::demultiplexTwist()
     geometry_msgs::TwistStamped arm_twist(input_twist_);
     geometry_msgs::TwistStamped base_twist(input_twist_);
 
+    std::cout << "arm_tf "<< arm_tf_ << std::endl;
+    std::cout << "base_tf_ "<< base_tf_ << std::endl; 
     // transform twists to required frames
     geometry_msgs::TwistStamped transformed_arm_twist = geometry_transformer_.transformTwist(arm_tf_, arm_twist);
     geometry_msgs::TwistStamped transformed_base_twist = geometry_transformer_.transformTwist(base_tf_, base_twist);
