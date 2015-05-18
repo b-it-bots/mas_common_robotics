@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_algorithms)
-find_package(catkin REQUIRED COMPONENTS geometry_msgs sensor_msgs mcr_perception_msgs libsvm)
+find_package(catkin REQUIRED COMPONENTS geometry_msgs sensor_msgs mcr_perception_msgs)
 find_package(PCL 1.6 REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Boost REQUIRED COMPONENTS serialization)
@@ -13,7 +13,6 @@ catkin_package(
     mcr_perception_msgs
     message_runtime 
     sensor_msgs 
-    libsvm
   INCLUDE_DIRS 
     common/include/
   LIBRARIES 
@@ -21,6 +20,8 @@ catkin_package(
     mcr_geometry
     mcr_machine_learning
     mcr_segmentation
+  DEPENDS
+    libsvm-dev
 )
 
 include_directories(
@@ -70,6 +71,7 @@ add_library(mcr_machine_learning
 target_link_libraries(mcr_machine_learning
     ${OpenCV_LIBRARIES}
     ${Boost_LIBRARIES}
+    svm
 )
 
 add_library(mcr_data_fitting 
