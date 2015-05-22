@@ -19,8 +19,6 @@
   <build_depend>rospy</build_depend>
   <build_depend>rostest</build_depend>
 
-  <test_depend>unittest</test_depend>
-
   <run_depend>roscpp</run_depend>
   <run_depend>urdf</run_depend>
   <run_depend>kdl_parser</run_depend>

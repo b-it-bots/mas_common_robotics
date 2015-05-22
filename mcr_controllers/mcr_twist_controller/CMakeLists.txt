@@ -20,3 +20,12 @@ install(PROGRAMS
   ros/scripts/twist_controller_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+### TESTS
+if(CATKIN_ENABLE_TESTING)
+  find_package(roslaunch REQUIRED)
+  find_package(rostest REQUIRED)
+
+  roslaunch_add_file_check(ros/launch)
+  add_rostest(ros/launch/twist_controller.test)
+endif()

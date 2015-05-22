@@ -19,3 +19,10 @@ install(PROGRAMS
   ros/scripts/cartesian_motion_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+### TESTS
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+
+  add_rostest(ros/launch/cartesian_motion.test)
+endif()
