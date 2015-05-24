@@ -32,7 +32,7 @@ add_dependencies(follow_person_node
   ${catkin_EXPORTED_TARGETS}
 )
 target_link_libraries(follow_person_node 
-	${catkin_LIBRARIES}
+  ${catkin_LIBRARIES}
 )
 
 install(TARGETS follow_person_node follow_person_node
