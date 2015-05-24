@@ -35,6 +35,19 @@ target_link_libraries(follow_person_node
   ${catkin_LIBRARIES}
 )
 
+
+### TEST
+if(CATKIN_ENABLE_TESTING)
+  find_package(catkin REQUIRED
+    COMPONENTS
+      roslaunch
+  )
+
+  roslaunch_add_file_check(ros/launch)
+endif()
+
+
+### INSTALLS
 install(TARGETS follow_person_node follow_person_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
