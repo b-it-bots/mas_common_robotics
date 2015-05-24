@@ -42,6 +42,18 @@ target_link_libraries(twist_to_motion_direction_conversion_node
 )
 add_dependencies(twist_to_motion_direction_conversion_node ${catkin_EXPORTED_TARGETS})
 
+
+### TESTS
+if(CATKIN_ENABLE_TESTING)
+  find_package(catkin REQUIRED
+    COMPONENTS
+      roslaunch
+  )
+
+  roslaunch_add_file_check(ros/launch)
+endif()
+
+
 ### INSTALL
 install(PROGRAMS
   ros/scripts/transform_to_pose_converter_node
