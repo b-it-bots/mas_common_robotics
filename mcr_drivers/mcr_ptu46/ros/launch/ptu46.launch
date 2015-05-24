@@ -10,10 +10,6 @@
     <remap from="/mcr_ptu46/state" to="/joint_states"/>
   </node>
   
-  
-  <!-- Action Server -->
-  <rosparam command="load" ns="/script_server/head" file="$(find mdr_default_robot_config)/$(env ROBOT)/head_joint_configurations.yaml"/>
-  
   <group ns="mcr_ptu46">
     <node pkg="mcr_ptu46" type="ptu_action_server.py" name="mcr_ptu46_action_server" output="screen">
       <remap from="state" to="/joint_states"/>
