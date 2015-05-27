@@ -47,3 +47,6 @@ install(DIRECTORY ros/include/
   FILES_MATCHING PATTERN "*.h"
 )
 
+if (CATKIN_ENABLE_TESTING)
+  catkin_add_nosetests(ros/test/extractors_unittest.py)
+endif()

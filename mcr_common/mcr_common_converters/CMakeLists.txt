@@ -45,12 +45,11 @@ add_dependencies(twist_to_motion_direction_conversion_node ${catkin_EXPORTED_TAR
 
 ### TESTS
 if(CATKIN_ENABLE_TESTING)
-  find_package(catkin REQUIRED
-    COMPONENTS
-      roslaunch
-  )
+  find_package(roslaunch REQUIRED)
+  find_package(rostest REQUIRED)
 
   roslaunch_add_file_check(ros/launch)
+  add_rostest(ros/launch/transform_to_pose_converter.test)
 endif()
 
 

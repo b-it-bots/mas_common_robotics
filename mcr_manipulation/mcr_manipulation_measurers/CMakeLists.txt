@@ -23,3 +23,13 @@ install(PROGRAMS
   ros/scripts/component_wise_pose_error_calculator_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+### TESTS
+if(CATKIN_ENABLE_TESTING)
+  find_package(roslaunch REQUIRED)
+  find_package(rostest REQUIRED)
+
+  roslaunch_add_file_check(ros/launch)
+  add_rostest(ros/launch/component_wise_pose_error_calculator.test)
+  catkin_add_nosetests(ros/test/component_wise_pose_error_calculator_unittest.py)
+endif()
