@@ -108,8 +108,6 @@ class CartesianDistanceMonitor(object):
         if self.event == 'e_start':
             return 'RUNNING'
         elif self.event == 'e_stop':
-            self.pose_1 = None
-            self.pose_2 = None
             self.transformed_pose = None
             return 'INIT'
         else:
@@ -124,8 +122,6 @@ class CartesianDistanceMonitor(object):
 
         """
         if self.event == 'e_stop':
-            self.pose_1 = None
-            self.pose_2 = None
             self.transformed_pose = None
             return 'INIT'
         else:

@@ -1,16 +1,27 @@
+# Temp files
+*~
+
+# Eclipse
 .autotools
 .cproject
 .project
+.settings/
+
+# Python
 .pydevproject
+*.pyc
+
+# Java
 .classpath
 .gradle/
-*.pyc
 .idea/
-.settings/
+
+# Doxygen
+html/
+latex/
+
+rospack_nosubdirs
 
 bin/
 build/
 install/
-html/
-latex/
-rospack_nosubdirs

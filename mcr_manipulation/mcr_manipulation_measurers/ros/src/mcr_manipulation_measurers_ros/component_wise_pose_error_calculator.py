@@ -107,8 +107,6 @@ class ComponentWisePoseErrorCalculator(object):
         if self.monitor_event == 'e_start':
             return 'RUNNING'
         elif self.monitor_event == 'e_stop':
-            self.pose_1 = None
-            self.pose_2 = None
             return 'INIT'
         else:
             return 'IDLE'
@@ -122,8 +120,6 @@ class ComponentWisePoseErrorCalculator(object):
 
         """
         if self.monitor_event == 'e_stop':
-            self.pose_1 = None
-            self.pose_2 = None
             return 'INIT'
         else:
             transformed_pose = self.transform_pose(self.pose_1, self.pose_2)

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="mcr_twist_synchronizer" type="twist_synchronizer_node"
+            name="twist_synchronizer" output="screen">
+
+        <!-- the cycle time of the node (in seconds) -->
+        <param name="cycle_time" type="double" value="0.1"/>
+
+    </node>
+</launch>

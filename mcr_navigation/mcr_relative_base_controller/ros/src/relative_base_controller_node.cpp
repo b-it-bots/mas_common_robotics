@@ -5,7 +5,7 @@
 #include <tf/transform_datatypes.h>
 #include <tf/transform_listener.h>
 #include <tf/LinearMath/Matrix3x3.h>
-
+#include <tf/LinearMath/Matrix3x3.h>
 
 BaseMotionController::BaseMotionController(ros::NodeHandle &n) : nh_(n)
 {
@@ -13,55 +13,69 @@ BaseMotionController::BaseMotionController(ros::NodeHandle &n) : nh_(n)
 
   odom_received_ = false;
   done_moving_ = true;
+  new_command_interuption_flag = false;
   start_relative_movement_ = false;
 
   nh_.getParam("world_frame_tf", world_frame_tf_);
   nh_.getParam("base_frame_tf", base_frame_tf_);
 
-  base_velocities_pub_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 1 );
+  base_velocities_pub_ = nh_.advertise<geometry_msgs::Twist>("cmd_vel", 1 );
   move_done_pub_ = nh_.advertise<std_msgs::String>("event_out", 1);
-  
+
   move_command_sub_ = nh_.subscribe("command", 1, &BaseMotionController::moveBaseCallback, this);
   trigger_sub_ = nh_.subscribe("event_in", 1, &BaseMotionController::triggerCallback, this);
+  
+  tf_listener_ = new tf::TransformListener();
 }
 
 BaseMotionController::~BaseMotionController()
 {
   trigger_sub_.shutdown();
   move_command_sub_.shutdown();
-  base_velocities_pub_.shutdown(); 
+  base_velocities_pub_.shutdown();
 }
 
-void BaseMotionController::moveBaseCallback(const geometry_msgs::Twist &relative_move_command)
+void BaseMotionController::moveBaseCallback(const geometry_msgs::PoseStamped &msg)
 {
-  if (done_moving_)
+  geometry_msgs::PoseStamped relative_move_command;
+  try {
+      tf_listener_->waitForTransform(base_frame_tf_, msg.header.frame_id, msg.header.stamp, ros::Duration(0.1));
+      tf_listener_->transformPose(base_frame_tf_, msg, relative_move_command);
+  }catch (std::exception &e) {
+    ROS_ERROR_STREAM("Could not transform pose: " << e.what());
+
+    return;
+  }
+
+
+  new_command_interuption_flag = true;
+
+  x_trans_ = relative_move_command.pose.position.x;
+  y_trans_ = relative_move_command.pose.position.y;
+
+  z_rot_ = getYaw(relative_move_command.pose.orientation);
+
+  ROS_DEBUG("Got new move message");
+
+  ROS_DEBUG("x, y, rot: %.2f, %.2f, %.2f", x_trans_, y_trans_, z_rot_);
+
+
+  // if both translation and rotation are specified, issue a warning
+  if (((x_trans_ != 0.0) || (y_trans_ != 0.0)) && (z_rot_ != 0.0))
   {
-    x_trans_ = relative_move_command.linear.x;
-    y_trans_ = relative_move_command.linear.y;
-    z_rot_ = relative_move_command.angular.z;
-    
-    ROS_DEBUG("Got new move message");
-    
-    // if both translation and rotation are specified, issue a warning
-    if (((x_trans_ != 0.0) || (y_trans_ != 0.0)) && (z_rot_ != 0.0))
+    ROS_INFO("Both translation and rotation are set");
+    if (rotate_first_)
     {
-      ROS_WARN("Both translation and rotation are set");
-      if (rotate_first_)
-      {
-        ROS_WARN("Rotating first then translating");
-      }
-      else
-      {
-        ROS_WARN("Translating first then rotating");
-      }
+      ROS_WARN("Rotating first then translating");
     }
-    done_moving_ = false;
-    new_command_sent_ = true;
+    else
+    {
+      ROS_WARN("Translating first then rotating");
+    }
   }
-  else 
-  {
-    ROS_WARN("Base still moving. Ignoring move command");
-  }
+  done_moving_ = false;
+  new_command_sent_ = true;
+
 }
 
 void BaseMotionController::triggerCallback(const std_msgs::String &trigger_command)
@@ -83,7 +97,7 @@ void BaseMotionController::triggerCallback(const std_msgs::String &trigger_comma
   }
 }
 
-void BaseMotionController::dynamicReconfigCallback(mcr_relative_base_controller::RelativeBaseControllerConfig &config, uint32_t level) 
+void BaseMotionController::dynamicReconfigCallback(mcr_relative_base_controller::RelativeBaseControllerConfig &config, uint32_t level)
 {
   this->rotate_first_ = config.rotation_before_translation;
   this->x_vel_ = config.x_vel;
@@ -91,40 +105,42 @@ void BaseMotionController::dynamicReconfigCallback(mcr_relative_base_controller:
   this->theta_vel_ = config.theta_vel;
   this->tolerance_ = config.distance_tolerance;
 }
-  		
+
 void BaseMotionController::odomCallback(const nav_msgs::Odometry &odom)
 {
-    double roll, pitch, yaw;      
+    double roll, pitch, yaw;
     tf::Quaternion q;
     x_current_ = odom.pose.pose.position.x;
     y_current_ = odom.pose.pose.position.y;
     tf::quaternionMsgToTF(odom.pose.pose.orientation, q);
-    tf::Matrix3x3(q).getRPY(roll, pitch, yaw);  
+    tf::Matrix3x3(q).getRPY(roll, pitch, yaw);
     theta_current_ = yaw;
-    odom_received_ = true; 
-} 
+    odom_received_ = true;
+}
 
 void BaseMotionController::run()
 {
   while (ros::ok())
   {
     ros::Rate(10).sleep();
-    ros::spinOnce();      
-    // wait for start trigger and new Twist message 
+    ros::spinOnce();
+    // wait for start trigger and new Twist message
     if (!start_relative_movement_ || !new_command_sent_)
     {
       continue;
     }
-    
+
     odom_received_ = false;
     if (start_relative_movement_)
     {
+      new_command_interuption_flag = false;
+
       // rotate first then translate
       if (rotate_first_)
       {
         if (z_rot_ != 0.0)
         {
-          rotateRelative(z_rot_);      
+          rotateRelative(z_rot_);
         }
         if (x_trans_ != 0.0 || y_trans_ != 0.0)
         {
@@ -140,11 +156,12 @@ void BaseMotionController::run()
         }
         if (z_rot_ != 0.0)
         {
-          rotateRelative(z_rot_);      
+          rotateRelative(z_rot_);
         }
       }
     }
-    if (new_command_sent_)
+
+    if (new_command_sent_ && !new_command_interuption_flag)
     {
       new_command_sent_ = false;
       x_trans_ = 0.0;
@@ -162,7 +179,7 @@ bool BaseMotionController::translateRelative(double x_trans, double y_trans)
 {
   geometry_msgs::Twist zero_velocity;
   while (!odom_received_)
-  {    
+  {
     ros::spinOnce();
     if (!start_relative_movement_)
     {
@@ -172,7 +189,6 @@ bool BaseMotionController::translateRelative(double x_trans, double y_trans)
   }
   odom_received_ = false;
 
-  tf::TransformListener tf_listener;
   tf::StampedTransform robot_transform;
   bool tf_received = false;
   // wait for transform
@@ -181,7 +197,7 @@ bool BaseMotionController::translateRelative(double x_trans, double y_trans)
   {
     try
     {
-      tf_listener.lookupTransform(world_frame_tf_, base_frame_tf_, ros::Time(0), robot_transform);
+      tf_listener_->lookupTransform(world_frame_tf_, base_frame_tf_, ros::Time(0), robot_transform);
       tf_received = true;
     }
     catch(tf::TransformException &ex)
@@ -198,7 +214,6 @@ bool BaseMotionController::translateRelative(double x_trans, double y_trans)
   point.x = x_current_;
   point.y = y_current_;
   geometry_msgs::Point newPoint = getTransformedPoint(point, robot_yaw);
-
   // calculate desired x and y positions
   double x_goal = newPoint.x + x_trans;
   double y_goal = newPoint.y + y_trans;
@@ -212,10 +227,15 @@ bool BaseMotionController::translateRelative(double x_trans, double y_trans)
     base_velocities_pub_.publish(zero_velocity);
     return true;
   }
-  
+
   // while either x or y translation needs to be done
   while (!isMovementDone(x_goal, newPoint.x) || !isMovementDone(y_goal, newPoint.y))
-  {      
+  {
+    if (new_command_interuption_flag)
+    {
+        ROS_WARN("Interupted!! Returning as got new command");
+        return true;
+    }
     geometry_msgs::Twist base_velocity;
     // if x translation is required
     if (!isMovementDone(x_goal, newPoint.x))
@@ -233,7 +253,7 @@ bool BaseMotionController::translateRelative(double x_trans, double y_trans)
     // if y translation is required
     if (!isMovementDone(y_goal, newPoint.y))
     {
-      if (y_goal - newPoint.y < 0.0) 
+      if (y_goal - newPoint.y < 0.0)
       {
         base_velocity.linear.y = -y_vel_;
       }
@@ -251,7 +271,7 @@ bool BaseMotionController::translateRelative(double x_trans, double y_trans)
     {
       ros::spinOnce();
       if (!start_relative_movement_)
-      {        
+      {
         base_velocities_pub_.publish(zero_velocity);
         return false;
       }
@@ -275,7 +295,7 @@ bool BaseMotionController::rotateRelative(double rotation)
   {
     ros::spinOnce();
     if (!start_relative_movement_)
-    {      
+    {
       base_velocities_pub_.publish(zero_velocity);
       return false;
     }
@@ -306,6 +326,13 @@ bool BaseMotionController::rotateRelative(double rotation)
   while (!isMovementDone(theta_goal, theta_current_))
   {
     geometry_msgs::Twist base_velocity;
+
+    if (new_command_interuption_flag)
+    {
+        ROS_WARN("Interupted!! Returning as got new command");
+        return true;
+    }
+
     // calculate difference in current and goal position in radians
     double theta_diff = angularDistance(theta_goal, theta_current_);
 
@@ -341,7 +368,7 @@ bool BaseMotionController::isMovementDone(double goal, double current)
   // check if current is within 'tolerance_' of goal
   return (fabs(goal - current) < tolerance_);
 }
-  
+
 // calculate angular distance between the two angles in radians
 double BaseMotionController::angularDistance(double angle1, double angle2)
 {
@@ -355,17 +382,24 @@ geometry_msgs::Point BaseMotionController::getTransformedPoint(const geometry_ms
   newPoint.y = (point.y * cos(robot_yaw) - point.x * sin(robot_yaw));
   return newPoint;
 }
-      
+
+double BaseMotionController::getYaw(const geometry_msgs::Quaternion &q)
+{
+    tf::Quaternion qtf(q.x,q.y,q.z,q.w);
+    double yaw,pitch,roll;
+    tf::Matrix3x3(qtf).getEulerYPR(yaw,pitch,roll);
+    return yaw;
+}
 
 int main(int argc, char **argv)
-{  
+{
   ros::init(argc, argv, "relative_base_controller");
 
   ros::NodeHandle n("~");
 
   ROS_INFO("Ready to move base position");
 
-  BaseMotionController bm(n); 
+  BaseMotionController bm(n);
   bm.run();
 
   return 0;

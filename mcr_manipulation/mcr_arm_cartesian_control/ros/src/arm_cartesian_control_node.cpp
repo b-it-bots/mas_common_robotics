@@ -69,19 +69,29 @@ void ccCallback(geometry_msgs::TwistStampedConstPtr desiredVelocity) {
 
 	if (!tf_listener) return;
 
-	try {
 	  geometry_msgs::Vector3Stamped linear_in;
 	  geometry_msgs::Vector3Stamped linear_out;
 	  linear_in.header = desiredVelocity->header;
 	  linear_in.vector = desiredVelocity->twist.linear;
-	  tf_listener->transformVector(root_name, linear_in, linear_out);
 
+          try {
+	    tf_listener->transformVector(root_name, linear_in, linear_out);
+	  } catch(...) {
+	    ROS_ERROR("Could not transform frames %s -> %s for linear transformation", desiredVelocity->header.frame_id.c_str(), root_name.c_str());
+	    return;
+	  }
 	  geometry_msgs::Vector3Stamped angular_in;
 	  geometry_msgs::Vector3Stamped angular_out;
 	  angular_in.header = desiredVelocity->header;
 	  angular_in.vector = desiredVelocity->twist.angular;
-	  tf_listener->transformVector(root_name, angular_in, angular_out);
 
+	  try
+	  {
+	    tf_listener->transformVector(root_name, angular_in, angular_out);
+	  } catch(...) {
+	    ROS_ERROR("Could not transform frames %s -> %s for angular transformation", desiredVelocity->header.frame_id.c_str(), root_name.c_str());
+	    return;
+	  }
 	  targetVelocity.vel.data[0] = linear_out.vector.x;
 	  targetVelocity.vel.data[1] = linear_out.vector.y;
 	  targetVelocity.vel.data[2] = linear_out.vector.z;
@@ -91,9 +101,7 @@ void ccCallback(geometry_msgs::TwistStampedConstPtr desiredVelocity) {
 	  targetVelocity.rot.data[2] = angular_out.vector.z;
 
 	  t_last_command = ros::Time::now();
-	} catch(...) {
-	  ROS_ERROR("Could not transform frames %s -> %s", desiredVelocity->header.frame_id.c_str(), root_name.c_str());
-	}
+	
 	active = true;
 }
 

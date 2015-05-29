@@ -25,4 +25,14 @@ install(PROGRAMS
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-catkin_add_nosetests(ros/test/joint_position_monitors_unittest.py)
+### TESTS
+if(CATKIN_ENABLE_TESTING)
+  find_package(roslaunch REQUIRED)
+  find_package(rostest REQUIRED)
+
+  roslaunch_add_file_check(ros/launch)
+  add_rostest(ros/launch/joint_position_monitor.test)
+  add_rostest(ros/launch/cartesian_distance_monitor.test)
+  catkin_add_nosetests(ros/test/joint_position_monitors_unittest.py)
+  catkin_add_nosetests(ros/test/cartesian_distance_monitor_unittest.py)
+endif()

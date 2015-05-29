@@ -41,6 +41,19 @@ add_dependencies(virtual_laser_scanner_node
   ${catkin_EXPORTED_TARGETS}
 )
 
+
+### TESTS
+if(CATKIN_ENABLE_TESTING)
+  find_package(catkin REQUIRED
+    COMPONENTS
+      roslaunch
+  )
+
+  roslaunch_add_file_check(ros/launch)
+endif()
+
+
+### INSTALLS
 install(TARGETS virtual_laser_scanner_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
