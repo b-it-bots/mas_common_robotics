@@ -6,6 +6,8 @@ find_package(catkin REQUIRED
     geometry_msgs
     roscpp
     tf
+    std_msgs
+    mcr_manipulation_msgs
 )
 
 catkin_python_setup()
@@ -21,6 +23,7 @@ catkin_package(
     std_msgs
     geometry_msgs
     tf
+    mcr_manipulation_msgs
 )
 
 include_directories(
@@ -50,6 +53,7 @@ if(CATKIN_ENABLE_TESTING)
 
   roslaunch_add_file_check(ros/launch)
   add_rostest(ros/launch/transform_to_pose_converter.test)
+  add_rostest(ros/launch/pose_error_to_pose_converter.test)
 endif()
 
 
