@@ -19,6 +19,7 @@ packagelist=(
   ros-hydro-image-transport 
   ros-hydro-joint-trajectory-controller 
   ros-hydro-kdl-parser 
+  ros-hydro-moveit-msgs
   ros-hydro-nav-msgs 
   ros-hydro-pcl-ros 
   ros-hydro-robot-state-publisher
