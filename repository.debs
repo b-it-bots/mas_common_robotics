@@ -12,6 +12,7 @@ packagelist=(
   ros-hydro-angles 
   ros-hydro-bfl 
   ros-hydro-brics-actuator 
+  ros-hydro-costmap-2d
   ros-hydro-diagnostic-aggregator 
   ros-hydro-diagnostic-analysis 
   ros-hydro-diagnostic-msgs 
@@ -20,6 +21,7 @@ packagelist=(
   ros-hydro-joint-trajectory-controller 
   ros-hydro-kdl-parser 
   ros-hydro-moveit-msgs
+  ros-hydro-nav-core
   ros-hydro-nav-msgs 
   ros-hydro-pcl-ros 
   ros-hydro-robot-state-publisher
