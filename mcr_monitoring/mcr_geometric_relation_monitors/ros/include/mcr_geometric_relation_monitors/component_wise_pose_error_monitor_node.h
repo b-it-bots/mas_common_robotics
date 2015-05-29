@@ -1,5 +1,5 @@
-#ifndef BLOBTRACKINGERRORMONITORNODE_H_
-#define BLOBTRACKINGERRORMONITORNODE_H_
+#ifndef COMPONENTWISEPOSEERRORMONITORNODE_H_
+#define COMPONENTWISEPOSEERRORMONITORNODE_H_
 
 #include <ros/ros.h>
 #include <ros/package.h>
@@ -8,24 +8,24 @@
 #include <std_msgs/UInt32.h>
 #include <string>
 #include <dynamic_reconfigure/server.h>
-#include <mcr_perception_monitors/BlobTrackingErrorMonitorConfig.h>
+#include <mcr_geometric_relation_monitors/ComponentWisePoseErrorMonitorConfig.h>
 #include <math.h>
 
 
-class BlobTrackingErrorMonitorNode
+class ComponentWisePoseErrorMonitorNode
 {
 
     public:
-        BlobTrackingErrorMonitorNode(ros::NodeHandle &nh);
-        virtual ~BlobTrackingErrorMonitorNode();
-        void dynamicReconfigCallback(mcr_perception_monitors::BlobTrackingErrorMonitorConfig &config, uint32_t level);
+        ComponentWisePoseErrorMonitorNode(ros::NodeHandle &nh);
+        virtual ~ComponentWisePoseErrorMonitorNode();
+        void dynamicReconfigCallback(mcr_geometric_relation_monitors::ComponentWisePoseErrorMonitorConfig &config, uint32_t level);
         void eventCallback(const std_msgs::String &event_command);
         void errorCallback(const mcr_manipulation_msgs::ComponentWiseCartesianDifference::ConstPtr &pose_error);
         void states();
         void initState();
         void idleState();
         void runState();
-        bool isBlobTrackingErrorWithinThreshold();
+        bool isComponentWisePoseErrorWithinThreshold();
 
     private:
         enum States {
@@ -36,12 +36,12 @@ class BlobTrackingErrorMonitorNode
 
     private:
         ros::NodeHandle node_handler_;
-        dynamic_reconfigure::Server<mcr_perception_monitors::BlobTrackingErrorMonitorConfig> dynamic_reconfig_server_;
+        dynamic_reconfigure::Server<mcr_geometric_relation_monitors::ComponentWisePoseErrorMonitorConfig> dynamic_reconfig_server_;
         ros::Subscriber event_sub_;
         ros::Subscriber error_sub_;
         ros::Publisher event_pub_;
-        bool tracking_error_sub_status_;
-        bool start_tracking_error_monitor_;
+        bool pose_error_sub_status_;
+        bool start_pose_error_monitor_;
         double threshold_linear_x_;
         double threshold_linear_y_;
         double threshold_linear_z_;
@@ -54,4 +54,4 @@ class BlobTrackingErrorMonitorNode
 
 };
 
-#endif /* BLOBTRACKINGERRORMONITORNODE_H_ */
+#endif /* COMPONENTWISEPOSEERRORMONITORNODE_H_ */

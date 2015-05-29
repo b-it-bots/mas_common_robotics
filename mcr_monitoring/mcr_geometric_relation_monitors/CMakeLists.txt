@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(mcr_perception_monitors)
+project(mcr_geometric_relation_monitors)
 
 find_package(catkin REQUIRED 
   COMPONENTS
@@ -11,7 +11,7 @@ find_package(catkin REQUIRED
 )
 
 generate_dynamic_reconfigure_options(
-  ros/config/BlobTrackingErrorMonitor.cfg
+  ros/config/ComponentWisePoseErrorMonitor.cfg
 )
 
 catkin_package(
@@ -28,20 +28,20 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(blob_tracking_error_monitor_node
-  ros/src/blob_tracking_error_monitor_node.cpp
+add_executable(component_wise_pose_error_monitor_node
+  ros/src/component_wise_pose_error_monitor_node.cpp
 )
 
-add_dependencies(blob_tracking_error_monitor_node
+add_dependencies(component_wise_pose_error_monitor_node
   ${catkin_EXPORTED_TARGETS}
   ${PROJECT_NAME}_gencfg
 )
 
-target_link_libraries(blob_tracking_error_monitor_node
+target_link_libraries(component_wise_pose_error_monitor_node
   ${catkin_LIBRARIES}
 )
 
-install(TARGETS blob_tracking_error_monitor_node
+install(TARGETS component_wise_pose_error_monitor_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

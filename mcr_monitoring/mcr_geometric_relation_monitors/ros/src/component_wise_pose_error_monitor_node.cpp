@@ -1,24 +1,24 @@
-#include <mcr_perception_monitors/blob_tracking_error_monitor_node.h>
+#include <mcr_geometric_relation_monitors/component_wise_pose_error_monitor_node.h>
 
-BlobTrackingErrorMonitorNode::BlobTrackingErrorMonitorNode(ros::NodeHandle &nh) : node_handler_(nh)
+ComponentWisePoseErrorMonitorNode::ComponentWisePoseErrorMonitorNode(ros::NodeHandle &nh) : node_handler_(nh)
 {
-    dynamic_reconfig_server_.setCallback(boost::bind(&BlobTrackingErrorMonitorNode::dynamicReconfigCallback, this, _1, _2));
-    event_sub_ = node_handler_.subscribe("event_in", 1, &BlobTrackingErrorMonitorNode::eventCallback, this);
-    error_sub_ = node_handler_.subscribe("pose_error", 1, &BlobTrackingErrorMonitorNode::errorCallback, this);
+    dynamic_reconfig_server_.setCallback(boost::bind(&ComponentWisePoseErrorMonitorNode::dynamicReconfigCallback, this, _1, _2));
+    event_sub_ = node_handler_.subscribe("event_in", 1, &ComponentWisePoseErrorMonitorNode::eventCallback, this);
+    error_sub_ = node_handler_.subscribe("pose_error", 1, &ComponentWisePoseErrorMonitorNode::errorCallback, this);
     event_pub_ = node_handler_.advertise<std_msgs::String>("event_out", 1);
     run_state_ = INIT;
-    start_tracking_error_monitor_ = false;
-    tracking_error_sub_status_ = false;  
+    start_pose_error_monitor_ = false;
+    pose_error_sub_status_ = false;  
 }
 
-BlobTrackingErrorMonitorNode::~BlobTrackingErrorMonitorNode()
+ComponentWisePoseErrorMonitorNode::~ComponentWisePoseErrorMonitorNode()
 {
     event_sub_.shutdown();
     error_sub_.shutdown();
     event_pub_.shutdown();  
 }
 
-void BlobTrackingErrorMonitorNode::dynamicReconfigCallback(mcr_perception_monitors::BlobTrackingErrorMonitorConfig &config, uint32_t level)
+void ComponentWisePoseErrorMonitorNode::dynamicReconfigCallback(mcr_geometric_relation_monitors::ComponentWisePoseErrorMonitorConfig &config, uint32_t level)
 {
     threshold_linear_x_ = config.threshold_linear_x;
     threshold_linear_y_ = config.threshold_linear_y;
@@ -28,24 +28,24 @@ void BlobTrackingErrorMonitorNode::dynamicReconfigCallback(mcr_perception_monito
     threshold_angular_z_ = config.threshold_angular_z;
 }
 
-void BlobTrackingErrorMonitorNode::eventCallback(const std_msgs::String &event_command)
+void ComponentWisePoseErrorMonitorNode::eventCallback(const std_msgs::String &event_command)
 {
     if (event_command.data == "e_start") {
-        start_tracking_error_monitor_ = true;
+        start_pose_error_monitor_ = true;
         ROS_INFO("ENABLED");
     } else if (event_command.data == "e_stop") {
-        start_tracking_error_monitor_ = false;
+        start_pose_error_monitor_ = false;
         ROS_INFO("DISABLED");
     }
 }
 
-void BlobTrackingErrorMonitorNode::errorCallback(const mcr_manipulation_msgs::ComponentWiseCartesianDifference::ConstPtr &pose_eror)
+void ComponentWisePoseErrorMonitorNode::errorCallback(const mcr_manipulation_msgs::ComponentWiseCartesianDifference::ConstPtr &pose_eror)
 {
     error_ = *pose_eror;
-    tracking_error_sub_status_ = true;
+    pose_error_sub_status_ = true;
 }
 
-void BlobTrackingErrorMonitorNode::states()
+void ComponentWisePoseErrorMonitorNode::states()
 {
     switch (run_state_) {
         case INIT:
@@ -62,40 +62,40 @@ void BlobTrackingErrorMonitorNode::states()
     }
 }
 
-void BlobTrackingErrorMonitorNode::initState()
+void ComponentWisePoseErrorMonitorNode::initState()
 {
-    if (start_tracking_error_monitor_) {
+    if (start_pose_error_monitor_) {
         run_state_ = IDLE;  
     } else {
         run_state_ = INIT;
     }
 }
 
-void BlobTrackingErrorMonitorNode::idleState()
+void ComponentWisePoseErrorMonitorNode::idleState()
 {
-    if (tracking_error_sub_status_) {
+    if (pose_error_sub_status_) {
         run_state_ = RUNNING;
-        tracking_error_sub_status_ = false;
+        pose_error_sub_status_ = false;
     } else {
         run_state_ = IDLE;
     }
 }
 
-void BlobTrackingErrorMonitorNode::runState()
+void ComponentWisePoseErrorMonitorNode::runState()
 {
-    if(isBlobTrackingErrorWithinThreshold()){
+    if(isComponentWisePoseErrorWithinThreshold()){
         status_msg_.data = "e_done";
         event_pub_.publish(status_msg_);
     }
 
-    if (start_tracking_error_monitor_) {
+    if (start_pose_error_monitor_) {
         run_state_ = IDLE;
     } else {
         run_state_ = INIT;
     }
 }
 
-bool BlobTrackingErrorMonitorNode::isBlobTrackingErrorWithinThreshold()
+bool ComponentWisePoseErrorMonitorNode::isComponentWisePoseErrorWithinThreshold()
 {
 
     if( (fabs(error_.linear.x) < threshold_linear_x_) && (fabs(error_.linear.y) < threshold_linear_y_) && (fabs(error_.linear.z) < threshold_linear_z_)){
@@ -110,10 +110,10 @@ bool BlobTrackingErrorMonitorNode::isBlobTrackingErrorWithinThreshold()
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "blob_tracking_error_monitor");
+    ros::init(argc, argv, "component_wise_pose_error_monitor");
     ros::NodeHandle nh("~");
     ROS_INFO("Initialised");
-    BlobTrackingErrorMonitorNode btem(nh);
+    ComponentWisePoseErrorMonitorNode cwpem(nh);
 
     double loop_rate = 30;
     nh.param<double>("loop_rate", loop_rate, 30);
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 
     while (ros::ok()) {
         ros::spinOnce();
-        btem.states();
+        cwpem.states();
         rate.sleep();
     }
     
