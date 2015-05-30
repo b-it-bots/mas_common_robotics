@@ -1,28 +1,18 @@
 <?xml version="1.0"?>
 <launch>
     <node pkg="mcr_common_converters" type="pose_error_to_pose_converter_node"
-          name="pose_error_to_pose_converter_node" output="screen" >
+          name="pose_error_to_pose_converter_node" output="screen" ns="mcr_common" >
 
-        <!-- the cycle rate of the node (in seconds) -->
-        <param name="loop_rate" type="double" value="0.1"/>
-
-        <!-- correction for base shift in x direction -->
-        <param name="offset_x" type="double" value="0.0"/>
-
-        <!-- correction for base shift in y direction -->
-        <param name="offset_y" type="double" value="0.0"/>
-
-        <!-- frame id w.r.t. to which base shift is to be spcified -->
-        <param name="frame_id" type="string" value="/base_link"/>
+        <rosparam command="load" file="$(find mcr_common_converters)/ros/config/pose_error_to_pose_converter.yaml" />
 
     </node>
 
     <test pkg="mcr_common_converters" type="pose_error_to_pose_converter_test.py"
             test-name="test_pose_error_to_pose_converter">
 
-        <remap from="~component_output" to="/pose_error_to_pose_converter_node/pose_error"/>
-        <remap from="~event_out" to="/pose_error_to_pose_converter_node/event_in"/>
-        <remap from="~component_input" to="/pose_error_to_pose_converter_node/pose"/>
+        <remap from="~component_output" to="mcr_common/pose_error_to_pose_converter_node/pose_error"/>
+        <remap from="~event_out" to="mcr_common/pose_error_to_pose_converter_node/event_in"/>
+        <remap from="~component_input" to="mcr_common/pose_error_to_pose_converter_node/pose"/>
 
     </test>
 </launch>
