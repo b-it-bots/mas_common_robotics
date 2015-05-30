@@ -25,6 +25,9 @@ class TestComputebaseShift(unittest.TestCase):
         self.result = None
         self.wait_for_result = None
 
+        self.offset_x = rospy.get_param('~offset_x', 0.0)
+        self.offset_y = rospy.get_param('~offset_y', 0.0)
+
         # publishers
         self.event_out = rospy.Publisher(
             '~event_out', std_msgs.msg.String, latch=True
@@ -55,7 +58,7 @@ class TestComputebaseShift(unittest.TestCase):
 
         """
         pose_error = mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference()
-        pose_error.linear.x = 0.251
+        pose_error.linear.x = 0.251 
         pose_error.linear.y = -0.016
         pose_error.linear.z = 0.456
         pose_error.angular.x = 0.0
@@ -64,8 +67,8 @@ class TestComputebaseShift(unittest.TestCase):
 
         expected_result = geometry_msgs.msg.PoseStamped()
         expected_result.header.frame_id = 'base_link'
-        expected_result.pose.position.x = 0.251
-        expected_result.pose.position.y = -0.016
+        expected_result.pose.position.x = 0.251 + self.offset_x
+        expected_result.pose.position.y = -0.016 + self.offset_y
         expected_result.pose.position.z = 0.0
         expected_result.pose.orientation.x = 0.0
         expected_result.pose.orientation.y = 0.0
