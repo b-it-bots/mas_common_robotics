@@ -5,6 +5,8 @@ find_package(catkin REQUIRED)
 
 catkin_package()
 
+
+### INSTALLS
 set(INSTALL_DIRS common/objects/ common/worlds/ ros/launch/) 
 foreach(dir ${INSTALL_DIRS}) 
   install(DIRECTORY ${dir}
