@@ -20,17 +20,20 @@ catkin_package(
     mcr_jshop2
 )
 
-add_executable(jshop2_test
-  ros/test/jshop2_test.cpp
-)
+### TESTS
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
 
-add_dependencies(jshop2_test
-  ${catkin_EXPORTED_TARGETS}
-)
+  add_rostest_gtest(jshop2_test
+    ros/test/jshop2.test
+    ros/test/jshop2_test.cpp
+  )
 
-target_link_libraries(jshop2_test
-  ${GTEST_LIBRARIES}
-  ${catkin_LIBRARIES}
-)
+  add_dependencies(jshop2_test
+    ${catkin_EXPORTED_TARGETS}
+  )
 
-add_rostest(ros/test/jshop2.test)
+  target_link_libraries(jshop2_test
+    ${catkin_LIBRARIES}
+  )
+endif()
