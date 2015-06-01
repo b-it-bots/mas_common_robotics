@@ -23,6 +23,9 @@ catkin_package(
 ### TESTS
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
+  find_package(roslaunch REQUIRED)
+
+  roslaunch_add_file_check(ros/launch)
 
   add_rostest_gtest(jshop2_test
     ros/test/jshop2.test
