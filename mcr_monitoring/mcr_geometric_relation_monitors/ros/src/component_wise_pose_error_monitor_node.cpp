@@ -84,7 +84,7 @@ void ComponentWisePoseErrorMonitorNode::idleState()
 void ComponentWisePoseErrorMonitorNode::runState()
 {
     if(isComponentWisePoseErrorWithinThreshold()){
-        status_msg_.data = "e_done";
+        status_msg_.data = "e_error_within_threshold";
         event_pub_.publish(status_msg_);
     }
 
