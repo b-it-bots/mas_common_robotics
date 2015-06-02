@@ -4,7 +4,6 @@ project(mcr_manipulation_measurers)
 find_package(catkin REQUIRED
   COMPONENTS
     rospy
-    rostest
 )
 
 catkin_python_setup()
