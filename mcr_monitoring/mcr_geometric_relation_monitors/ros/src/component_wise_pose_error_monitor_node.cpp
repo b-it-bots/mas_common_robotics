@@ -98,7 +98,8 @@ void ComponentWisePoseErrorMonitorNode::runState()
 bool ComponentWisePoseErrorMonitorNode::isComponentWisePoseErrorWithinThreshold()
 {
 
-    if( (fabs(error_.linear.x) < threshold_linear_x_) && (fabs(error_.linear.y) < threshold_linear_y_) && (fabs(error_.linear.z) < threshold_linear_z_)){
+    if( (fabs(error_.linear.x) < threshold_linear_x_) && (fabs(error_.linear.y) < threshold_linear_y_) && (fabs(error_.linear.z) < threshold_linear_z_))
+    {
         if( (fabs(error_.angular.x) < threshold_angular_x_) && (fabs(error_.angular.y) < threshold_angular_y_) && (fabs(error_.angular.z) < threshold_angular_z_)){
             return true;
         }
