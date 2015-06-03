@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Test integration for the compute_base_shift node.
+Test integration for the pose_error_to_pose_converter node.
 
 """
 
@@ -15,7 +15,7 @@ import tf
 PKG = 'mcr_pose_error_to_pose_converter'
 
 
-class TestComputebaseShift(unittest.TestCase):
+class TestPoseErrorToPoseConverter(unittest.TestCase):
     def setUp(self):
         """
         Sets up the test fixture before exercising it.
@@ -54,7 +54,7 @@ class TestComputebaseShift(unittest.TestCase):
 
     def test_pose_error_to_pose_converter(self):
         """
-        Verifies that the node returns base shift correctly.
+        Verifies that the node returns pose correctly.
 
         """
         pose_error = mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference()
@@ -95,4 +95,4 @@ class TestComputebaseShift(unittest.TestCase):
 
 if __name__ == '__main__':
     rospy.init_node('pose_error_to_pose_converter_test')
-    rostest.rosrun(PKG, 'pose_error_to_pose_converter_test', TestComputebaseShift)
+    rostest.rosrun(PKG, 'pose_error_to_pose_converter_test', TestPoseErrorToPoseConverter)
