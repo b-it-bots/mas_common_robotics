@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """
-This module contains a component that computes
-base shift with given pose error.
+This module contains a component that computes pose from given pose error.
 
 """
 #-*- encoding: utf-8 -*-
@@ -25,6 +24,7 @@ class PoseErrorToPoseConverter(object):
         self.frame_id = rospy.get_param('~frame_id', '/base_link')
 
         self.pose_error_linear = None
+        self.r = rospy.Rate(self.loop_rate) 
 
         # publishers
         self.pose_pub = rospy.Publisher('~pose', PoseStamped)
@@ -36,7 +36,7 @@ class PoseErrorToPoseConverter(object):
 
     def start(self):
         """
-        Starts base shift calculator.
+        Starts pose error to pose calculator.
 
         """
         rospy.loginfo("Ready to start...")
@@ -52,11 +52,11 @@ class PoseErrorToPoseConverter(object):
                 state = self.running_state()
 
             rospy.logdebug("State: {0}".format(state))
-            rospy.sleep(self.loop_rate)
+            self.r.sleep()
 
     def event_in_cb(self, msg):
         """
-        Obtains an event for the base shift computation.
+        Obtains an event for the pose computation.
 
         """
         self.monitor_event = msg.data
@@ -107,9 +107,9 @@ class PoseErrorToPoseConverter(object):
         if self.monitor_event == 'e_stop':
             return 'INIT'
         else:
-            relative_base_move = self.pose_error_to_pose_converter()
+            pose_from_pose_error = self.pose_error_to_pose_converter()
 
-            self.pose_pub.publish(relative_base_move)
+            self.pose_pub.publish(pose_from_pose_error)
             event_out_msg = String()
             event_out_msg.data = 'e_done'
             self.event_out_pub.publish(event_out_msg)
@@ -118,9 +118,9 @@ class PoseErrorToPoseConverter(object):
 
     def pose_error_to_pose_converter(self):
         """
-        Computes base shift from pose error and offset.
+        Computes pose from pose error and offset.
 
-        :return: The desired base shift.
+        :return: pose from pose error.
         :rtype: geometry_msgs.msg.PoseStamped
 
         """
@@ -128,14 +128,14 @@ class PoseErrorToPoseConverter(object):
         pose_x = self.pose_error_linear.x + self.offset_x
         pose_y = self.pose_error_linear.y + self.offset_y
 
-        relative_base_move = PoseStamped()
-        relative_base_move.header.stamp = rospy.Time.now()
-        relative_base_move.header.frame_id = self.frame_id
+        pose_from_pose_error = PoseStamped()
+        pose_from_pose_error.header.stamp = rospy.Time.now()
+        pose_from_pose_error.header.frame_id = self.frame_id
 
-        relative_base_move.pose.position.x = pose_x
-        relative_base_move.pose.position.y = pose_y
+        pose_from_pose_error.pose.position.x = pose_x
+        pose_from_pose_error.pose.position.y = pose_y
 
-        return relative_base_move
+        return pose_from_pose_error
 
 def main():
     rospy.init_node('pose_error_to_pose_converter_node', anonymous=True)
