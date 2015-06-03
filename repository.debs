@@ -20,6 +20,7 @@ packagelist=(
   ros-hydro-image-transport 
   ros-hydro-joint-trajectory-controller 
   ros-hydro-kdl-parser
+  ros-hydro-laser-filters
   ros-hydro-moveit-msgs
   ros-hydro-nav-core
   ros-hydro-nav-msgs 
