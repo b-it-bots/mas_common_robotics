@@ -28,4 +28,5 @@ if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
 
   add_rostest(ros/launch/cartesian_motion.test)
+  catkin_add_nosetests(ros/test/planned_motion_unittest.py)
 endif()
