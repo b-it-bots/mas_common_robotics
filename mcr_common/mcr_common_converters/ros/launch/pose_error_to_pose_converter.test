@@ -5,9 +5,9 @@
     <test pkg="mcr_common_converters" type="pose_error_to_pose_converter_test.py"
             test-name="test_pose_error_to_pose_converter">
 
-        <remap from="~component_output" to="mcr_common/pose_error_to_pose_converter_node/pose_error"/>
-        <remap from="~event_out" to="mcr_common/pose_error_to_pose_converter_node/event_in"/>
-        <remap from="~component_input" to="mcr_common/pose_error_to_pose_converter_node/pose"/>
+        <remap from="~component_output" to="mcr_common/pose_error_to_pose_converter/pose_error"/>
+        <remap from="~event_out" to="mcr_common/pose_error_to_pose_converter/event_in"/>
+        <remap from="~component_input" to="mcr_common/pose_error_to_pose_converter/pose"/>
 
     </test>
 </launch>

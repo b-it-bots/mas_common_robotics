@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
     <node pkg="mcr_common_converters" type="pose_error_to_pose_converter_node"
-          name="pose_error_to_pose_converter_node" output="screen" ns="mcr_common" >
+          name="pose_error_to_pose_converter" output="screen" ns="mcr_common" >
 
         <rosparam command="load" file="$(find mcr_common_converters)/ros/config/pose_error_to_pose_converter.yaml" />
 

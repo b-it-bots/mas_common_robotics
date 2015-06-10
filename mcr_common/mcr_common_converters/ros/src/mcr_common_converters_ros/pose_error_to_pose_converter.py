@@ -138,6 +138,6 @@ class PoseErrorToPoseConverter(object):
         return pose_from_pose_error
 
 def main():
-    rospy.init_node('pose_error_to_pose_converter_node', anonymous=True)
+    rospy.init_node('pose_error_to_pose_converter', anonymous=True)
     pose_error_to_pose_converter = PoseErrorToPoseConverter()
     pose_error_to_pose_converter.start()
