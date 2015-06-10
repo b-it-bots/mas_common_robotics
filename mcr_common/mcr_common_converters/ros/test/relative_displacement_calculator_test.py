@@ -15,7 +15,7 @@ import tf
 PKG = 'mcr_relative_displacement_calculator'
 
 
-class TestPoseErrorToPoseConverter(unittest.TestCase):
+class TestDislacementCalculator(unittest.TestCase):
     def setUp(self):
         """
         Sets up the test fixture before exercising it.
@@ -93,4 +93,4 @@ class TestPoseErrorToPoseConverter(unittest.TestCase):
 
 if __name__ == '__main__':
     rospy.init_node('relative_displacement_calculator_test')
-    rostest.rosrun(PKG, 'relative_displacement_calculator_test', TestPoseErrorToPoseConverter)
+    rostest.rosrun(PKG, 'relative_displacement_calculator_test', TestDislacementCalculator)

@@ -12,7 +12,7 @@ from geometry_msgs.msg import PoseStamped
 import mcr_manipulation_msgs.msg
 import tf
 
-class PoseErrorToPoseConverter(object):
+class RelativeDisplacementCalculator(object):
 
     def __init__(self):
         # params
@@ -35,7 +35,7 @@ class PoseErrorToPoseConverter(object):
 
     def start(self):
         """
-        Starts pose error to pose calculator.
+        Starts relative displacement calculator calculator.
 
         """
         rospy.loginfo("Ready to start...")
@@ -118,7 +118,7 @@ class PoseErrorToPoseConverter(object):
 
     def relative_displacement_calculator(self):
         """
-        Computes pose from pose error.
+        Computes relative displacement from pose error.
 
         :return: pose from pose error.
         :rtype: geometry_msgs.msg.PoseStamped
@@ -155,5 +155,5 @@ class PoseErrorToPoseConverter(object):
 
 def main():
     rospy.init_node('relative_displacement_calculator', anonymous=True)
-    relative_displacement_calculator = PoseErrorToPoseConverter()
+    relative_displacement_calculator = RelativeDisplacementCalculator()
     relative_displacement_calculator.start()
