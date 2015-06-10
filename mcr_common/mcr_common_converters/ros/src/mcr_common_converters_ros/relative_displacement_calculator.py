@@ -107,7 +107,7 @@ class PoseErrorToPoseConverter(object):
         if self.monitor_event == 'e_stop':
             return 'INIT'
         else:
-            pose_from_pose_error = self.pose_error_to_pose_converter()
+            pose_from_pose_error = self.relative_displacement_calculator()
 
             self.pose_pub.publish(pose_from_pose_error)
             event_out_msg = String()
@@ -116,7 +116,7 @@ class PoseErrorToPoseConverter(object):
 
             return 'RUNNING'
 
-    def pose_error_to_pose_converter(self):
+    def relative_displacement_calculator(self):
         """
         Computes pose from pose error and offset.
 
@@ -138,6 +138,6 @@ class PoseErrorToPoseConverter(object):
         return pose_from_pose_error
 
 def main():
-    rospy.init_node('pose_error_to_pose_converter', anonymous=True)
-    pose_error_to_pose_converter = PoseErrorToPoseConverter()
-    pose_error_to_pose_converter.start()
+    rospy.init_node('relative_displacement_calculator', anonymous=True)
+    relative_displacement_calculator = PoseErrorToPoseConverter()
+    relative_displacement_calculator.start()

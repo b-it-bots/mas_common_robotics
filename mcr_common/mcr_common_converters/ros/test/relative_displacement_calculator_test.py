@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Test integration for the pose_error_to_pose_converter node.
+Test integration for the relative_displacement_calculator node.
 
 """
 
@@ -12,7 +12,7 @@ import geometry_msgs.msg
 import mcr_manipulation_msgs.msg
 import tf
 
-PKG = 'mcr_pose_error_to_pose_converter'
+PKG = 'mcr_relative_displacement_calculator'
 
 
 class TestPoseErrorToPoseConverter(unittest.TestCase):
@@ -52,7 +52,7 @@ class TestPoseErrorToPoseConverter(unittest.TestCase):
         self.event_out.unregister()
         self.component_input.unregister()
 
-    def test_pose_error_to_pose_converter(self):
+    def test_relative_displacement_calculator(self):
         """
         Verifies that the node returns pose correctly.
 
@@ -94,5 +94,5 @@ class TestPoseErrorToPoseConverter(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    rospy.init_node('pose_error_to_pose_converter_test')
-    rostest.rosrun(PKG, 'pose_error_to_pose_converter_test', TestPoseErrorToPoseConverter)
+    rospy.init_node('relative_displacement_calculator_test')
+    rostest.rosrun(PKG, 'relative_displacement_calculator_test', TestPoseErrorToPoseConverter)
