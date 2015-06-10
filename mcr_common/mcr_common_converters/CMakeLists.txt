@@ -53,7 +53,7 @@ if(CATKIN_ENABLE_TESTING)
 
   roslaunch_add_file_check(ros/launch)
   add_rostest(ros/launch/transform_to_pose_converter.test)
-  add_rostest(ros/launch/pose_error_to_pose_converter.test)
+  add_rostest(ros/launch/relative_displacement_calculator.test)
 endif()
 
 

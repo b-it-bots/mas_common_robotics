@@ -10,7 +10,7 @@ import rospy
 from std_msgs.msg import String
 from geometry_msgs.msg import PoseStamped
 import mcr_manipulation_msgs.msg
-
+import tf
 
 class PoseErrorToPoseConverter(object):
 
@@ -19,12 +19,11 @@ class PoseErrorToPoseConverter(object):
         self.monitor_event = None
         # node cycle rate (in seconds)
         self.loop_rate = rospy.get_param('~loop_rate')
-        self.offset_x = rospy.get_param('~offset_x', 0.0)
-        self.offset_y = rospy.get_param('~offset_y', 0.0)
-        self.frame_id = rospy.get_param('~frame_id', '/base_link')
+        self.reference_frame = rospy.get_param('~reference_frame', '/base_link')
 
         self.pose_error_linear = None
         self.r = rospy.Rate(self.loop_rate) 
+        self.listener = tf.TransformListener()
 
         # publishers
         self.pose_pub = rospy.Publisher('~pose', PoseStamped)
@@ -67,6 +66,7 @@ class PoseErrorToPoseConverter(object):
 
         """
         self.pose_error_linear = msg.linear
+        self.pose_error_frame = msg.header.frame_id
 
     def init_state(self):
         """
@@ -118,24 +118,40 @@ class PoseErrorToPoseConverter(object):
 
     def relative_displacement_calculator(self):
         """
-        Computes pose from pose error and offset.
+        Computes pose from pose error.
 
         :return: pose from pose error.
         :rtype: geometry_msgs.msg.PoseStamped
 
         """
 
-        pose_x = self.pose_error_linear.x + self.offset_x
-        pose_y = self.pose_error_linear.y + self.offset_y
+        pose_x = self.pose_error_linear.x 
+        pose_y = self.pose_error_linear.y 
+        pose_z = self.pose_error_linear.z
 
         pose_from_pose_error = PoseStamped()
         pose_from_pose_error.header.stamp = rospy.Time.now()
-        pose_from_pose_error.header.frame_id = self.frame_id
+        pose_from_pose_error.header.frame_id = self.pose_error_frame
 
         pose_from_pose_error.pose.position.x = pose_x
         pose_from_pose_error.pose.position.y = pose_y
+        pose_from_pose_error.pose.position.z = pose_z
 
-        return pose_from_pose_error
+        try:
+            self.listener.waitForTransform(
+                self.pose_error_frame, self.reference_frame,
+                rospy.Time(0), rospy.Duration(0.1)
+            )
+
+            transformed_pose = self.listener.transformPose(
+                self.reference_frame, pose_from_pose_error
+            )
+
+            return transformed_pose
+
+        except tf.Exception, error:
+            rospy.logwarn("Exception occurred: {0}".format(error))
+            return None
 
 def main():
     rospy.init_node('relative_displacement_calculator', anonymous=True)
