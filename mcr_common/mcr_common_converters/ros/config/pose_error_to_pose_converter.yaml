@@ -1,0 +1,5 @@
+loop_rate : 10
+frame_id : /base_link
+offset_x : 0.0
+offset_y : 0.0
+

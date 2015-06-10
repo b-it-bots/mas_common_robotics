@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <include file="$(find mcr_common_converters)/ros/launch/pose_error_to_pose_converter.launch"/>
+
+    <test pkg="mcr_common_converters" type="pose_error_to_pose_converter_test.py"
+            test-name="test_pose_error_to_pose_converter">
+
+        <remap from="~component_output" to="mcr_common/pose_error_to_pose_converter_node/pose_error"/>
+        <remap from="~event_out" to="mcr_common/pose_error_to_pose_converter_node/event_in"/>
+        <remap from="~component_input" to="mcr_common/pose_error_to_pose_converter_node/pose"/>
+
+    </test>
+</launch>
