@@ -22,22 +22,22 @@ TwistToMotionDirectionConversionNode::TwistToMotionDirectionConversionNode() : t
 
 TwistToMotionDirectionConversionNode::~TwistToMotionDirectionConversionNode()
 {
-	sub_event_.shutdown();
-	sub_twist_.shutdown();
+    sub_event_.shutdown();
+    sub_twist_.shutdown();
     pub_pose_.shutdown();
     pub_point_.shutdown();
 }
 
 void TwistToMotionDirectionConversionNode::twistCallback(const geometry_msgs::TwistPtr &msg)
 {
-	twist_msg_ = *msg;
-	twist_msg_received_ = true;
+    twist_msg_ = *msg;
+    twist_msg_received_ = true;
 }
 
 void TwistToMotionDirectionConversionNode::eventCallback(const std_msgs::StringPtr &msg)
 {
-	event_msg_ = *msg;
-	event_msg_received_ = true;
+    event_msg_ = *msg;
+    event_msg_received_ = true;
 }
 
 void TwistToMotionDirectionConversionNode::computeMotionDirectionAndPublish()
@@ -69,33 +69,33 @@ void TwistToMotionDirectionConversionNode::computeMotionDirectionAndPublish()
 
 void TwistToMotionDirectionConversionNode::update()
 {
-	// check if a new event has been received
-	if(event_msg_received_)
-	{
-		ROS_INFO_STREAM("Received event: " << event_msg_.data);
+    // check if a new event has been received
+    if(event_msg_received_)
+    {
+        ROS_INFO_STREAM("Received event: " << event_msg_.data);
 
-		if(event_msg_.data == "e_start")
-			current_state_ = RUN;
-		else if(event_msg_.data == "e_stop")
-			current_state_ = INIT;
-		else
-			ROS_ERROR_STREAM("Event not supported: " << event_msg_.data);
+        if(event_msg_.data == "e_start")
+            current_state_ = RUN;
+        else if(event_msg_.data == "e_stop")
+            current_state_ = INIT;
+        else
+            ROS_ERROR_STREAM("Event not supported: " << event_msg_.data);
 
 
-		event_msg_received_ = false;
-	}
+        event_msg_received_ = false;
+    }
 
-	// if state is INIT, do nothing
-	if(current_state_ == INIT)
-		return;
+    // if state is INIT, do nothing
+    if(current_state_ == INIT)
+        return;
 
-	// if not msg received, do nothing
-	if(!twist_msg_received_)
-		return;
+    // if not msg received, do nothing
+    if(!twist_msg_received_)
+        return;
 
-	computeMotionDirectionAndPublish();
+    computeMotionDirectionAndPublish();
 
-	twist_msg_received_ = false;
+    twist_msg_received_ = false;
 }
 
 int main(int argc, char** argv)
@@ -109,7 +109,7 @@ int main(int argc, char** argv)
 
     while (ros::ok())
     {
-    	conversion_node.update();
+        conversion_node.update();
         ros::spinOnce();
         loop_rate.sleep();
     }
