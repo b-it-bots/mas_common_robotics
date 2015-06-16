@@ -29,7 +29,7 @@
 #include <pcl_ros/transforms.h>
 #include <dynamic_reconfigure/server.h>
 
-#include "mcr_virtual_laser_scanner/VirtualLaserScannerConfig.h"
+#include <mcr_virtual_laser_scanner/VirtualLaserScannerConfig.h>
 
 using namespace std;
 
