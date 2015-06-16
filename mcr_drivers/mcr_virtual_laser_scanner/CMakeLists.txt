@@ -8,7 +8,7 @@ find_package(catkin REQUIRED
     tf
     pcl_ros
     sensor_msgs
-    std_srvs
+    std_msgs
 )
 find_package(PCL 1.5 REQUIRED)
 
