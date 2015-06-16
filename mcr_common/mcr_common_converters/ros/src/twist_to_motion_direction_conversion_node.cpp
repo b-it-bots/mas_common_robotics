@@ -94,6 +94,8 @@ void TwistToMotionDirectionConversionNode::update()
 		return;
 
 	computeMotionDirectionAndPublish();
+
+	twist_msg_received_ = false;
 }
 
 int main(int argc, char** argv)
