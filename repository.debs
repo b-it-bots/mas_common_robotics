@@ -2,7 +2,6 @@
 
 # create list of packages to install
 packagelist=(
-  liblog4cpp5-dev 
   libsvm-dev
   python-rosinstall 
   python-scipy 
@@ -21,6 +20,7 @@ packagelist=(
   ros-hydro-joint-trajectory-controller 
   ros-hydro-kdl-parser
   ros-hydro-laser-filters
+  ros-hydro-log4cpp
   ros-hydro-moveit-msgs
   ros-hydro-nav-core
   ros-hydro-nav-msgs 
