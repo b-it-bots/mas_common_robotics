@@ -97,6 +97,7 @@ class RelativeDisplacementCalculator(object):
         :rtype: str
         """
         if self.monitor_event == 'e_stop':
+            self.pose_error = None
             return 'INIT'
         else:
             pose_from_pose_error = self.relative_displacement_calculator()
