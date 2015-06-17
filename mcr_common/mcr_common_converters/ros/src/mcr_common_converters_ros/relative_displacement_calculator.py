@@ -17,11 +17,10 @@ class RelativeDisplacementCalculator(object):
     def __init__(self):
         # params
         self.monitor_event = None
-        # node cycle rate (in seconds)
-        self.loop_rate = rospy.get_param('~loop_rate')
+        # node cycle rate (in Hz)
+        self.loop_rate = rospy.get_param('~loop_rate', 10)
         self.reference_frame = rospy.get_param('~reference_frame', '/base_link')
-
-        self.pose_error_linear = None
+        self.pose_error = None
         self.r = rospy.Rate(self.loop_rate) 
         self.listener = tf.TransformListener()
 
@@ -36,7 +35,6 @@ class RelativeDisplacementCalculator(object):
     def start(self):
         """
         Starts relative displacement calculator calculator.
-
         """
         rospy.loginfo("Ready to start...")
         state = 'INIT'
@@ -56,17 +54,14 @@ class RelativeDisplacementCalculator(object):
     def event_in_cb(self, msg):
         """
         Obtains an event for the pose computation.
-
         """
         self.monitor_event = msg.data
 
     def pose_error_cb(self, msg):
         """
         Stores pose error.
-
         """
-        self.pose_error_linear = msg.linear
-        self.pose_error_frame = msg.header.frame_id
+        self.pose_error = msg
 
     def init_state(self):
         """
@@ -74,9 +69,8 @@ class RelativeDisplacementCalculator(object):
 
         :return: The updated state.
         :rtype: str
-
         """
-        if self.pose_error_linear:
+        if self.pose_error:
             return 'IDLE'
         else:
             return 'INIT'
@@ -87,7 +81,6 @@ class RelativeDisplacementCalculator(object):
 
         :return: The updated state.
         :rtype: str
-
         """
         if self.monitor_event == 'e_start':
             return 'RUNNING'
@@ -102,18 +95,16 @@ class RelativeDisplacementCalculator(object):
 
         :return: The updated state.
         :rtype: str
-
         """
         if self.monitor_event == 'e_stop':
             return 'INIT'
         else:
             pose_from_pose_error = self.relative_displacement_calculator()
-
-            self.pose_pub.publish(pose_from_pose_error)
-            event_out_msg = String()
-            event_out_msg.data = 'e_done'
-            self.event_out_pub.publish(event_out_msg)
-
+            if pose_from_pose_error:
+                self.pose_pub.publish(pose_from_pose_error)
+                event_out_msg = String()
+                event_out_msg.data = 'e_done'
+                self.event_out_pub.publish(event_out_msg)
             return 'RUNNING'
 
     def relative_displacement_calculator(self):
@@ -122,24 +113,16 @@ class RelativeDisplacementCalculator(object):
 
         :return: pose from pose error.
         :rtype: geometry_msgs.msg.PoseStamped
-
         """
-
-        pose_x = self.pose_error_linear.x 
-        pose_y = self.pose_error_linear.y 
-        pose_z = self.pose_error_linear.z
-
         pose_from_pose_error = PoseStamped()
-        pose_from_pose_error.header.stamp = rospy.Time.now()
-        pose_from_pose_error.header.frame_id = self.pose_error_frame
-
-        pose_from_pose_error.pose.position.x = pose_x
-        pose_from_pose_error.pose.position.y = pose_y
-        pose_from_pose_error.pose.position.z = pose_z
+        pose_from_pose_error.header = self.pose_error.header
+        pose_from_pose_error.pose.position.x = self.pose_error.linear.x 
+        pose_from_pose_error.pose.position.y = self.pose_error.linear.y 
+        pose_from_pose_error.pose.position.z = self.pose_error.linear.z
 
         try:
             self.listener.waitForTransform(
-                self.pose_error_frame, self.reference_frame,
+                self.reference_frame, self.pose_error.header.frame_id, 
                 rospy.Time(0), rospy.Duration(0.1)
             )
 
