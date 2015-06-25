@@ -6,7 +6,6 @@
 #include <std_msgs/String.h>
 #include <geometry_msgs/TwistStamped.h>
 #include <geometry_msgs/Twist.h>
-#include <mcr_geometry_transformer/geometry_transformer.h>
 
 
 class TwistDemultiplexerNode
@@ -51,8 +50,6 @@ class TwistDemultiplexerNode
 
         std::string base_tf_;
         std::string arm_tf_;
-
-        GeometryTransformer geometry_transformer_;
 
         States run_state_;
 

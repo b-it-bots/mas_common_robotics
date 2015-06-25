@@ -90,24 +90,24 @@ void TwistDemultiplexerNode::demultiplexTwist()
     geometry_msgs::TwistStamped base_twist(input_twist_);
 
     // transform twists to required frames
-    geometry_msgs::TwistStamped transformed_arm_twist = geometry_transformer_.transformTwist(arm_tf_, arm_twist);
-    geometry_msgs::TwistStamped transformed_base_twist = geometry_transformer_.transformTwist(base_tf_, base_twist);
+    //geometry_msgs::TwistStamped transformed_arm_twist = geometry_transformer_.transformTwist(arm_tf_, arm_twist);
+    //geometry_msgs::TwistStamped transformed_base_twist = geometry_transformer_.transformTwist(base_tf_, base_twist);
 
+    // set linear arm motions to zero and angular x,y to zero
     // set x,y angular arm motions to zero
-    transformed_arm_twist.twist.angular.x = 0.0;
-    transformed_arm_twist.twist.angular.y = 0.0;
-
-    // set z linear arm motions to zero
-    transformed_arm_twist.twist.linear.z = 0.0;
+    arm_twist.twist.angular.x = 0.0;
+    arm_twist.twist.angular.y = 0.0;
+    arm_twist.twist.linear.x = 0.0;
+    arm_twist.twist.linear.y = 0.0;
+    arm_twist.twist.linear.z = 0.0;
 
     // set angular base motions to zero and linear z to zero
-    transformed_base_twist.twist.angular.x = 0.0;
-    transformed_base_twist.twist.angular.y = 0.0;
-    transformed_base_twist.twist.angular.z = 0.0;
+    base_twist.twist.angular.x = 0.0;
+    base_twist.twist.angular.y = 0.0;
+    base_twist.twist.angular.z = 0.0;
+    base_twist.twist.linear.z = 0.0;
 
-    transformed_base_twist.twist.linear.z = 0.0;
-
-    double minimum_base_velocity_x = 0.0;
+/*    double minimum_base_velocity_x = 0.0;
     double minimum_base_velocity_y = 0.0;
 
     node_handler_.getParam("minimum_base_velocity_x", minimum_base_velocity_x);
@@ -130,10 +130,10 @@ void TwistDemultiplexerNode::demultiplexTwist()
     else
     {
         transformed_arm_twist.twist.linear.y = 0.0;
-    }
+    }*/
 
-    arm_twist_stamped_pub_.publish(transformed_arm_twist);
-    base_twist_pub_.publish(transformed_base_twist.twist);
+    arm_twist_stamped_pub_.publish(arm_twist);
+    base_twist_pub_.publish(base_twist.twist);
 
 }
 
@@ -144,9 +144,15 @@ int main(int argc, char **argv)
     ros::NodeHandle nh("~");
     ROS_INFO("[twist demultiplexer] node started");
     TwistDemultiplexerNode twist_demultiplexer_node(nh);
+
+    int loop_rate = 30;
+    nh.param<int>("loop_rate", loop_rate, 30);
+    ros::Rate rate(loop_rate);
+
     while (ros::ok()) {
-        twist_demultiplexer_node.states();
         ros::spinOnce();
+        twist_demultiplexer_node.states();
+        rate.sleep();
     }
     return 0;
 }
