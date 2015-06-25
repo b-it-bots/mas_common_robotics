@@ -101,6 +101,8 @@ void TwistDemultiplexerNode::demultiplexTwist()
     arm_twist.twist.linear.y = 0.0;
     arm_twist.twist.linear.z = 0.0;
 
+    arm_twist.header.frame_id = arm_tf_;
+
     // set angular base motions to zero and linear z to zero
     base_twist.twist.angular.x = 0.0;
     base_twist.twist.angular.y = 0.0;
