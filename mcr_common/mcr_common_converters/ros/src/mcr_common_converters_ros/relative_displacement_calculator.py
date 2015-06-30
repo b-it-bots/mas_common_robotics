@@ -83,8 +83,10 @@ class RelativeDisplacementCalculator(object):
         :rtype: str
         """
         if self.monitor_event == 'e_start':
+            self.monitor_event = None
             return 'RUNNING'
         elif self.monitor_event == 'e_stop':
+            self.monitor_event = None
             return 'INIT'
         else:
             return 'IDLE'
@@ -97,6 +99,7 @@ class RelativeDisplacementCalculator(object):
         :rtype: str
         """
         if self.monitor_event == 'e_stop':
+            self.monitor_event = None
             self.pose_error = None
             return 'INIT'
         else:
