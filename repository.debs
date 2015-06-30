@@ -38,6 +38,7 @@ packagelist=(
   ros-hydro-urdf 
   ros-hydro-vision-opencv 
   ros-hydro-visualization-msgs 
+  ros-hydro-urdfdom-py 
 )
 
 ### Install debian packages listed in array above
