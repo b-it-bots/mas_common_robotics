@@ -2,7 +2,7 @@
 
 # create list of packages to install
 packagelist=(
-  liblog4cpp5-dev 
+  libsvm-dev
   python-rosinstall 
   python-scipy 
   python-setuptools
@@ -11,13 +11,18 @@ packagelist=(
   ros-hydro-angles 
   ros-hydro-bfl 
   ros-hydro-brics-actuator 
+  ros-hydro-costmap-2d
   ros-hydro-diagnostic-aggregator 
   ros-hydro-diagnostic-analysis 
   ros-hydro-diagnostic-msgs 
   ros-hydro-dynamic-reconfigure 
   ros-hydro-image-transport 
   ros-hydro-joint-trajectory-controller 
-  ros-hydro-kdl-parser 
+  ros-hydro-kdl-parser
+  ros-hydro-laser-filters
+  ros-hydro-log4cpp
+  ros-hydro-moveit-msgs
+  ros-hydro-nav-core
   ros-hydro-nav-msgs 
   ros-hydro-pcl-ros 
   ros-hydro-robot-state-publisher
@@ -33,6 +38,7 @@ packagelist=(
   ros-hydro-urdf 
   ros-hydro-vision-opencv 
   ros-hydro-visualization-msgs 
+  ros-hydro-urdfdom-py 
 )
 
 ### Install debian packages listed in array above

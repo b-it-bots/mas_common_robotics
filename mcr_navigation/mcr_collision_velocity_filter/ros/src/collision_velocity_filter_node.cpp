@@ -35,7 +35,7 @@ CollisionVelocityFilterNode::CollisionVelocityFilterNode() :
     ROS_INFO("Got footprint!");
 
     // Subscriber
-    sub_twist_ = nh.subscribe < geometry_msgs::Twist > ("cmd_vel_safe", 1, &CollisionVelocityFilterNode::twistCommadCallback, this);
+    sub_twist_ = nh.subscribe < geometry_msgs::Twist > ("cmd_vel_in", 1, &CollisionVelocityFilterNode::twistCommadCallback, this);
 
     // read parameters
     scan_topics = readScanTopicsFromParameterServer();
@@ -96,7 +96,7 @@ CollisionVelocityFilterNode::CollisionVelocityFilterNode() :
     }
 
     // Publisher
-    pub_safe_twist_ = nh.advertise < geometry_msgs::Twist > ("cmd_vel", 1);
+    pub_safe_twist_ = nh.advertise < geometry_msgs::Twist > ("cmd_vel_out", 1);
     pub_event_ = nh.advertise < std_msgs::String > ("event_out", 1);
 
     // Debug publisher
@@ -275,15 +275,19 @@ void CollisionVelocityFilterNode::update()
         // publish safe velocities
         pub_safe_twist_.publish(safe_twist_);
 
+        // publish events
         double sum_desired = fabs(desired_twist_msg_.linear.x) + fabs(desired_twist_msg_.linear.y) + fabs(desired_twist_msg_.angular.x);
         double sum_safe = fabs(safe_twist_.linear.x) + fabs(safe_twist_.linear.y) + fabs(safe_twist_.angular.x);
 
-        if(sum_desired > 0.0 and sum_safe == 0.0)
+        if (sum_desired > 0.0 and sum_safe == 0.0)
         {
-            event_out_.data = "e_stuck";
+            event_out_.data = "e_zero_velocities_forwarded";
+            pub_event_.publish(event_out_);
+        } else if (sum_desired != sum_safe)
+        {
+            event_out_.data = "e_reduced_velocities_forwarded";
             pub_event_.publish(event_out_);
         }
-
 
         laser_scans_as_pcl_cloud_received = false;
         desired_twist_msg_received_ = false;

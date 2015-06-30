@@ -20,23 +20,22 @@
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <sensor_msgs/LaserScan.h>
+#include <std_msgs/String.h>
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl_conversions/pcl_conversions.h>
 
 #include <tf/transform_listener.h>
 #include <pcl_ros/transforms.h>
-#include <std_srvs/Empty.h>
 #include <dynamic_reconfigure/server.h>
 
-#include "mcr_virtual_laser_scanner/VirtualLaserScannerConfig.h"
+#include <mcr_virtual_laser_scanner/VirtualLaserScannerConfig.h>
 
 using namespace std;
 
 ros::Publisher pub_virtual_scan;
 tf::TransformListener *transform_listener;
 ros::Subscriber sub_pointcloud;
-ros::NodeHandle* nh_ptr = NULL;
 
 double min_height = 0.0;
 double max_height = 0.0;
@@ -111,6 +110,22 @@ void pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr& cloud_msg)
 	pub_virtual_scan.publish(output);
 }
 
+
+void eventCallback(const std_msgs::String::ConstPtr& msg)
+{
+	ros::NodeHandle nh("~");
+
+	ROS_INFO_STREAM("Received event: " << msg->data);
+
+	if(msg->data == "e_start")
+		sub_pointcloud = nh.subscribe < sensor_msgs::PointCloud2 > ("pointcloud_xyz", 1, pointcloudCallback);
+	else if(msg->data == "e_stop")
+	    sub_pointcloud.shutdown();
+	else
+		ROS_ERROR_STREAM("Event not supported: " << msg->data);
+}
+
+
 void dynamic_reconfig_callback(mcr_virtual_laser_scanner::VirtualLaserScannerConfig &config, uint32_t level)
 {
 	target_frame = config.target_frame;
@@ -119,33 +134,15 @@ void dynamic_reconfig_callback(mcr_virtual_laser_scanner::VirtualLaserScannerCon
 	scan_frequency = config.scan_frequency;
 }
 
-bool start(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
-{
-	sub_pointcloud = nh_ptr->subscribe < sensor_msgs::PointCloud2 > ("pointcloud_xyz", 1, pointcloudCallback);
-
-	ROS_INFO("virtual laser scanner ENABLED");
-	return true;
-}
-
-bool stop(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
-{
-	sub_pointcloud.shutdown();
-	ROS_INFO("virtual laser scanner DISABLED");
-	return true;
-}
-
 int main(int argc, char** argv)
 {
 	ros::init(argc, argv, "virtual_laser_scanner");
 	ros::NodeHandle nh("~");
-	nh_ptr = &nh;
 
 	dynamic_reconfigure::Server < mcr_virtual_laser_scanner::VirtualLaserScannerConfig > dynamic_reconfig_server;
 	dynamic_reconfig_server.setCallback(boost::bind(&dynamic_reconfig_callback, _1, _2));
 
-	ros::ServiceServer srv_start = nh.advertiseService("start", start);
-	ros::ServiceServer srv_stop = nh.advertiseService("stop", stop);
-
+	ros::Subscriber sub_event = nh.subscribe < std_msgs::String > ("event_in", 1, eventCallback);
 	pub_virtual_scan = nh.advertise < sensor_msgs::LaserScan > ("scan", 1);
 
 	transform_listener = new tf::TransformListener();

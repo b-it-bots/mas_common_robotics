@@ -4,6 +4,28 @@ find_package(catkin REQUIRED)
 
 catkin_package()
 
+### TESTS
+set(env_list
+  brsu-c025
+  brsu-c069
+)
+
+if(CATKIN_ENABLE_TESTING)
+  find_package(catkin REQUIRED
+    COMPONENTS
+      roslaunch
+  )
+
+  #roslaunch_add_file_check(upload_param.launch robot_env:=brsu-c025)
+
+  foreach(env ${env_list})
+    roslaunch_add_file_check(${env}/upload_param_${env}.launch)
+  endforeach()
+
+endif()
+
+
+### INSTALLS
 install(FILES upload_param.launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/upload_param.launch
 )
