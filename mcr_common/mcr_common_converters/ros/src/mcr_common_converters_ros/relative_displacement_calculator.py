@@ -127,7 +127,7 @@ class RelativeDisplacementCalculator(object):
         try:
             self.listener.waitForTransform(
                 self.reference_frame, self.pose_error.header.frame_id, 
-                rospy.Time(0), rospy.Duration(0.1)
+                self.pose_error.header.stamp, rospy.Duration(0.1)
             )
 
             transformed_pose = self.listener.transformPose(
