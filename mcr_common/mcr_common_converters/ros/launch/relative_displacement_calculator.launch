@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="mcr_common_converters" type="relative_displacement_calculator_node"
+          name="relative_displacement_calculator" output="screen" ns="mcr_common" >
+
+        <rosparam command="load" file="$(find mcr_common_converters)/ros/config/relative_displacement_calculator.yaml" />
+
+    </node>
+</launch>
