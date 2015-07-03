@@ -6,7 +6,7 @@
 
 
   <xacro:macro name="realsense_camera" params="name parent *origin">
-  	<link name="${name}_link">
+    <link name="${name}_link">
       <inertial>
         <mass value="0.1" />
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -16,7 +16,7 @@
       <visual>
           <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mcr_description/meshes/sensors/realsense_camera.dae" />
+          <mesh filename="package://mcr_description/meshes/sensors/realsense_camera.dae" scale="0.0254 0.0254 0.0254" />
         </geometry>
         <material name="LightGrey" />
       </visual>
@@ -24,7 +24,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mcr_description/meshes/sensors/realsense_camera.dae" />
+          <mesh filename="package://mcr_description/meshes/sensors/realsense_camera_convexhull.dae" scale="0.0254 0.0254 0.0254" />
         </geometry>
      </collision>
     </link>
