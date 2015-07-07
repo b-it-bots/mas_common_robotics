@@ -6,9 +6,8 @@ ComponentWisePoseErrorMonitorNode::ComponentWisePoseErrorMonitorNode(ros::NodeHa
     event_sub_ = node_handler_.subscribe("event_in", 1, &ComponentWisePoseErrorMonitorNode::eventCallback, this);
     error_sub_ = node_handler_.subscribe("pose_error", 1, &ComponentWisePoseErrorMonitorNode::errorCallback, this);
     event_pub_ = node_handler_.advertise<std_msgs::String>("event_out", 1);
-    run_state_ = INIT;
-    start_pose_error_monitor_ = false;
-    pose_error_sub_status_ = false;  
+    current_state_ = INIT;
+    has_pose_error_data_ = false;  
 }
 
 ComponentWisePoseErrorMonitorNode::~ComponentWisePoseErrorMonitorNode()
@@ -30,24 +29,18 @@ void ComponentWisePoseErrorMonitorNode::dynamicReconfigCallback(mcr_geometric_re
 
 void ComponentWisePoseErrorMonitorNode::eventCallback(const std_msgs::String &event_command)
 {
-    if (event_command.data == "e_start") {
-        start_pose_error_monitor_ = true;
-        ROS_INFO("ENABLED");
-    } else if (event_command.data == "e_stop") {
-        start_pose_error_monitor_ = false;
-        ROS_INFO("DISABLED");
-    }
+    event_in_msg_ = event_command;
 }
 
 void ComponentWisePoseErrorMonitorNode::errorCallback(const mcr_manipulation_msgs::ComponentWiseCartesianDifference::ConstPtr &pose_eror)
 {
     error_ = *pose_eror;
-    pose_error_sub_status_ = true;
+    has_pose_error_data_ = true;
 }
 
 void ComponentWisePoseErrorMonitorNode::states()
 {
-    switch (run_state_) {
+    switch (current_state_) {
         case INIT:
             initState();
             break;
@@ -64,35 +57,35 @@ void ComponentWisePoseErrorMonitorNode::states()
 
 void ComponentWisePoseErrorMonitorNode::initState()
 {
-    if (start_pose_error_monitor_) {
-        run_state_ = IDLE;  
+    if (event_in_msg_.data == "e_start") {
+        current_state_ = IDLE;
+        has_pose_error_data_ = false; 
+        event_in_msg_.data = ""; 
     } else {
-        run_state_ = INIT;
+        current_state_ = INIT;
     }
 }
 
 void ComponentWisePoseErrorMonitorNode::idleState()
 {
-    if (pose_error_sub_status_) {
-        run_state_ = RUNNING;
-        pose_error_sub_status_ = false;
+    if(event_in_msg_.data == "e_stop") {
+        current_state_ = INIT;
+        event_in_msg_.data = "";
+    } else if (has_pose_error_data_) {
+        current_state_ = RUNNING;
+        has_pose_error_data_ = false;
     } else {
-        run_state_ = IDLE;
+        current_state_ = IDLE;
     }
 }
 
 void ComponentWisePoseErrorMonitorNode::runState()
 {
     if(isComponentWisePoseErrorWithinThreshold()){
-        status_msg_.data = "e_error_within_threshold";
+        status_msg_.data = "e_done";
         event_pub_.publish(status_msg_);
     }
-
-    if (start_pose_error_monitor_) {
-        run_state_ = IDLE;
-    } else {
-        run_state_ = INIT;
-    }
+    current_state_ = IDLE;
 }
 
 bool ComponentWisePoseErrorMonitorNode::isComponentWisePoseErrorWithinThreshold()

@@ -40,8 +40,7 @@ class ComponentWisePoseErrorMonitorNode
         ros::Subscriber event_sub_;
         ros::Subscriber error_sub_;
         ros::Publisher event_pub_;
-        bool pose_error_sub_status_;
-        bool start_pose_error_monitor_;
+        bool has_pose_error_data_;
         double threshold_linear_x_;
         double threshold_linear_y_;
         double threshold_linear_z_;
@@ -49,8 +48,10 @@ class ComponentWisePoseErrorMonitorNode
         double threshold_angular_y_;
         double threshold_angular_z_;
         mcr_manipulation_msgs::ComponentWiseCartesianDifference error_;
+        //mcr_monitoring_msgs::ComponentWisePoseErrorMonitorFeedback feedback_;
         std_msgs::String status_msg_;
-        States run_state_;
+        States current_state_;
+        std_msgs::String event_in_msg_;
 
 };
 
