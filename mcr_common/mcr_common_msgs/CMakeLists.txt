@@ -11,7 +11,7 @@ find_package(catkin REQUIRED
 add_message_files(
   FILES
     ClosedInterval.msg
-    Float64Stamped.msg
+    Float32Stamped.msg
     PoseStampedList.msg
 )
 
