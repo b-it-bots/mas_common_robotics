@@ -7,7 +7,9 @@
   </description>
   <license>GPLv3</license>
 
-  <maintainer email="jose.sanchez.loza@gmail.com,arkamallick30@gmail.com">Jose Sanchez,Arka Mallick</maintainer>
+  <maintainer email="jose.sanchez.loza@gmail.com">Jose Sanchez</maintainer>
+  <maintainer email="arkamallick30@gmail.com">Arka Mallick</maintainer>
+
   <author email="jose.sanchez.loza@gmail.com">Jose Sanchez</author>
 
   <buildtool_depend>catkin</buildtool_depend>
