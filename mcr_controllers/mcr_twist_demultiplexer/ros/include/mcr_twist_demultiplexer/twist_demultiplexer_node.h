@@ -42,7 +42,6 @@ class TwistDemultiplexerNode
         mcr_monitoring_msgs::ComponentWisePoseErrorMonitorFeedback error_feedback_msg_;
         bool has_twist_data_;
         bool has_error_feedback_data_;
-        std::string base_tf_;
         std::string arm_tf_;
         std_msgs::String event_in_msg_;
         States current_state_;
