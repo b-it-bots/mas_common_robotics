@@ -79,6 +79,7 @@ void TwistDemultiplexerNode::initState()
         current_state_ = IDLE;
         event_in_msg_.data = "";
         has_twist_data_ = false;
+        has_error_feedback_data_ = false;
     } else {
         current_state_ = INIT;
     }
@@ -113,7 +114,7 @@ void TwistDemultiplexerNode::runState()
     base_twist_ = input_twist_;
     arm_twist_.header.frame_id = arm_tf_;
     base_twist_.header.frame_id = base_tf_;
-    
+
     if (is_error_monitor_enabled_){
         demultiplexTwistWithErrorFeedback();
     } else {
