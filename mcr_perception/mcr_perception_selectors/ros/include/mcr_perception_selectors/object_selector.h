@@ -36,19 +36,29 @@ class ObjectSelector
 
         void update();
 
+        enum SelectionType {BY_NAME=0, RANDOM=1, CLOSEST=2};
+        enum States {INIT, IDLE, RUNNING};
 
     private:
-        void objectNameCallback(const std_msgs::String &msg);
+        void objectNameCallback(const std_msgs::String::Ptr &msg);
         void objectListCallback(const mcr_perception_msgs::ObjectList::Ptr &msg);
+        void eventCallback(const std_msgs::String::Ptr &msg);
 
+        bool selectObjectByName(mcr_perception_msgs::Object &selected_object);
+        bool selectRandomObject(mcr_perception_msgs::Object &selected_object);
+        bool selectClosestObject(mcr_perception_msgs::Object &selected_object);
 
     private:
         ros::NodeHandle nh_;
 
+        States current_state_;
+
         ros::Subscriber sub_object_name_;
         ros::Subscriber sub_object_list_;
+        ros::Subscriber sub_event_in_;
 
         ros::Publisher pub_event_out_;
+        ros::Publisher pub_object_;
         ros::Publisher pub_object_pose_;
 
         std_msgs::String object_name_;
@@ -56,5 +66,11 @@ class ObjectSelector
 
         mcr_perception_msgs::ObjectList::Ptr object_list_;
         bool object_list_received_;
+
+        std_msgs::String event_in_;
+        bool event_in_received_;
+
+        SelectionType object_selection_type_;
+
 };
 #endif
