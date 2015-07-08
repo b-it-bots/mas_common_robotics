@@ -20,8 +20,7 @@ class TwistDemultiplexerNode
         void initState();
         void idleState();
         void runState();
-        void demultiplexTwistWithErrorFeedback();
-        void demultiplexTwistWithoutErrorFeedback();
+        void demultiplexTwist();
 
     private:
         enum States {
@@ -44,22 +43,18 @@ class TwistDemultiplexerNode
         bool has_error_feedback_data_;
         std::string arm_tf_;
         std_msgs::String event_in_msg_;
+        std_msgs::String event_out_msg_;
         States current_state_;
-        bool is_base_linear_x_enabled_;
-        bool is_base_linear_y_enabled_;
-        bool is_base_linear_z_enabled_;
-        bool is_base_angular_x_enabled_;
-        bool is_base_angular_y_enabled_;
-        bool is_base_angular_z_enabled_;
-        bool is_arm_linear_x_enabled_;
-        bool is_arm_linear_y_enabled_;
-        bool is_arm_linear_z_enabled_;
-        bool is_arm_angular_x_enabled_;
-        bool is_arm_angular_y_enabled_;
-        bool is_arm_angular_z_enabled_;
         bool is_error_monitor_enabled_;
         geometry_msgs::TwistStamped arm_twist_;
-        geometry_msgs::TwistStamped base_twist_;
+        geometry_msgs::Twist base_twist_;
+        static const int NO_OF_PARTS_IN_TWIST = 6;
+        bool is_twist_part_enabled_in_base_[NO_OF_PARTS_IN_TWIST];
+        bool is_twist_part_enabled_in_arm_[NO_OF_PARTS_IN_TWIST];
+        bool is_error_part_within_tolerance_[NO_OF_PARTS_IN_TWIST];
+        double input_twist_array_[NO_OF_PARTS_IN_TWIST];
+        double base_twist_array_[NO_OF_PARTS_IN_TWIST];
+        double arm_twist_array_[NO_OF_PARTS_IN_TWIST];
 
 };
 
