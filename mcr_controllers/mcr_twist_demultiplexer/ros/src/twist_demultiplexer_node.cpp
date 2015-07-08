@@ -1,3 +1,9 @@
+/**
+ * @file twist_demultiplexer_node.cpp
+ * @author Ashok Meenakshi Sundaram (mashoksc@gmail.com)
+ * @date June, 2015
+ */
+
 #include <mcr_twist_demultiplexer/twist_demultiplexer_node.h>
 
 TwistDemultiplexerNode::TwistDemultiplexerNode(ros::NodeHandle &nh) : node_handler_(nh)
@@ -21,7 +27,6 @@ TwistDemultiplexerNode::TwistDemultiplexerNode(ros::NodeHandle &nh) : node_handl
 
     node_handler_.param<bool>("is_error_monitor_enabled", is_error_monitor_enabled_,"false");
 
-    event_pub_ = node_handler_.advertise<std_msgs::String>("event_out", 1);
     arm_twist_stamped_pub_ = node_handler_.advertise<geometry_msgs::TwistStamped>("arm_twist", 1);
     base_twist_pub_ = node_handler_.advertise<geometry_msgs::Twist>("base_twist", 1);
 
@@ -39,7 +44,6 @@ TwistDemultiplexerNode::~TwistDemultiplexerNode()
     twist_sub_.shutdown();
     arm_twist_stamped_pub_.shutdown();
     base_twist_pub_.shutdown();
-    event_pub_.shutdown();
 }
 
 void TwistDemultiplexerNode::eventCallback(const std_msgs::String &event_command)
