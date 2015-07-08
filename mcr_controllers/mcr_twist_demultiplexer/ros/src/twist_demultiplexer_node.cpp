@@ -18,8 +18,8 @@ TwistDemultiplexerNode::TwistDemultiplexerNode(ros::NodeHandle &nh) : node_handl
     node_handler_.param<bool>("is_arm_angular_z_enabled", is_arm_angular_z_enabled_,"false");
     node_handler_.param<bool>("is_error_monitor_enabled", is_error_monitor_enabled_,"false");
 
-    arm_twist.header.frame_id = arm_tf_;
-    base_twist.header.frame_id = base_tf_;
+    arm_twist_.header.frame_id = arm_tf_;
+    base_twist_.header.frame_id = base_tf_;
 
     event_pub_ = node_handler_.advertise<std_msgs::String>("event_out", 1);
     arm_twist_stamped_pub_ = node_handler_.advertise<geometry_msgs::TwistStamped>("arm_twist", 1);
@@ -27,7 +27,7 @@ TwistDemultiplexerNode::TwistDemultiplexerNode(ros::NodeHandle &nh) : node_handl
 
     event_sub_ = node_handler_.subscribe("event_in", 1, &TwistDemultiplexerNode::eventCallback, this);
     twist_sub_ = node_handler_.subscribe("input_twist", 1, &TwistDemultiplexerNode::twistStampedCallback, this);
-    error_feedback_sub_ = node_handler_.subscribe("error_feedback", 1, &TwistDemultiplexerNode::errorFeedbackCallback, this)
+    error_feedback_sub_ = node_handler_.subscribe("error_feedback", 1, &TwistDemultiplexerNode::errorFeedbackCallback, this);
 
     current_state_ = INIT;
     has_twist_data_ = false;
@@ -53,7 +53,7 @@ void TwistDemultiplexerNode::twistStampedCallback(const geometry_msgs::TwistStam
     has_twist_data_ = true;
 }
 
-void TwistDemultiplexerNode::errorFeedbackCallback(const mcr_monitoring_msgs::ComponentWiseErrorMonitorFeedback &error_feedback)
+void TwistDemultiplexerNode::errorFeedbackCallback(const mcr_monitoring_msgs::ComponentWisePoseErrorMonitorFeedback &error_feedback)
 {
     error_feedback_msg_ = error_feedback;
     has_error_feedback_data_ = true;
@@ -118,115 +118,115 @@ void TwistDemultiplexerNode::runState()
         demultiplexTwistWithoutErrorFeedback();
     }
     
-    arm_twist_stamped_pub_.publish(arm_twist);
-    base_twist_pub_.publish(base_twist.twist);
+    arm_twist_stamped_pub_.publish(arm_twist_);
+    base_twist_pub_.publish(base_twist_.twist);
     current_state_ = IDLE;
 }
 
 void TwistDemultiplexerNode::demultiplexTwistWithErrorFeedback()
 {
-    arm_twist_(input_twist_);
-    base_twist_(input_twist_);
+    arm_twist_ = input_twist_;
+    base_twist_ = input_twist_;
 
-    if (!is_base_linear_x_enabled || error_feedback_msg_.is_linear_x_within_tolerance) {
+    if (!is_base_linear_x_enabled_ || error_feedback_msg_.is_linear_x_within_tolerance) {
         base_twist_.twist.linear.x = 0.0;
     }
 
-    if (!is_base_linear_y_enabled || error_feedback_msg_.is_linear_y_within_tolerance) {
+    if (!is_base_linear_y_enabled_ || error_feedback_msg_.is_linear_y_within_tolerance) {
         base_twist_.twist.linear.y = 0.0;
     }
 
-    if (!is_base_linear_z_enabled || error_feedback_msg_.is_linear_z_within_tolerance) {
+    if (!is_base_linear_z_enabled_ || error_feedback_msg_.is_linear_z_within_tolerance) {
         base_twist_.twist.linear.z = 0.0;
     }
 
-    if (!is_base_angular_x_enabled || error_feedback_msg_.is_angular_x_within_tolerance) {
+    if (!is_base_angular_x_enabled_ || error_feedback_msg_.is_angular_x_within_tolerance) {
         base_twist_.twist.angular.x = 0.0;
     }
 
-    if (!is_base_angular_y_enabled || error_feedback_msg_.is_angular_y_within_tolerance) {
+    if (!is_base_angular_y_enabled_ || error_feedback_msg_.is_angular_y_within_tolerance) {
         base_twist_.twist.angular.y = 0.0;
     }
 
-    if (!is_base_angular_z_enabled || error_feedback_msg_.is_angular_z_within_tolerance) {
+    if (!is_base_angular_z_enabled_ || error_feedback_msg_.is_angular_z_within_tolerance) {
         base_twist_.twist.angular.z = 0.0;
     }
     
-    if (!is_arm_linear_x_enabled || error_feedback_msg_.is_linear_x_within_tolerance) {
+    if (!is_arm_linear_x_enabled_ || error_feedback_msg_.is_linear_x_within_tolerance) {
         arm_twist_.twist.linear.x = 0.0;
     }
 
-    if (!is_arm_linear_y_enabled || error_feedback_msg_.is_linear_y_within_tolerance) {
+    if (!is_arm_linear_y_enabled_ || error_feedback_msg_.is_linear_y_within_tolerance) {
         arm_twist_.twist.linear.y = 0.0;
     }
 
-    if (!is_arm_linear_z_enabled || error_feedback_msg_.is_linear_z_within_tolerance) {
+    if (!is_arm_linear_z_enabled_ || error_feedback_msg_.is_linear_z_within_tolerance) {
         arm_twist_.twist.linear.z = 0.0;
     }
 
-    if (!is_arm_angular_x_enabled || error_feedback_msg_.is_angular_x_within_tolerance) {
+    if (!is_arm_angular_x_enabled_ || error_feedback_msg_.is_angular_x_within_tolerance) {
         arm_twist_.twist.angular.x = 0.0;
     }
 
-    if (!is_arm_angular_y_enabled || error_feedback_msg_.is_angular_y_within_tolerance) {
+    if (!is_arm_angular_y_enabled_ || error_feedback_msg_.is_angular_y_within_tolerance) {
         arm_twist_.twist.angular.y = 0.0;
     }
 
-    if (!is_arm_angular_z_enabled || error_feedback_msg_.is_angular_z_within_tolerance) {
+    if (!is_arm_angular_z_enabled_ || error_feedback_msg_.is_angular_z_within_tolerance) {
         arm_twist_.twist.angular.z = 0.0;
     }
 }
 
 void TwistDemultiplexerNode::demultiplexTwistWithoutErrorFeedback()
 {
-    arm_twist_(input_twist_);
-    base_twist_(input_twist_);
-
-    if (!is_base_linear_x_enabled) {
+    arm_twist_ = input_twist_;
+    base_twist_ = input_twist_;
+    
+    if (!is_base_linear_x_enabled_) {
         base_twist_.twist.linear.x = 0.0;
     }
 
-    if (!is_base_linear_y_enabled) {
+    if (!is_base_linear_y_enabled_) {
         base_twist_.twist.linear.y = 0.0;
     }
 
-    if (!is_base_linear_z_enabled) {
+    if (!is_base_linear_z_enabled_) {
         base_twist_.twist.linear.z = 0.0;
     }
 
-    if (!is_base_angular_x_enabled) {
+    if (!is_base_angular_x_enabled_) {
         base_twist_.twist.angular.x = 0.0;
     }
 
-    if (!is_base_angular_y_enabled) {
+    if (!is_base_angular_y_enabled_) {
         base_twist_.twist.angular.y = 0.0;
     }
 
-    if (!is_base_angular_z_enabled) {
+    if (!is_base_angular_z_enabled_) {
         base_twist_.twist.angular.z = 0.0;
     }
     
-    if (!is_arm_linear_x_enabled) {
+    if (!is_arm_linear_x_enabled_) {
         arm_twist_.twist.linear.x = 0.0;
     }
 
-    if (!is_arm_linear_y_enabled) {
+    if (!is_arm_linear_y_enabled_) {
         arm_twist_.twist.linear.y = 0.0;
     }
 
-    if (!is_arm_linear_z_enabled) {
+    if (!is_arm_linear_z_enabled_) {
         arm_twist_.twist.linear.z = 0.0;
     }
 
-    if (!is_arm_angular_x_enabled) {
+    if (!is_arm_angular_x_enabled_) {
         arm_twist_.twist.angular.x = 0.0;
     }
 
-    if (!is_arm_angular_y_enabled) {
+    if (!is_arm_angular_y_enabled_) {
         arm_twist_.twist.angular.y = 0.0;
     }
 
-    if (!is_arm_angular_z_enabled) {
+    if (!is_arm_angular_z_enabled_) {
         arm_twist_.twist.angular.z = 0.0;
     }
     

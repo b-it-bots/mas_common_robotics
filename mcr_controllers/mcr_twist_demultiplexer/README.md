@@ -11,7 +11,7 @@ This package can be used for visual servoing pipeline to send a part of input tw
 ```rostopic echo /cmd_vel```
 3. Subscribe to the arm twist output of the component:
 ```rostopic echo /arm_1/arm_controller/cartesian_velocity_command```
-4. Publish the component wise error feedback (mcr_monitoring_msgs::ComponentWiseErroMonitorFeedback) in ```/mcr_monitoring/component_wise_pose_error_monitor/feedback```
+4. Publish the component wise error feedback (mcr_monitoring_msgs/ComponentWisePoseErrorMonitorFeedback) in ```/mcr_monitoring/component_wise_pose_error_monitor/feedback```
 5. Publish the input twist to be demultiplexed (geometry_msgs/TwistStamped) in ```/twist_limiter/limited_twist```
 
 ### To start the component:

@@ -5,7 +5,7 @@
 #include <ros/package.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/TwistStamped.h>
-#include <mcr_monitoring_msgs/ComponentWiseErrorMonitorFeedback.h>
+#include <mcr_monitoring_msgs/ComponentWisePoseErrorMonitorFeedback.h>
 
 class TwistDemultiplexerNode
 {
@@ -15,7 +15,7 @@ class TwistDemultiplexerNode
         virtual ~TwistDemultiplexerNode();
         void eventCallback(const std_msgs::String &event_command);
         void twistStampedCallback(const geometry_msgs::TwistStamped &msg);
-        void errorFeedbackCallback(const mcr_monitoring_msgs::ComponentWiseErrorMonitorFeedback &error_feedback);
+        void errorFeedbackCallback(const mcr_monitoring_msgs::ComponentWisePoseErrorMonitorFeedback &error_feedback);
         void states();
         void initState();
         void idleState();
@@ -39,12 +39,12 @@ class TwistDemultiplexerNode
         ros::Publisher arm_twist_stamped_pub_;
         ros::Publisher base_twist_pub_;
         geometry_msgs::TwistStamped input_twist_;
-        mcr_monitoring_msgs::ComponentWiseErrorMonitorFeedback error_feedback_msg_;
+        mcr_monitoring_msgs::ComponentWisePoseErrorMonitorFeedback error_feedback_msg_;
         bool has_twist_data_;
         bool has_error_feedback_data_;
         std::string base_tf_;
         std::string arm_tf_;
-        std_msgs/String event_in_msg_;
+        std_msgs::String event_in_msg_;
         States current_state_;
         bool is_base_linear_x_enabled_;
         bool is_base_linear_y_enabled_;
@@ -58,9 +58,9 @@ class TwistDemultiplexerNode
         bool is_arm_angular_x_enabled_;
         bool is_arm_angular_y_enabled_;
         bool is_arm_angular_z_enabled_;
-        bool is_error_feedback_enabled_;
-        geometry_msgs::TwistStamped arm_twist_(input_twist_);
-        geometry_msgs::TwistStamped base_twist_(input_twist_);
+        bool is_error_monitor_enabled_;
+        geometry_msgs::TwistStamped arm_twist_;
+        geometry_msgs::TwistStamped base_twist_;
 
 };
 
