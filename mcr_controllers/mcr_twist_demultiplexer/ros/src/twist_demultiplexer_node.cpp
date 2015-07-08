@@ -18,9 +18,6 @@ TwistDemultiplexerNode::TwistDemultiplexerNode(ros::NodeHandle &nh) : node_handl
     node_handler_.param<bool>("is_arm_angular_z_enabled", is_arm_angular_z_enabled_,"false");
     node_handler_.param<bool>("is_error_monitor_enabled", is_error_monitor_enabled_,"false");
 
-    arm_twist_.header.frame_id = arm_tf_;
-    base_twist_.header.frame_id = base_tf_;
-
     event_pub_ = node_handler_.advertise<std_msgs::String>("event_out", 1);
     arm_twist_stamped_pub_ = node_handler_.advertise<geometry_msgs::TwistStamped>("arm_twist", 1);
     base_twist_pub_ = node_handler_.advertise<geometry_msgs::Twist>("base_twist", 1);
@@ -112,6 +109,11 @@ void TwistDemultiplexerNode::idleState()
 
 void TwistDemultiplexerNode::runState()
 {
+    arm_twist_ = input_twist_;
+    base_twist_ = input_twist_;
+    arm_twist_.header.frame_id = arm_tf_;
+    base_twist_.header.frame_id = base_tf_;
+    
     if (is_error_monitor_enabled_){
         demultiplexTwistWithErrorFeedback();
     } else {
@@ -125,9 +127,6 @@ void TwistDemultiplexerNode::runState()
 
 void TwistDemultiplexerNode::demultiplexTwistWithErrorFeedback()
 {
-    arm_twist_ = input_twist_;
-    base_twist_ = input_twist_;
-
     if (!is_base_linear_x_enabled_ || error_feedback_msg_.is_linear_x_within_tolerance) {
         base_twist_.twist.linear.x = 0.0;
     }
@@ -179,9 +178,6 @@ void TwistDemultiplexerNode::demultiplexTwistWithErrorFeedback()
 
 void TwistDemultiplexerNode::demultiplexTwistWithoutErrorFeedback()
 {
-    arm_twist_ = input_twist_;
-    base_twist_ = input_twist_;
-    
     if (!is_base_linear_x_enabled_) {
         base_twist_.twist.linear.x = 0.0;
     }
@@ -228,8 +224,7 @@ void TwistDemultiplexerNode::demultiplexTwistWithoutErrorFeedback()
 
     if (!is_arm_angular_z_enabled_) {
         arm_twist_.twist.angular.z = 0.0;
-    }
-    
+    }  
 }
 
 
