@@ -100,53 +100,25 @@ void ComponentWisePoseErrorMonitorNode::runState()
 bool ComponentWisePoseErrorMonitorNode::isComponentWisePoseErrorWithinThreshold()
 {
     // Linear X component
-    if(fabs(error_.linear.x) < threshold_linear_x_) {
-        feedback_.is_linear_x_within_tolerance = true;
-    } else {
-        feedback_.is_linear_x_within_tolerance = false;
-    }
+    feedback_.is_linear_x_within_tolerance = fabs(error_.linear.x) < threshold_linear_x_;
 
     // Linear Y component
-    if(fabs(error_.linear.y) < threshold_linear_y_) {
-        feedback_.is_linear_y_within_tolerance = true;
-    } else {
-        feedback_.is_linear_y_within_tolerance = false;
-    }
+    feedback_.is_linear_y_within_tolerance = fabs(error_.linear.y) < threshold_linear_y_;
 
     // Linear Z component
-    if(fabs(error_.linear.z) < threshold_linear_z_) {
-        feedback_.is_linear_z_within_tolerance = true;
-    } else {
-        feedback_.is_linear_z_within_tolerance = false;
-    }
+    feedback_.is_linear_z_within_tolerance = fabs(error_.linear.z) < threshold_linear_z_;
 
     // Angular X component
-    if(fabs(error_.angular.x) < threshold_angular_x_) {
-        feedback_.is_angular_x_within_tolerance = true;
-    } else {
-        feedback_.is_angular_x_within_tolerance = false;
-    }
+    feedback_.is_angular_x_within_tolerance = fabs(error_.angular.x) < threshold_angular_x_;
 
     // Angular Y component
-    if(fabs(error_.angular.y) < threshold_angular_y_) {
-        feedback_.is_angular_y_within_tolerance = true;
-    } else {
-        feedback_.is_angular_y_within_tolerance = false;
-    }
+    feedback_.is_angular_y_within_tolerance = fabs(error_.angular.y) < threshold_angular_y_;
 
     // Angular Z component
-    if(fabs(error_.angular.z) < threshold_angular_z_) {
-        feedback_.is_angular_z_within_tolerance = true;
-    } else {
-        feedback_.is_angular_z_within_tolerance = false;
-    }
+    feedback_.is_angular_z_within_tolerance = fabs(error_.angular.z) < threshold_angular_z_;
 
-    if(feedback_.is_linear_x_within_tolerance && feedback_.is_linear_y_within_tolerance && feedback_.is_linear_z_within_tolerance)
-    {
-        if(feedback_.is_angular_x_within_tolerance && feedback_.is_angular_y_within_tolerance && feedback_.is_angular_z_within_tolerance)
-            return true;
-    }
-    return false;
+    return (feedback_.is_linear_x_within_tolerance && feedback_.is_linear_y_within_tolerance && feedback_.is_linear_z_within_tolerance
+        && feedback_.is_angular_x_within_tolerance && feedback_.is_angular_y_within_tolerance && feedback_.is_angular_z_within_tolerance);
 }
 
 int main(int argc, char **argv)
