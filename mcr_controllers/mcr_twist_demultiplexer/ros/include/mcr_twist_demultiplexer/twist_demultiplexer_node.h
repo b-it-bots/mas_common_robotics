@@ -9,6 +9,7 @@
 
 #include <ros/ros.h>
 #include <ros/package.h>
+#include <string.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/TwistStamped.h>
 #include <mcr_monitoring_msgs/ComponentWisePoseErrorMonitorFeedback.h>
@@ -81,7 +82,7 @@ class TwistDemultiplexerNode
          * If error monitor feedback is within tolerance then make it to zero.
          * Then switch to IDLE state.
          */
-        void demultiplexTwist();
+        void demultiplexTwist(std::string twist_to);
 
     private:
 
