@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "twist_demultiplexer");
     ros::NodeHandle nh("~");
-    ROS_INFO("[twist demultiplexer] node started");
+    ROS_INFO("Initialized");
     TwistDemultiplexerNode twist_demultiplexer_node(nh);
 
     int loop_rate = 30;
