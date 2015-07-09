@@ -131,8 +131,8 @@ void TwistDemultiplexerNode::idleState()
 
 void TwistDemultiplexerNode::runState()
 {
-    demultiplexTwist("base");
-    demultiplexTwist("arm");
+    demultiplexTwist(base_twist_array_, is_twist_part_enabled_in_base_);
+    demultiplexTwist(arm_twist_array_, is_twist_part_enabled_in_arm_);
 
     base_twist_.linear.x = base_twist_array_[0];
     base_twist_.linear.y = base_twist_array_[1];
@@ -154,16 +154,17 @@ void TwistDemultiplexerNode::runState()
     current_state_ = IDLE;
 }
 
-void TwistDemultiplexerNode::demultiplexTwist(std::string twist_to)
+void TwistDemultiplexerNode::demultiplexTwist(double *twist_as_array, bool *is_twist_part_enabled)
 {
     for (size_t i = 0; i < NO_OF_PARTS_IN_TWIST ; i++) {
-        (twist_to == "base") ? (base_twist_array_[i] = input_twist_array_[i]) : (arm_twist_array_[i] = input_twist_array_[i]);
-        if (((twist_to == "base") ? !is_twist_part_enabled_in_base_[i] : !is_twist_part_enabled_in_arm_[i]) || 
-                    (is_error_monitor_enabled_ && is_error_part_within_tolerance_[i])) {
-            (twist_to == "base") ? (base_twist_array_[i] = 0.0) : (arm_twist_array_[i] = 0.0);
+        twist_as_array[i] = input_twist_array_[i];
+        if (!is_twist_part_enabled[i] || (is_error_monitor_enabled_ && is_error_part_within_tolerance_[i])) {
+            twist_as_array[i] = 0.0;
         }
     }
+
 }
+
 
 int main(int argc, char **argv)
 {

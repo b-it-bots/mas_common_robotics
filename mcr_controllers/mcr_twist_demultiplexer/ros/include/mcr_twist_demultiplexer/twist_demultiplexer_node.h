@@ -82,9 +82,10 @@ class TwistDemultiplexerNode
          * If error monitor feedback is within tolerance then make it to zero.
          * Then switch to IDLE state.
          * 
-         * @param twist_to Stores the string "base" or "arm" to handle twist demux correspondingly
+         * @param twist_as_array Stores the twist array to be updated
+         * @param is_twist_part_enabled Stores the boolean to say which parts of twist are enabled
          */
-        void demultiplexTwist(std::string twist_to);
+        void demultiplexTwist(double *twist_as_array, bool *is_twist_part_enabled);
 
     private:
 
