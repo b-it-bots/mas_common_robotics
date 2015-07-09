@@ -81,6 +81,8 @@ class TwistDemultiplexerNode
          * Calculate the twist to be demultiplexed for arm and base as given in the launch configuration
          * If error monitor feedback is within tolerance then make it to zero.
          * Then switch to IDLE state.
+         * 
+         * @param twist_to Stores the string "base" or "arm" to handle twist demux correspondingly
          */
         void demultiplexTwist(std::string twist_to);
 
