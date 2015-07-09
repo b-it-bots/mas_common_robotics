@@ -9,8 +9,6 @@ find_package(catkin REQUIRED
 )
 
 catkin_package(
-  INCLUDE_DIRS
-    ros/include
   CATKIN_DEPENDS
     geometry_msgs
     std_msgs
