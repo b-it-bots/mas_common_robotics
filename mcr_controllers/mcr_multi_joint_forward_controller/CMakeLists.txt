@@ -56,11 +56,15 @@ install(FILES ros_control_plugins.xml
 
 
 # test
-add_rostest_gtest(multi_joint_forward_controller_test
-  ros/test/multi_joint_forward_controller.test
-  ros/test/multi_joint_forward_controller_test.cpp
-)
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
 
-target_link_libraries(multi_joint_forward_controller_test
-  ${catkin_LIBRARIES}
-)
+  add_rostest_gtest(multi_joint_forward_controller_test
+    ros/test/multi_joint_forward_controller.test
+    ros/test/multi_joint_forward_controller_test.cpp
+  )
+
+  target_link_libraries(multi_joint_forward_controller_test
+    ${catkin_LIBRARIES}
+  )
+endif()

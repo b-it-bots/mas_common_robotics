@@ -59,19 +59,20 @@ target_link_libraries(body_detection_3d_node
 
 
 ### TESTS
-add_executable(integration_test ros/test/integration_test.cpp)
-target_link_libraries(integration_test ${GTEST_LIBRARIES} ${catkin_LIBRARIES})
-add_dependencies(integration_test body_detection_3d_node)
-
 if(CATKIN_ENABLE_TESTING)
-  find_package(catkin REQUIRED
-    COMPONENTS
-      roslaunch
-      rostest
-  )
+  find_package(rostest REQUIRED)
+  find_package(roslaunch REQUIRED)
 
   roslaunch_add_file_check(ros/launch)
-  add_rostest(ros/test/integration.test)
+
+  add_rostest_gtest(body_detection_3d_integration_test
+    ros/test/integration.test
+    ros/test/integration_test.cpp
+  )
+  target_link_libraries(body_detection_3d_integration_test
+    ${catkin_LIBRARIES}
+  )
+
 endif()
 
 

@@ -19,6 +19,7 @@ class Kinematics:
         self.commander = moveit_commander.RobotCommander()
         self.state = moveit_commander.RobotState()
         self.joint_names = self.commander.get_joint_names(self.group_name)
+        self.link_names = self.commander.get_link_names(self.group_name)
 
         # service clients
         rospy.loginfo("Waiting for 'compute_ik' service")
@@ -26,6 +27,12 @@ class Kinematics:
         self.ik_client = rospy.ServiceProxy('/compute_ik',
                                             moveit_msgs.srv.GetPositionIK)
         rospy.loginfo("Found service 'compute_ik'")
+
+        rospy.loginfo("Waiting for 'compute_fk' service")
+        rospy.wait_for_service('/compute_fk')
+        self.fk_client = rospy.ServiceProxy('/compute_fk',
+                                            moveit_msgs.srv.GetPositionFK)
+        rospy.loginfo("Found service 'compute_fk'")
 
     def inverse_kinematics(self, goal_pose, configuration=None, timeout=0.5, attempts=1):
         """
@@ -74,4 +81,61 @@ class Kinematics:
                 resp.solution.joint_state, self.joint_names
             )
         else:
+            return None
+
+    def forward_kinematics(
+            self, reference_header, configuration=None,
+            joint_names=None, link_names=None
+    ):
+        """
+        Calls the FK solver to calculate the poses of a list of links, given a
+        joint configuration. If no configuration is provided, the current joint
+        values are used as the joint configuration.
+
+        :param reference_header: The forward kinematics are computed with respect
+                            to this header (i.e. frame and time stamp).
+        :type reference_header: str
+
+        :param configuration: The robot's configuration. If none is provided,
+                         the current joint values are used.
+        :type configuration: Float[]
+
+        :param joint_names: A list of joint names for the specified configuration.
+                        If none is provided, the group's joints are used.
+        :type joint_names: str[]
+
+        :param link_names: A list of link names for which the forward kinematics must
+                        be computed. If none is provided, the group's links are used.
+        :type link_names: str[]
+
+        :return: The poses of the requested links.
+        :rtype: geometry_msgs.msg.PoseStamped[] or None
+
+        """
+        if configuration is None:
+            configuration = self.group.get_current_joint_values()
+
+        if joint_names is None:
+            joint_names = self.joint_names
+
+        if link_names is None:
+            link_names = self.link_names
+
+        req = moveit_msgs.srv.GetPositionFKRequest()
+        req.header = reference_header
+        req.fk_link_names = link_names
+
+        req.robot_state.joint_state.header = reference_header
+        req.robot_state.joint_state.name = joint_names
+        req.robot_state.joint_state.position = configuration
+
+        try:
+            resp = self.fk_client(req)
+            if resp.error_code.val == resp.error_code.SUCCESS:
+                return resp.pose_stamped
+            else:
+                return None
+
+        except rospy.ServiceException, e:
+            rospy.logerr("Service did not process request: {0}".format(e))
             return None
