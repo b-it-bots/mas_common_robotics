@@ -31,6 +31,19 @@ target_link_libraries(kinect_led_node
   ${LIBUSB_LIBRARIES}
 )
 
+
+### TESTS
+if(CATKIN_ENABLE_TESTING)
+  find_package(catkin REQUIRED
+    COMPONENTS
+      roslaunch
+  )
+
+  roslaunch_add_file_check(ros/launch)
+endif()
+
+
+### INSTALLS
 install(DIRECTORY ros/launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
 )

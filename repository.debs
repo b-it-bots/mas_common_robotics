@@ -2,7 +2,6 @@
 
 # create list of packages to install
 packagelist=(
-  liblog4cpp5-dev 
   libsvm-dev
   python-rosinstall 
   python-scipy 

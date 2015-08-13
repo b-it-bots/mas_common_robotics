@@ -13,9 +13,20 @@ catkin_package(
     rospy
     std_msgs
     geometry_msgs
+    brics_actuator
+    moveit_commander
 )
 
 install(PROGRAMS
   ros/scripts/cartesian_motion_node
+  ros/scripts/planned_motion_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+### TESTS
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+
+  add_rostest(ros/launch/cartesian_motion.test)
+  catkin_add_nosetests(ros/test/planned_motion_unittest.py)
+endif()
