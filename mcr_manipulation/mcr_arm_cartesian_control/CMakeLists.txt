@@ -41,6 +41,23 @@ if(CATKIN_ENABLE_TESTING)
   roslaunch_add_file_check(ros/launch)
 endif()
 
-install(TARGETS arm_cartesian_control arm_cartesian_control
-   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+
+### INSTALLS
+install(
+  TARGETS arm_cartesian_control
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(DIRECTORY common/include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+)
+
+install(DIRECTORY ros/include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+)
+
+install(DIRECTORY ros/launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
 )
