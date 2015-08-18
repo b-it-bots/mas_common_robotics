@@ -22,8 +22,11 @@ class TransformToPoseConverter(object):
     def __init__(self):
         # params
         self.event = None
-        self.reference_frame = rospy.get_param('~reference_frame')
-        self.target_frame = rospy.get_param('~target_frame')
+        self.reference_frame = rospy.get_param('~reference_frame', None)
+        assert self.reference_frame is not None, "Reference frame must be defined."
+        self.target_frame = rospy.get_param('~target_frame', None)
+        assert self.target_frame is not None, "Target frame must be defined."
+
         self.listener = tf.TransformListener()
 
         # node cycle time (in seconds)
