@@ -36,6 +36,7 @@ class ComponentWisePoseErrorCalculator(object):
         self.pose_error = rospy.Publisher(
             '~pose_error', mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference
         )
+        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
 
         # subscribers
         rospy.Subscriber('~event_in', std_msgs.msg.String, self.event_in_cb)
@@ -126,6 +127,7 @@ class ComponentWisePoseErrorCalculator(object):
             self.monitor_event = None
             self.pose_1 = None
             self.pose_2 = None
+            self.event_out.publish('e_stopped')
             return 'INIT'
         else:
             transformed_pose = self.transform_pose(self.pose_1, self.pose_2)
@@ -136,6 +138,9 @@ class ComponentWisePoseErrorCalculator(object):
                 )
 
                 self.pose_error.publish(pose_error)
+                self.event_out.publish('e_success')
+            else:
+                self.event_out.publish('e_failure')
 
             self.monitor_event = None
             self.pose_1 = None
