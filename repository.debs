@@ -29,7 +29,6 @@ packagelist=(
   ros-hydro-ros 
   ros-hydro-ros-control
   ros-hydro-roscpp 
-  ros-hydro-rosjava
   ros-hydro-rviz
   ros-hydro-std-srvs 
   ros-hydro-tf 
