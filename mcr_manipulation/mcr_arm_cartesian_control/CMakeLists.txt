@@ -34,6 +34,30 @@ add_dependencies(arm_cartesian_control
   ${catkin_EXPORTED_TARGETS}
 )
 
-install(TARGETS arm_cartesian_control arm_cartesian_control
-   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+### TESTS
+if(CATKIN_ENABLE_TESTING)
+  find_package(roslaunch REQUIRED)
+
+  roslaunch_add_file_check(ros/launch)
+endif()
+
+
+### INSTALLS
+install(
+  TARGETS arm_cartesian_control
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(DIRECTORY common/include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+)
+
+install(DIRECTORY ros/include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+)
+
+install(DIRECTORY ros/launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
 )
