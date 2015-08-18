@@ -91,7 +91,7 @@ class ComponentWisePoseErrorCalculator(object):
         :rtype: str
 
         """
-        if self.pose_2 and self.pose_1:
+        if self.monitor_event == 'e_start':
             return 'IDLE'
         else:
             return 'INIT'
@@ -104,10 +104,13 @@ class ComponentWisePoseErrorCalculator(object):
         :rtype: str
 
         """
-        if self.monitor_event == 'e_start':
-            return 'RUNNING'
-        elif self.monitor_event == 'e_stop':
+        if self.monitor_event == 'e_stop':
+            self.monitor_event = None
+            self.pose_1 = None
+            self.pose_2 = None
             return 'INIT'
+        elif self.pose_1 and self.pose_2:
+            return 'RUNNING'
         else:
             return 'IDLE'
 
@@ -120,6 +123,9 @@ class ComponentWisePoseErrorCalculator(object):
 
         """
         if self.monitor_event == 'e_stop':
+            self.monitor_event = None
+            self.pose_1 = None
+            self.pose_2 = None
             return 'INIT'
         else:
             transformed_pose = self.transform_pose(self.pose_1, self.pose_2)
@@ -131,7 +137,10 @@ class ComponentWisePoseErrorCalculator(object):
 
                 self.pose_error.publish(pose_error)
 
-            return 'RUNNING'
+            self.monitor_event = None
+            self.pose_1 = None
+            self.pose_2 = None
+            return 'IDLE'
 
     def transform_pose(self, reference_pose, target_pose):
         """
