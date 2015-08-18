@@ -17,7 +17,8 @@ packagelist=(
   ros-indigo-dynamic-reconfigure 
   ros-indigo-image-transport 
   ros-indigo-joint-trajectory-controller 
-  ros-indigo-kdl-parser 
+  ros-indigo-kdl-parser
+  ros-indigo-laser-filters
   ros-indigo-nav-msgs 
   ros-indigo-pcl-ros 
   ros-indigo-robot-state-publisher
