@@ -27,6 +27,13 @@ class ComponentWisePoseErrorCalculator(object):
         self.pose_2 = None
         self.listener = tf.TransformListener()
 
+        # linear offset applied to the result (a three-element list)
+        self.linear_offset = rospy.get_param('~linear_offset', None)
+        if self.linear_offset is not None:
+            assert (
+                isinstance(self.linear_offset, list) and len(self.linear_offset) == 3
+            ), "If linear offset is specified, it must be a three-dimensional array."
+
         # node cycle rate (in hz)
         self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
@@ -135,7 +142,7 @@ class ComponentWisePoseErrorCalculator(object):
 
             if transformed_pose:
                 pose_error = calculate_component_wise_pose_error(
-                    self.pose_1, transformed_pose
+                    self.pose_1, transformed_pose, self.linear_offset
                 )
 
                 self.pose_error.publish(pose_error)
@@ -183,7 +190,7 @@ class ComponentWisePoseErrorCalculator(object):
             return None
 
 
-def calculate_component_wise_pose_error(current_pose, target_pose):
+def calculate_component_wise_pose_error(current_pose, target_pose, offset=None):
     """
     Calculates the component-wise error between two 'PoseStamped' objects.
     It assumes that both poses are specified with respect of the same
@@ -194,6 +201,9 @@ def calculate_component_wise_pose_error(current_pose, target_pose):
 
     :param target_pose: The target pose.
     :type target_pose: geometry_msgs.msg.PoseStamped
+
+    :param offset: A linear offset in X, Y, Z.
+    :type offset: list
 
     :return: The difference in the six components
     (three linear and three angular).
@@ -225,6 +235,12 @@ def calculate_component_wise_pose_error(current_pose, target_pose):
     error.angular.x = target_angles[0] - current_angles[0]
     error.angular.y = target_angles[1] - current_angles[1]
     error.angular.z = target_angles[2] - current_angles[2]
+
+    if offset is not None:
+        offset = tuple(offset)
+        error.linear.x += offset[0]
+        error.linear.y += offset[1]
+        error.linear.z += offset[2]
 
     return error
 
