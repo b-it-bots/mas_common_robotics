@@ -181,34 +181,31 @@ def calculate_component_wise_pose_error(current_pose, target_pose):
     :rtype: mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference
 
     """
-    current_quaternion = []
-    target_quaternion = []
     error = mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference()
     error.header.frame_id = current_pose.header.frame_id
 
-    point_dimensions = ['x', 'y', 'z']
-    quaternion_dimensions = ['x', 'y', 'z', 'w']
-
     # calculate linear distances
-    for _, dim in enumerate(point_dimensions):
-        difference = getattr(target_pose.pose.position, dim) - \
-            getattr(current_pose.pose.position, dim)
-        setattr(error.linear, dim, difference)
+    error.linear.x = target_pose.pose.position.x - current_pose.pose.position.x
+    error.linear.y = target_pose.pose.position.y - current_pose.pose.position.y
+    error.linear.z = target_pose.pose.position.z - current_pose.pose.position.z
+
+    current_quaternion = [
+        current_pose.pose.orientation.x, current_pose.pose.orientation.y,
+        current_pose.pose.orientation.z, current_pose.pose.orientation.w
+    ]
+    target_quaternion = [
+        target_pose.pose.orientation.x, target_pose.pose.orientation.y,
+        target_pose.pose.orientation.z, target_pose.pose.orientation.w
+    ]
 
     # convert quaternions into roll, pitch, yaw angles
-    for _, dim in enumerate(quaternion_dimensions):
-        current_quaternion.append(getattr(current_pose.pose.orientation, dim))
-        target_quaternion.append(getattr(target_pose.pose.orientation, dim))
-
     current_angles = tf.transformations.euler_from_quaternion(current_quaternion)
     target_angles = tf.transformations.euler_from_quaternion(target_quaternion)
 
     # calculate angular distances
-    for i, (target, current) in enumerate(
-            zip(target_angles, current_angles)
-    ):
-        difference = target - current
-        setattr(error.angular, point_dimensions[i], difference)
+    error.angular.x = target_angles[0] - current_angles[0]
+    error.angular.y = target_angles[1] - current_angles[1]
+    error.angular.z = target_angles[2] - current_angles[2]
 
     return error
 
