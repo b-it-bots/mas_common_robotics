@@ -148,9 +148,13 @@ class ComponentWisePoseErrorCalculator(object):
 
         """
         try:
+            target_pose.header.stamp = self.listener.getLatestCommonTime(
+                target_pose.header.frame_id, reference_pose.header.frame_id
+            )
+
             self.listener.waitForTransform(
                 target_pose.header.frame_id, reference_pose.header.frame_id,
-                rospy.Time(0), rospy.Duration(self.wait_for_transform)
+                target_pose.header.stamp, rospy.Duration(self.wait_for_transform)
             )
 
             transformed_pose = self.listener.transformPose(
