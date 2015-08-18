@@ -27,8 +27,9 @@ class ComponentWisePoseErrorCalculator(object):
         self.pose_2 = None
         self.listener = tf.TransformListener()
 
-        # node cycle rate (in seconds)
-        self.loop_rate = rospy.get_param('~loop_rate')
+        # node cycle rate (in hz)
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
+
         # how long to wait for transform (in seconds)
         self.wait_for_transform = rospy.get_param('~wait_for_transform', 0.1)
 
@@ -61,7 +62,7 @@ class ComponentWisePoseErrorCalculator(object):
                 state = self.running_state()
 
             rospy.logdebug("State: {0}".format(state))
-            rospy.sleep(self.loop_rate)
+            self.loop_rate.sleep()
 
     def event_in_cb(self, msg):
         """
