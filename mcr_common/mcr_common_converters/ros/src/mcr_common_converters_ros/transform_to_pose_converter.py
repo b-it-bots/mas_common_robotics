@@ -77,7 +77,7 @@ class TransformToPoseConverter(object):
         :rtype: str
 
         """
-        if self.target_frame and self.reference_frame:
+        if self.event == 'e_start':
             return 'IDLE'
         else:
             return 'INIT'
@@ -90,10 +90,11 @@ class TransformToPoseConverter(object):
         :rtype: str
 
         """
-        if self.event == 'e_start':
-            return 'RUNNING'
-        elif self.event == 'e_stop':
+        if self.event == 'e_stop':
+            self.event = None
             return 'INIT'
+        elif self.target_frame and self.reference_frame:
+            return 'RUNNING'
         else:
             return 'IDLE'
 
@@ -106,10 +107,12 @@ class TransformToPoseConverter(object):
 
         """
         if self.event == 'e_stop':
+            self.event = None
             return 'INIT'
         else:
             self.publish_converted_pose()
-            return 'RUNNING'
+            self.event = None
+            return 'IDLE'
 
     def publish_converted_pose(self):
         """
