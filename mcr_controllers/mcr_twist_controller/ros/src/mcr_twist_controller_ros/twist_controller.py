@@ -53,6 +53,7 @@ class TwistController(object):
         self.controlled_velocity = rospy.Publisher(
             '~controlled_velocity', geometry_msgs.msg.TwistStamped
         )
+        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
 
         # subscribers
         rospy.Subscriber('~event_in', std_msgs.msg.String, self.event_in_cb)
@@ -137,10 +138,15 @@ class TwistController(object):
         if self.event == 'e_stop':
             self.event = None
             self.pose_error = None
+            self.event_out.publish('e_stopped')
             return 'INIT'
         else:
             cartesian_velocity = self.calculate_cartesian_velocity()
-            self.controlled_velocity.publish(cartesian_velocity)
+            if cartesian_velocity:
+                self.controlled_velocity.publish(cartesian_velocity)
+                self.event_out.publish('e_success')
+            else:
+                self.event_out.publish('e_failure')
 
             self.event = None
             self.pose_error = None
