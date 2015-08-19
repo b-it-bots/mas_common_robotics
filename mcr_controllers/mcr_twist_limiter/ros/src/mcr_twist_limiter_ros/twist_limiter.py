@@ -35,8 +35,8 @@ class TwistLimiter(object):
         self.max_velocity_pitch = rospy.get_param('~max_velocity_pitch', 0.1)
         self.max_velocity_yaw = rospy.get_param('~max_velocity_yaw', 0.1)
 
-        # node cycle time (in seconds)
-        self.cycle_time = rospy.get_param('~cycle_time')
+        # node cycle rate (in hz)
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
         # publishers
         self.limited_twist = rospy.Publisher(
@@ -66,7 +66,7 @@ class TwistLimiter(object):
                 state = self.running_state()
 
             rospy.logdebug("State: {0}".format(state))
-            rospy.sleep(self.cycle_time)
+            self.loop_rate.sleep()
 
     def event_in_cb(self, msg):
         """
