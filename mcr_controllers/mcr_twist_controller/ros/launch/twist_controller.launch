@@ -6,7 +6,5 @@
         <!-- the cycle rate of the node (in Hz) -->
         <param name="loop_rate" type="double" value="10"/>
 
-        <remap from="~controlled_velocity" to="/arm_1/arm_controller/cartesian_velocity_command"/>
-
     </node>
 </launch>

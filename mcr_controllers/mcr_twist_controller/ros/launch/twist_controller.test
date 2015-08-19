@@ -17,7 +17,7 @@
     <test pkg="mcr_twist_controller" type="twist_controller_test.py"
             test-name="test_twist_controller">
 
-        <remap from="~component_output" to="/twist_controller/controlled_velocity"/>
+        <remap from="~component_output" to="/twist_controller/controlled_twist"/>
         <remap from="~event_out" to="/twist_controller/event_in"/>
         <remap from="~pose_error" to="/twist_controller/pose_error"/>
 

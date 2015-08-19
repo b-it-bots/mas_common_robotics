@@ -50,8 +50,8 @@ class TwistController(object):
         self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
         # publishers
-        self.controlled_velocity = rospy.Publisher(
-            '~controlled_velocity', geometry_msgs.msg.TwistStamped
+        self.controlled_twist = rospy.Publisher(
+            '~controlled_twist', geometry_msgs.msg.TwistStamped
         )
         self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
 
@@ -143,7 +143,7 @@ class TwistController(object):
         else:
             cartesian_velocity = self.calculate_cartesian_velocity()
             if cartesian_velocity:
-                self.controlled_velocity.publish(cartesian_velocity)
+                self.controlled_twist.publish(cartesian_velocity)
                 self.event_out.publish('e_success')
             else:
                 self.event_out.publish('e_failure')
