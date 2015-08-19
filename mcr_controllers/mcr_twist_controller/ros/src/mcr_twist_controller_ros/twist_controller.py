@@ -46,8 +46,8 @@ class TwistController(object):
         self.pitch_controller = pid_controller.p_controller(self.p_gain_pitch)
         self.yaw_controller = pid_controller.p_controller(self.p_gain_yaw)
 
-        # node cycle time (in seconds)
-        self.cycle_time = rospy.get_param('~cycle_time')
+        # node cycle rate (in hz)
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
         # publishers
         self.controlled_velocity = rospy.Publisher(
@@ -81,7 +81,7 @@ class TwistController(object):
                 state = self.running_state()
 
             rospy.logdebug("State: {0}".format(state))
-            rospy.sleep(self.cycle_time)
+            self.loop_rate.sleep()
 
     def event_in_cb(self, msg):
         """

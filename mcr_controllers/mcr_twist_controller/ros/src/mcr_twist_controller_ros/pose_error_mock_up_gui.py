@@ -59,8 +59,8 @@ def error_z(slider):
 
 
 def publish_pose_error():
-    # node cycle rate (in seconds)
-    loop_rate = rospy.get_param('~loop_rate')
+    # node cycle rate (in hz)
+    loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
     pub = rospy.Publisher(
         '~pose_error', mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference
@@ -68,7 +68,7 @@ def publish_pose_error():
 
     while not rospy.is_shutdown():
         pub.publish(pose_error)
-        rospy.sleep(cycle_time)
+        loop_rate.sleep()
 
 
 def main():
