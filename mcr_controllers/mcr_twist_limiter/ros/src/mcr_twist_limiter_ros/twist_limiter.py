@@ -137,24 +137,24 @@ class TwistLimiter(object):
         limited_twist.header.frame_id = self.twist.header.frame_id
         limited_twist.header.stamp = self.twist.header.stamp
 
-        dimensions = ['x', 'y', 'z']
-        linear_velocities = [
-            self.max_velocity_x, self.max_velocity_y, self.max_velocity_z
-        ]
-        angular_velocities = [
-            self.max_velocity_roll, self.max_velocity_pitch, self.max_velocity_yaw
-        ]
-
-        for i, dim in enumerate(dimensions):
-            linear_velocity = limiter.limit_value(
-                getattr(self.twist.twist.linear, dim), linear_velocities[i]
-            )
-            angular_velocity = limiter.limit_value(
-                getattr(self.twist.twist.angular, dim), angular_velocities[i]
-            )
-
-            setattr(limited_twist.twist.linear, dim, linear_velocity)
-            setattr(limited_twist.twist.angular, dim, angular_velocity)
+        limited_twist.twist.linear.x = limiter.limit_value(
+            self.twist.twist.linear.x, self.max_velocity_x
+        )
+        limited_twist.twist.linear.y = limiter.limit_value(
+            self.twist.twist.linear.y, self.max_velocity_y
+        )
+        limited_twist.twist.linear.z = limiter.limit_value(
+            self.twist.twist.linear.z, self.max_velocity_z
+        )
+        limited_twist.twist.angular.x = limiter.limit_value(
+            self.twist.twist.angular.x, self.max_velocity_roll
+        )
+        limited_twist.twist.angular.y = limiter.limit_value(
+            self.twist.twist.angular.y, self.max_velocity_pitch
+        )
+        limited_twist.twist.angular.z = limiter.limit_value(
+            self.twist.twist.angular.z, self.max_velocity_yaw
+        )
 
         return limited_twist
 
