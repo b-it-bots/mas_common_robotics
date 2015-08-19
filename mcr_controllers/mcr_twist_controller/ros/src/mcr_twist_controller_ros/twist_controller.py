@@ -31,12 +31,12 @@ class TwistController(object):
         self.pose_error = None
 
         # proportional gains for the Cartesian linear velocities
-        self.p_gain_x = rospy.get_param('~p_gain_x', -0.8)
-        self.p_gain_y = rospy.get_param('~p_gain_y', -0.8)
-        self.p_gain_z = rospy.get_param('~p_gain_z', -0.8)
-        self.p_gain_roll = rospy.get_param('~p_gain_roll', -0.8)
-        self.p_gain_pitch = rospy.get_param('~p_gain_pitch', -0.8)
-        self.p_gain_yaw = rospy.get_param('~p_gain_yaw', -0.8)
+        self.p_gain_x = rospy.get_param('~p_gain_x', 0.0)
+        self.p_gain_y = rospy.get_param('~p_gain_y', 0.0)
+        self.p_gain_z = rospy.get_param('~p_gain_z', 0.0)
+        self.p_gain_roll = rospy.get_param('~p_gain_roll', 0.0)
+        self.p_gain_pitch = rospy.get_param('~p_gain_pitch', 0.0)
+        self.p_gain_yaw = rospy.get_param('~p_gain_yaw', 0.0)
 
         # create controllers
         self.x_controller = pid_controller.p_controller(self.p_gain_x)
