@@ -89,7 +89,7 @@ class TwistLimiter(object):
         :rtype: str
 
         """
-        if self.twist:
+        if self.event == 'e_start':
             return 'IDLE'
         else:
             return 'INIT'
@@ -102,10 +102,12 @@ class TwistLimiter(object):
         :rtype: str
 
         """
-        if self.event == 'e_start':
-            return 'RUNNING'
-        elif self.event == 'e_stop':
+        if self.event == 'e_stop':
+            self.event = None
+            self.twist = None
             return 'INIT'
+        elif self.twist:
+            return 'RUNNING'
         else:
             return 'IDLE'
 
@@ -118,12 +120,16 @@ class TwistLimiter(object):
 
         """
         if self.event == 'e_stop':
+            self.event = None
+            self.twist = None
             return 'INIT'
         else:
             limited_twist = self.limit_twist()
             self.limited_twist.publish(limited_twist)
 
-            return 'RUNNING'
+            self.event = None
+            self.twist = None
+            return 'IDLE'
 
     def limit_twist(self):
         """
