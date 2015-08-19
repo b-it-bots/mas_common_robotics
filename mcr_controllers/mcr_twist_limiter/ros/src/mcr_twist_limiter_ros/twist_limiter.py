@@ -42,6 +42,7 @@ class TwistLimiter(object):
         self.limited_twist = rospy.Publisher(
             '~limited_twist', geometry_msgs.msg.TwistStamped
         )
+        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
 
         # subscribers
         rospy.Subscriber('~event_in', std_msgs.msg.String, self.event_in_cb)
@@ -122,10 +123,15 @@ class TwistLimiter(object):
         if self.event == 'e_stop':
             self.event = None
             self.twist = None
+            self.event_out.publish('e_stopped')
             return 'INIT'
         else:
             limited_twist = self.limit_twist()
-            self.limited_twist.publish(limited_twist)
+            if limited_twist:
+                self.limited_twist.publish(limited_twist)
+                self.event_out.publish('e_success')
+            else:
+                self.event_out.publish('e_failure')
 
             self.event = None
             self.twist = None
