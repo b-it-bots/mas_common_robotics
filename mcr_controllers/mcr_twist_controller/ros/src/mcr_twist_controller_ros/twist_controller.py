@@ -104,7 +104,7 @@ class TwistController(object):
         :rtype: str
 
         """
-        if self.pose_error:
+        if self.event == 'e_start':
             return 'IDLE'
         else:
             return 'INIT'
@@ -117,10 +117,12 @@ class TwistController(object):
         :rtype: str
 
         """
-        if self.event == 'e_start':
-            return 'RUNNING'
-        elif self.event == 'e_stop':
+        if self.event == 'e_stop':
+            self.event = None
+            self.pose_error = None
             return 'INIT'
+        elif self.pose_error:
+            return 'RUNNING'
         else:
             return 'IDLE'
 
@@ -133,12 +135,16 @@ class TwistController(object):
 
         """
         if self.event == 'e_stop':
+            self.event = None
+            self.pose_error = None
             return 'INIT'
         else:
             cartesian_velocity = self.calculate_cartesian_velocity()
             self.controlled_velocity.publish(cartesian_velocity)
 
-            return 'RUNNING'
+            self.event = None
+            self.pose_error = None
+            return 'IDLE'
 
     def calculate_cartesian_velocity(self):
         """
