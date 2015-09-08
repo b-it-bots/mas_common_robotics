@@ -3,7 +3,6 @@ project(mcr_twist_synchronizer)
 
 find_package(catkin REQUIRED
   COMPONENTS
-    rospy
 )
 
 catkin_python_setup()
