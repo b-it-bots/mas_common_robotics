@@ -3,7 +3,7 @@
   <name>mcr_twist_controller</name>
   <version>0.1.0</version>
   <description>
-  A package that calculates a twist to
+  This component calculates a twist to
   reduce the difference between two poses.
   </description>
   <license>GPLv3</license>

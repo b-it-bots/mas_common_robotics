@@ -7,7 +7,6 @@ find_package(catkin REQUIRED
     controller_interface
     hardware_interface
     brics_actuator
-    rostest
 )
 
 catkin_package(
@@ -20,7 +19,6 @@ catkin_package(
     controller_interface
     hardware_interface
     brics_actuator
-    rostest
 )
 
 # build
