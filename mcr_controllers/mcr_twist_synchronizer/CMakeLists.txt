@@ -3,6 +3,7 @@ project(mcr_twist_synchronizer)
 
 find_package(catkin REQUIRED
   COMPONENTS
+    roslint
 )
 
 catkin_python_setup()
@@ -21,6 +22,8 @@ install(PROGRAMS
 )
 
 ### TESTS
+roslint_python()
+
 if(CATKIN_ENABLE_TESTING)
   find_package(roslaunch REQUIRED)
   find_package(rostest REQUIRED)
