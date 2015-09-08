@@ -7,7 +7,7 @@ find_package(catkin REQUIRED
     std_msgs
 )
 
-include($ENV{ROS_ROOT}/core/rosbuild/FindPkgConfig.cmake)
+find_package(PkgConfig REQUIRED)
 pkg_check_modules (LIBUSB REQUIRED libusb-1.0)
 
 catkin_package(
