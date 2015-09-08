@@ -20,8 +20,6 @@ catkin_package(
     mcr_geometry
     mcr_machine_learning
     mcr_segmentation
-  DEPENDS
-    libsvm-dev
 )
 
 include_directories(
