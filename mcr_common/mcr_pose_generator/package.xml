@@ -3,7 +3,7 @@
   <name>mcr_pose_generator</name>
   <version>0.1.0</version>
   <description>
-  A package that generates a list of poses around a target pose based
+  Generates a list of poses around a target pose based
   on a set of parameters (SphericalSamplerParameters).
   </description>
 
