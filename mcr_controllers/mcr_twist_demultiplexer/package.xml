@@ -21,8 +21,10 @@
   <build_depend>roscpp</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>std_msgs</build_depend>
+  <build_depend>mcr_monitoring_msgs</build_depend>
 
   <run_depend>geometry_msgs</run_depend>
   <run_depend>std_msgs</run_depend>
+  <run_depend>mcr_monitoring_msgs</run_depend>
 
 </package>

@@ -6,12 +6,14 @@ find_package(catkin REQUIRED
     roscpp
     geometry_msgs
     std_msgs
+    mcr_monitoring_msgs
 )
 
 catkin_package(
   CATKIN_DEPENDS
     geometry_msgs
     std_msgs
+    mcr_monitoring_msgs
 )
 
 include_directories(
