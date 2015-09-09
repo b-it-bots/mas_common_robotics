@@ -17,6 +17,7 @@ find_package(orocos_kdl REQUIRED)
 catkin_package(
   CATKIN_DEPENDS  
     mcr_manipulation_utils
+    sensor_msgs
 )
 
 include_directories(
@@ -24,10 +25,6 @@ include_directories(
  ${PROJECT_SOURCE_DIR}/common/include
  ${EIGEN_INCLUDE_DIRS}
  ${catkin_INCLUDE_DIRS}
-)
-
-link_directories(
-  ${orocos_kdl_LIBRARY_DIRS}
 )
 
 add_executable(arm_cartesian_control
