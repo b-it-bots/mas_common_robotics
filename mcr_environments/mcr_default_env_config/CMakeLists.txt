@@ -8,6 +8,7 @@ catkin_package()
 set(env_list
   brsu-c025
   brsu-c069
+  empty-world
 )
 
 if(CATKIN_ENABLE_TESTING)
@@ -32,5 +33,9 @@ install(DIRECTORY brsu-c069/
 )
 
 install(DIRECTORY brsu-c025/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/brsu-c069/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/brsu-c025/
+)
+
+install(DIRECTORY empty-world/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/empty-world/
 )
