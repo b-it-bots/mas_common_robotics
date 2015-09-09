@@ -8,6 +8,7 @@ find_package(orocos_kdl REQUIRED)
 catkin_package(
   CATKIN_DEPENDS  
     mcr_manipulation_utils
+    sensor_msgs
 )
 
 include_directories(
