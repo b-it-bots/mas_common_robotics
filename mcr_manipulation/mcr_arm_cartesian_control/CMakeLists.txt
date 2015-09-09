@@ -17,10 +17,6 @@ include_directories(
  ${catkin_INCLUDE_DIRS}
 )
 
-link_directories(
-  ${orocos_kdl_LIBRARY_DIRS}
-)
-
 add_executable(arm_cartesian_control
   ros/src/arm_cartesian_control_node.cpp
   common/src/arm_cartesian_control.cpp)
