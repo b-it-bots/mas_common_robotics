@@ -34,10 +34,10 @@ add_library(mcr_node_analyzer
   ros/src/mcr_node_analyzer.cpp
 )
   
-add_executable(cpp_example
+add_executable(node_analyzer_example
   ros/examples/cpp_example.cpp
 )
-target_link_libraries(cpp_example
+target_link_libraries(node_analyzer_example
   ${catkin_LIBRARIES}
 )
 
@@ -55,7 +55,7 @@ install(TARGETS mcr_node_analyzer
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
 
-install(TARGETS cpp_example
+install(TARGETS node_analyzer_example
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

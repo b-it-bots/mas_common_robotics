@@ -5,8 +5,8 @@
  *      Author: matthias
  */
 
-#include "mcr_manipulation_utils/ros_urdf_loader.h"
-#include "arm_cartesian_control.h"
+#include <mcr_manipulation_utils/ros_urdf_loader.h>
+#include <mcr_arm_cartesian_control/arm_cartesian_control.h>
 
 #include <sensor_msgs/JointState.h>
 #include <kdl/kdl.hpp>

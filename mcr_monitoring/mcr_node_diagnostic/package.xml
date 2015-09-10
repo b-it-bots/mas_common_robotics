@@ -21,12 +21,13 @@
   <build_depend>diagnostic_aggregator</build_depend>
   <build_depend>diagnostic_analysis</build_depend>
   <build_depend>pluginlib</build_depend>
-  <build_depend>roslaunch</build_depend>
 
   <run_depend>diagnostic_aggregator</run_depend>
   <run_depend>rospy</run_depend>
   <run_depend>diagnostic_msgs</run_depend>
   <run_depend>pluginlib</run_depend>
+
+  <test_depend>roslaunch</test_depend>
 
   <export> 
      <diagnostic_aggregator plugin="${prefix}/mcr_node_analyzer_plugin.xml" />

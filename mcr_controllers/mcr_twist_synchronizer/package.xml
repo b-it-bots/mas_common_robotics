@@ -3,7 +3,7 @@
   <name>mcr_twist_synchronizer</name>
   <version>0.1.0</version>
   <description>
-  A package that synchronizes the velocities of a twist
+  Synchronization of velocities of a twist
   (represented as a geometry_msgs/TwistStamped message),
   such that each component of a Cartesian error (compensated
   by the twist's velocities) simultaneously reaches zero.
@@ -15,12 +15,14 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>rospy</build_depend>
-  <build_depend>roslaunch</build_depend>
-  <build_depend>rostest</build_depend>
+  <build_depend>roslint</build_depend>
 
   <run_depend>rospy</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>mcr_manipulation_msgs</run_depend>
+
+  <test_depend>roslaunch</test_depend>
+  <test_depend>rostest</test_depend>
+
 </package>

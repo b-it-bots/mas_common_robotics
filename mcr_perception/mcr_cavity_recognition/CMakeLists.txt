@@ -4,6 +4,7 @@ project(mcr_cavity_recognition)
 find_package(catkin REQUIRED
   COMPONENTS
     message_filters
+    roscpp
     roslib
     sensor_msgs
     geometry_msgs
@@ -13,7 +14,10 @@ find_package(catkin REQUIRED
 find_package(PCL 1.7 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem)
 
-catkin_package()
+catkin_package(
+  CATKIN_DEPENDS
+    mcr_perception_msgs
+)
 
 include_directories(
   ros/include

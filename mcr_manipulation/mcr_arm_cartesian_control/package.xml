@@ -35,6 +35,8 @@
   <run_depend>orocos_kdl</run_depend>
   <run_depend>mcr_manipulation_utils</run_depend>
 
+  <test_depend>roslaunch</test_depend>
+
 </package>
 
 

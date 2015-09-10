@@ -4,7 +4,6 @@ project(mcr_pose_generator)
 find_package(catkin REQUIRED
   COMPONENTS
     rospy
-    rostest
     tf
 )
 
@@ -12,7 +11,6 @@ catkin_python_setup()
 
 catkin_package(
   CATKIN_DEPENDS
-    numpy
     rospy
     std_msgs
     geometry_msgs

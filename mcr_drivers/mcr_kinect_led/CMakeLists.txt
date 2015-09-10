@@ -7,7 +7,7 @@ find_package(catkin REQUIRED
     std_msgs
 )
 
-include($ENV{ROS_ROOT}/core/rosbuild/FindPkgConfig.cmake)
+find_package(PkgConfig REQUIRED)
 pkg_check_modules (LIBUSB REQUIRED libusb-1.0)
 
 catkin_package(
@@ -34,10 +34,7 @@ target_link_libraries(kinect_led_node
 
 ### TESTS
 if(CATKIN_ENABLE_TESTING)
-  find_package(catkin REQUIRED
-    COMPONENTS
-      roslaunch
-  )
+  find_package(roslaunch REQUIRED)
 
   roslaunch_add_file_check(ros/launch)
 endif()
@@ -46,4 +43,10 @@ endif()
 ### INSTALLS
 install(DIRECTORY ros/launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
+)
+
+install(
+  TARGETS
+    kinect_led_node
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
