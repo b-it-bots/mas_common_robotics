@@ -1,3 +1,10 @@
+/*********************************************************************
+ * Software License Agreement (GPLv3 License)
+ *
+ *  Copyright (c) 2015, Hochschule Bonn-Rhein-Sieg.
+ *  All rights reserved.
+ *
+ *********************************************************************/
 /**
  * Author: Shehzad Ahmed
  */
@@ -60,7 +67,8 @@ bool interpolation_planner_interface::InterpolationPlannerContext::solve(plannin
     return true;
 }
 
-bool interpolation_planner_interface::InterpolationPlannerContext::solve(planning_interface::MotionPlanDetailedResponse &res)
+bool interpolation_planner_interface::InterpolationPlannerContext::solve(
+    planning_interface::MotionPlanDetailedResponse &res)
 {
     logInform("Unable to solve the planning problem");
     res.error_code_.val = moveit_msgs::MoveItErrorCodes::PLANNING_FAILED;
@@ -88,7 +96,8 @@ void interpolation_planner_interface::InterpolationPlannerContext::setCompleteIn
     complete_initial_robot_state_ = complete_initial_robot_state;
 }
 
-const robot_state::RobotState& interpolation_planner_interface::InterpolationPlannerContext::getCompleteInitialRobotState() const
+const robot_state::RobotState&
+    interpolation_planner_interface::InterpolationPlannerContext::getCompleteInitialRobotState() const
 {
     return complete_initial_robot_state_;
 }
@@ -110,7 +119,8 @@ bool interpolation_planner_interface::InterpolationPlannerContext::setGoalConstr
     return true;
 }
 
-const robot_model::RobotModelConstPtr& interpolation_planner_interface::InterpolationPlannerContext::getRobotModel() const
+const robot_model::RobotModelConstPtr&
+    interpolation_planner_interface::InterpolationPlannerContext::getRobotModel() const
 {
     return complete_initial_robot_state_.getRobotModel();
 }
@@ -131,9 +141,9 @@ bool interpolation_planner_interface::InterpolationPlannerContext::generateTraje
     // Prepare start state
     constructStartState();
 
-    // Configure velocity profiler using planner sample time (assuming 
-    // that the smallest duration required for any axis motion is equal to 
-    // planner sample time) and then search duration for longest motion 
+    // Configure velocity profiler using planner sample time (assuming
+    // that the smallest duration required for any axis motion is equal to
+    // planner sample time) and then search duration for longest motion
     // from all axis.
     if (!configureVelocityProfiler(planner_sample_time_))
         return false;
@@ -141,7 +151,7 @@ bool interpolation_planner_interface::InterpolationPlannerContext::generateTraje
     if (max_rescaled_time == 0.0)
         return false;
 
-    // In case longest motion requires less or equal time to sample time then 
+    // In case longest motion requires less or equal time to sample time then
     // Reduce the sample time to half to insert one intermediate point.
     if (max_rescaled_time <= planner_sample_time_) {
         planner_sample_time_ = max_rescaled_time/2;
@@ -155,7 +165,7 @@ bool interpolation_planner_interface::InterpolationPlannerContext::generateTraje
     double time_from_start = 0.0;
     while (time_from_start <= max_rescaled_time) {
         trajectory_msgs::JointTrajectoryPoint traj_point_temp;
-        if(!interpolate(time_from_start, traj_point_temp))
+        if (!interpolate(time_from_start, traj_point_temp))
             return false;
         joint_traj_.points.push_back(traj_point_temp);
 
@@ -167,12 +177,12 @@ bool interpolation_planner_interface::InterpolationPlannerContext::generateTraje
     // add last trajectory point at the max_rescaled_time which is goal state.
     if ((time_from_start-planner_sample_time_) < max_rescaled_time) {
         trajectory_msgs::JointTrajectoryPoint traj_point_temp;
-        if(!interpolate(max_rescaled_time, traj_point_temp))
+        if (!interpolate(max_rescaled_time, traj_point_temp))
             return false;
         joint_traj_.points.push_back(traj_point_temp);
     }
 
-    // store total trajectory time
+    // Store total trajectory time
     planned_trajectory_time_ = max_rescaled_time;
 
     for (std::size_t i = 0 ; i < planning_req_joint_names_.size() ; ++i) {
@@ -188,10 +198,10 @@ double interpolation_planner_interface::InterpolationPlannerContext::searchLonge
 {
     double max_duration = 0;
 
-    //finding maximum duration from all axis.
+    // Finding maximum duration from all axis.
     for (std::size_t i = 0 ; i < planning_req_joint_names_.size() ; ++i) {
             // Find lengthiest trajectory
-            max_duration = std::max( max_duration, vp_[i]->Duration());
+            max_duration = std::max(max_duration, vp_[i]->Duration());
     }
 
     return max_duration;
@@ -216,7 +226,8 @@ bool interpolation_planner_interface::InterpolationPlannerContext::constructStar
     start_state_map_.clear();
 
     for (std::size_t i = 0 ; i < planning_req_joint_names_.size() ; ++i) {
-        const double *current_position = complete_initial_robot_state_.getJointPositions(planning_req_joint_names_[i]);
+        const double *current_position =
+            complete_initial_robot_state_.getJointPositions(planning_req_joint_names_[i]);
         start_state_map_[planning_req_joint_names_[i]] = *current_position;
     }
 }
@@ -232,7 +243,7 @@ bool interpolation_planner_interface::InterpolationPlannerContext::constructGoal
         moveit_msgs::JointConstraint joint_constraint = goal_constraints_msg_.joint_constraints[i];
         std::vector<std::string>::iterator it;
 
-        it = find (group_joint_names_.begin(), group_joint_names_.end(), joint_constraint.joint_name);
+        it = find(group_joint_names_.begin(), group_joint_names_.end(), joint_constraint.joint_name);
         if (it != group_joint_names_.end()) {
             planning_req_joint_names_.push_back(joint_constraint.joint_name);
             goal_state_map_[joint_constraint.joint_name] = joint_constraint.position;
@@ -253,15 +264,12 @@ bool interpolation_planner_interface::InterpolationPlannerContext::configureVelo
         vp_.resize(planning_req_joint_names_.size());
         for (std::size_t i = 0 ; i < planning_req_joint_names_.size(); ++i) {
             std::string joint_name = planning_req_joint_names_[i];
-            vp_[i].reset(new KDL::VelocityProfile_Trap(
-                                                        max_velocity_map_[joint_name],
-                                                        max_acceleration_map_[joint_name])
-                                                        );
+            vp_[i].reset(new KDL::VelocityProfile_Trap(max_velocity_map_[joint_name],
+                                                        max_acceleration_map_[joint_name]));
 
-            vp_[i]->SetProfileDuration(start_state_map_[joint_name], 
-                                        goal_state_map_[joint_name], 
-                                        profiler_duration
-                                        );
+            vp_[i]->SetProfileDuration(start_state_map_[joint_name],
+                                        goal_state_map_[joint_name],
+                                        profiler_duration);
         }
     } else {
         logError("Implementation fo Planner type '%s' is missing.", selected_planner_id_.c_str());

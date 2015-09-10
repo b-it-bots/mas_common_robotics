@@ -1,3 +1,11 @@
+/*********************************************************************
+ * Software License Agreement (GPLv3 License)
+ *
+ *  Copyright (c) 2015, Hochschule Bonn-Rhein-Sieg.
+ *  All rights reserved.
+ *
+ *********************************************************************/
+
 /**
  * Author: Shehzad Ahmed
  */
@@ -39,16 +47,16 @@ std::string interpolation_planner_interface::InterpolationPlannerManager::getDes
 void interpolation_planner_interface::InterpolationPlannerManager::getPlanningAlgorithms(
         std::vector<std::string> &algs) const
 {
-    const planning_interface::PlannerConfigurationMap &pconfig = interpolation_planner_interface_->getPlannerConfigurations();
+    const planning_interface::PlannerConfigurationMap &pconfig =
+                                    interpolation_planner_interface_->getPlannerConfigurations();
     planning_interface::PlannerConfigurationMap::const_iterator it = pconfig.begin();
 
-    if(it != pconfig.end())
-    {
+    if (it != pconfig.end()) {
         planning_interface::PlannerConfigurationSettings pc_temp = it->second;
         int number_of_planners = boost::lexical_cast<int>(pc_temp.config["number_of_planners"]);
         algs.clear();
         algs.reserve(number_of_planners);
-        for(int iter=1; iter<=number_of_planners; iter++) {
+        for(int iter = 1; iter <= number_of_planners; iter++) {
             std::string planner_type = pc_temp.config["planner_type_"+iter];
             algs.push_back(planner_type);
         }
@@ -58,7 +66,6 @@ void interpolation_planner_interface::InterpolationPlannerManager::getPlanningAl
 void interpolation_planner_interface::InterpolationPlannerManager::setPlannerConfigurations(
         const planning_interface::PlannerConfigurationMap &pconfig)
 {
-
     // this call can add a few more configs than we pass in (adds defaults)
     interpolation_planner_interface_->setPlannerConfigurations(pconfig);
 
@@ -67,7 +74,8 @@ void interpolation_planner_interface::InterpolationPlannerManager::setPlannerCon
     PlannerManager::setPlannerConfigurations(interpolation_planner_interface_->getPlannerConfigurations());
 }
 
-planning_interface::PlanningContextPtr interpolation_planner_interface::InterpolationPlannerManager::getPlanningContext(
+planning_interface::PlanningContextPtr
+    interpolation_planner_interface::InterpolationPlannerManager::getPlanningContext(
         const planning_scene::PlanningSceneConstPtr& planning_scene,
         const planning_interface::MotionPlanRequest &req,
         moveit_msgs::MoveItErrorCodes &error_code) const

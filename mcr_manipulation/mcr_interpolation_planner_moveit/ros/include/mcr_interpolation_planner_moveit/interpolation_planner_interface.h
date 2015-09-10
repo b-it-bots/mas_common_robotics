@@ -1,8 +1,15 @@
+/*********************************************************************
+ * Software License Agreement (GPLv3 License)
+ *
+ *  Copyright (c) 2015, Hochschule Bonn-Rhein-Sieg.
+ *  All rights reserved.
+ *
+ *********************************************************************/
 /**
  * Author: Shehzad Ahmed
  */
-#ifndef INTERPOLATION_PLANNER_INTERFACE_H
-#define INTERPOLATION_PLANNER_INTERFACE_H
+#ifndef MCR_INTERPOLATION_PLANNER_MOVEIT_INTERPOLATION_PLANNER_INTERFACE_H
+#define MCR_INTERPOLATION_PLANNER_MOVEIT_INTERPOLATION_PLANNER_INTERFACE_H
 
 #include <mcr_interpolation_planner_moveit/interpolation_planner_context.h>
 #include <moveit/planning_interface/planning_interface.h>
@@ -15,6 +22,7 @@
 #include <string>
 #include <map>
 #include <ros/ros.h>
+#include <vector>
 
 /**
  * @brief The MoveIt interface to the Interpolation planner.
@@ -34,7 +42,6 @@ namespace interpolation_planner_interface
     class InterpolationPlannerInterface
     {
         public:
-
             /**
              * A constructor.
              * @brief Initialize interpolation based planning for a
@@ -73,9 +80,10 @@ namespace interpolation_planner_interface
              *                   planner context.
              * @return      Pointer to interpolation based planning context.
              */
-            InterpolationPlannerContextPtr getPlanningContext(const planning_scene::PlanningSceneConstPtr& planning_scene,
-                                                          const planning_interface::MotionPlanRequest &req,
-                                                          moveit_msgs::MoveItErrorCodes &error_code) const;
+            InterpolationPlannerContextPtr getPlanningContext(
+                                                        const planning_scene::PlanningSceneConstPtr& planning_scene,
+                                                        const planning_interface::MotionPlanRequest &req,
+                                                        moveit_msgs::MoveItErrorCodes &error_code) const;
 
             /**
              * @brief Print the status of this node.
@@ -115,5 +123,5 @@ namespace interpolation_planner_interface
              */
             interpolation_planner_interface::GroupSpecificationMap group_configs_;
     };
-}
-#endif
+}  // namespace interpolation_planner_interface
+#endif  // MCR_INTERPOLATION_PLANNER_MOVEIT_INTERPOLATION_PLANNER_INTERFACE_H

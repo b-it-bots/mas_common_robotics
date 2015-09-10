@@ -1,3 +1,10 @@
+/*********************************************************************
+ * Software License Agreement (GPLv3 License)
+ *
+ *  Copyright (c) 2015, Hochschule Bonn-Rhein-Sieg.
+ *  All rights reserved.
+ *
+ *********************************************************************/
 /**
  * Author: Shehzad Ahmed
  */
@@ -42,7 +49,8 @@ void interpolation_planner_interface::InterpolationPlannerInterface::setPlannerC
     planner_configs_ = pconfig2;
 }
 
-interpolation_planner_interface::InterpolationPlannerContextPtr interpolation_planner_interface::InterpolationPlannerInterface::getPlanningContext(
+interpolation_planner_interface::InterpolationPlannerContextPtr
+    interpolation_planner_interface::InterpolationPlannerInterface::getPlanningContext(
         const planning_scene::PlanningSceneConstPtr& planning_scene,
         const planning_interface::MotionPlanRequest &req,
         moveit_msgs::MoveItErrorCodes &error_code) const
@@ -83,19 +91,19 @@ interpolation_planner_interface::InterpolationPlannerContextPtr interpolation_pl
     planning_interface::PlannerConfigurationSettings pc_temp = pc->second;
 
     if (req.planner_id.empty()) {
-        logWarn("No planner is specified in request. Using default planner %s","Trapezoidal");
+        logWarn("No planner is specified in request. Using default planner %s", "Trapezoidal");
         pc_temp.config["selected_planner_id"] = "Trapezoidal";
     } else {
         int number_of_planners = boost::lexical_cast<int>(pc_temp.config["number_of_planners"]);
         bool is_planner_type_exit = false;
 
-        for(int iter=1; iter<=number_of_planners; iter++) {
+        for(int iter = 1; iter <= number_of_planners; iter++) {
             std::string planner_type = pc_temp.config["planner_type_"+iter];
             if (req.planner_id.compare(planner_type) == 0)
                 is_planner_type_exit = true;
         }
 
-        if(!is_planner_type_exit) {
+        if (!is_planner_type_exit) {
             logError("Planner type '%s' does not exit in the planner configurations.", req.planner_id.c_str());
             return InterpolationPlannerContextPtr();
         }
@@ -116,10 +124,9 @@ interpolation_planner_interface::InterpolationPlannerContextPtr interpolation_pl
     }
 
     InterpolationPlannerContextPtr context(new InterpolationPlannerContext(req.group_name,
-                                                                                        pc_temp,
-                                                                                        gc->second,
-                                                                                        kmodel_
-                                                                                        ));
+                                                                            pc_temp,
+                                                                            gc->second,
+                                                                            kmodel_));
 
     if (context) {
         context->clear();
@@ -182,12 +189,12 @@ void interpolation_planner_interface::InterpolationPlannerInterface::loadPlanner
             if (nh_.getParam(group_names[i] + "/" + KNOWN_GROUP_PARAMS[k], value_d))
               specific_group_params[KNOWN_GROUP_PARAMS[k]] = boost::lexical_cast<std::string>(value_d);
             else {
-              logError("Parameter '%s' should be of type double(for group '%s')", 
-                KNOWN_GROUP_PARAMS[k].c_str(),group_names[i].c_str());
+              logError("Parameter '%s' should be of type double(for group '%s')",
+                KNOWN_GROUP_PARAMS[k].c_str(), group_names[i].c_str());
             }
           } else {
-            logError("Could not find the parameter '%s' on the param server(for group '%s')", 
-                KNOWN_GROUP_PARAMS[k].c_str(),group_names[i].c_str());
+            logError("Could not find the parameter '%s' on the param server(for group '%s')",
+                KNOWN_GROUP_PARAMS[k].c_str(), group_names[i].c_str());
           }
         }
 
@@ -201,14 +208,13 @@ void interpolation_planner_interface::InterpolationPlannerInterface::loadPlanner
             continue;
         }
 
-        if (!(config_names.getType() == XmlRpc::XmlRpcValue::TypeArray)) { 
+        if (!(config_names.getType() == XmlRpc::XmlRpcValue::TypeArray)) {
             logError("The planner_configs argument of a group configuration "
                 "should be an array of strings (for group '%s')", group_names[i].c_str());
             continue;
         }
 
         for (int32_t j = 0; j < config_names.size() ; ++j) {
-
             std::string planner_config;
             if (!(config_names[j].getType() == XmlRpc::XmlRpcValue::TypeString)) {
                 logError("Planner configuration names must be of "
@@ -243,22 +249,23 @@ void interpolation_planner_interface::InterpolationPlannerInterface::loadPlanner
                         number_of_planners++;
                         std::string planner_type = "planner_type_" + number_of_planners;
                         pc.config[planner_type] = static_cast<std::string>(it->second);
-                    } else 
+                    } else {
                         logError("Planner type should be of type XmlRpc String type "
                             "(for configuration '%s')", planner_config.c_str());
-                
+                    }
+
                 pc.config["number_of_planners"] = boost::to_string(number_of_planners);
                 pconfig[pc.name] = pc;
-            }   
+            }
         }
     }
 
     for (planning_interface::PlannerConfigurationMap::iterator it = pconfig.begin();
         it != pconfig.end(); ++it) {
-        ROS_DEBUG_STREAM_NAMED("parameters","Parameters for configuration '"<< it->first << "'");
+        ROS_DEBUG_STREAM_NAMED("parameters", "Parameters for configuration '"<< it->first << "'");
         for (std::map<std::string, std::string>::const_iterator config_it = it->second.config.begin() ;
             config_it != it->second.config.end() ; ++config_it)
-        ROS_DEBUG_STREAM_NAMED("parameters"," - " << config_it->first << " = " << config_it->second);
+        ROS_DEBUG_STREAM_NAMED("parameters", " - " << config_it->first << " = " << config_it->second);
     }
     setPlannerConfigurations(pconfig);
 }
@@ -267,16 +274,15 @@ void interpolation_planner_interface::InterpolationPlannerInterface::loadGroupCo
 {
     const std::vector<std::string> &group_names = kmodel_->getJointModelGroupNames();
     interpolation_planner_interface::GroupSpecificationMap gconfig;
-  
+
     /**
      * Read the group configuration for each group.
      */
     gconfig.clear();
     for (std::size_t g_index = 0 ; g_index < group_names.size() ; ++g_index) {
-
         interpolation_planner_interface::GroupSpecification gspec;
         interpolation_planner_interface::JointSpecification jspec;
-        const std::vector<std::string> &joint_names = 
+        const std::vector<std::string> &joint_names =
                 kmodel_->getJointModelGroup(group_names[g_index])->getActiveJointModelNames();
         gspec.joint_names = joint_names;
 

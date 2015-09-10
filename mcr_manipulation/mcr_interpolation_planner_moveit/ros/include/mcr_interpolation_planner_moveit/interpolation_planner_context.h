@@ -1,8 +1,15 @@
+/*********************************************************************
+ * Software License Agreement (GPLv3 License)
+ *
+ *  Copyright (c) 2015, Hochschule Bonn-Rhein-Sieg.
+ *  All rights reserved.
+ *
+ *********************************************************************/
 /**
  * Author: Shehzad Ahmed
  */
-#ifndef INTERPOLATION_PLANNER_CONTEXT_H
-#define INTERPOLATION_PLANNER_CONTEXT_H
+#ifndef MCR_INTERPOLATION_PLANNER_MOVEIT_INTERPOLATION_PLANNER_CONTEXT_H
+#define MCR_INTERPOLATION_PLANNER_MOVEIT_INTERPOLATION_PLANNER_CONTEXT_H
 
 #include <moveit/planning_interface/planning_interface.h>
 #include <moveit/robot_state/conversions.h>
@@ -16,6 +23,10 @@
 #include <moveit/profiler/profiler.h>
 #include <eigen_conversions/eigen_msg.h>
 #include <ros/ros.h>
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <map>
 
 /**
  * @brief The context for the interpolation based planner.
@@ -133,7 +144,6 @@ namespace interpolation_planner_interface
             InterpolationPlannerContext &operator=(const InterpolationPlannerContext &other);
 
         private:
-
             /**
              * @brief Get the robot model from robot state.
              */
@@ -189,7 +199,6 @@ namespace interpolation_planner_interface
             virtual bool configureVelocityProfiler(double profiler_duration);
 
         protected:
-
             /**
              * Stores initial state of the robot.
              */
@@ -265,5 +274,5 @@ namespace interpolation_planner_interface
             std::vector<boost::shared_ptr<KDL::VelocityProfile> > vp_;
     };
     typedef boost::shared_ptr<InterpolationPlannerContext> InterpolationPlannerContextPtr;
-}
-#endif
+}  // namespace interpolation_planner_interface
+#endif  // MCR_INTERPOLATION_PLANNER_MOVEIT_INTERPOLATION_PLANNER_CONTEXT_H
