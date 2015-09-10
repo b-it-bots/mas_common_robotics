@@ -22,12 +22,15 @@ class TransformToPoseConverter(object):
     def __init__(self):
         # params
         self.event = None
-        self.reference_frame = rospy.get_param('~reference_frame')
-        self.target_frame = rospy.get_param('~target_frame')
+        self.reference_frame = rospy.get_param('~reference_frame', None)
+        assert self.reference_frame is not None, "Reference frame must be defined."
+        self.target_frame = rospy.get_param('~target_frame', None)
+        assert self.target_frame is not None, "Target frame must be defined."
+
         self.listener = tf.TransformListener()
 
-        # node cycle time (in seconds)
-        self.cycle_time = rospy.get_param('~cycle_time', 0.1)
+        # node cycle rate (in hz)
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
         # how long to wait for transform (in seconds)
         self.wait_for_transform = rospy.get_param('~wait_for_transform', 0.1)
 
@@ -57,7 +60,7 @@ class TransformToPoseConverter(object):
                 state = self.running_state()
 
             rospy.logdebug("State: {0}".format(state))
-            rospy.sleep(self.cycle_time)
+            self.loop_rate.sleep()
 
     def event_in_cb(self, msg):
         """
@@ -74,7 +77,7 @@ class TransformToPoseConverter(object):
         :rtype: str
 
         """
-        if self.target_frame and self.reference_frame:
+        if self.event == 'e_start':
             return 'IDLE'
         else:
             return 'INIT'
@@ -87,10 +90,11 @@ class TransformToPoseConverter(object):
         :rtype: str
 
         """
-        if self.event == 'e_start':
-            return 'RUNNING'
-        elif self.event == 'e_stop':
+        if self.event == 'e_stop':
+            self.event = None
             return 'INIT'
+        elif self.target_frame and self.reference_frame:
+            return 'RUNNING'
         else:
             return 'IDLE'
 
@@ -103,10 +107,12 @@ class TransformToPoseConverter(object):
 
         """
         if self.event == 'e_stop':
+            self.event = None
             return 'INIT'
         else:
             self.publish_converted_pose()
-            return 'RUNNING'
+            self.event = None
+            return 'IDLE'
 
     def publish_converted_pose(self):
         """

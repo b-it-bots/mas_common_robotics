@@ -35,13 +35,14 @@ class TwistLimiter(object):
         self.max_velocity_pitch = rospy.get_param('~max_velocity_pitch', 0.1)
         self.max_velocity_yaw = rospy.get_param('~max_velocity_yaw', 0.1)
 
-        # node cycle time (in seconds)
-        self.cycle_time = rospy.get_param('~cycle_time')
+        # node cycle rate (in hz)
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
         # publishers
         self.limited_twist = rospy.Publisher(
             '~limited_twist', geometry_msgs.msg.TwistStamped
         )
+        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
 
         # subscribers
         rospy.Subscriber('~event_in', std_msgs.msg.String, self.event_in_cb)
@@ -65,7 +66,7 @@ class TwistLimiter(object):
                 state = self.running_state()
 
             rospy.logdebug("State: {0}".format(state))
-            rospy.sleep(self.cycle_time)
+            self.loop_rate.sleep()
 
     def event_in_cb(self, msg):
         """
@@ -89,7 +90,7 @@ class TwistLimiter(object):
         :rtype: str
 
         """
-        if self.twist:
+        if self.event == 'e_start':
             return 'IDLE'
         else:
             return 'INIT'
@@ -102,10 +103,12 @@ class TwistLimiter(object):
         :rtype: str
 
         """
-        if self.event == 'e_start':
-            return 'RUNNING'
-        elif self.event == 'e_stop':
+        if self.event == 'e_stop':
+            self.event = None
+            self.twist = None
             return 'INIT'
+        elif self.twist:
+            return 'RUNNING'
         else:
             return 'IDLE'
 
@@ -118,12 +121,21 @@ class TwistLimiter(object):
 
         """
         if self.event == 'e_stop':
+            self.event = None
+            self.twist = None
+            self.event_out.publish('e_stopped')
             return 'INIT'
         else:
             limited_twist = self.limit_twist()
-            self.limited_twist.publish(limited_twist)
+            if limited_twist:
+                self.limited_twist.publish(limited_twist)
+                self.event_out.publish('e_success')
+            else:
+                self.event_out.publish('e_failure')
 
-            return 'RUNNING'
+            self.event = None
+            self.twist = None
+            return 'IDLE'
 
     def limit_twist(self):
         """
@@ -137,24 +149,24 @@ class TwistLimiter(object):
         limited_twist.header.frame_id = self.twist.header.frame_id
         limited_twist.header.stamp = self.twist.header.stamp
 
-        dimensions = ['x', 'y', 'z']
-        linear_velocities = [
-            self.max_velocity_x, self.max_velocity_y, self.max_velocity_z
-        ]
-        angular_velocities = [
-            self.max_velocity_roll, self.max_velocity_pitch, self.max_velocity_yaw
-        ]
-
-        for i, dim in enumerate(dimensions):
-            linear_velocity = limiter.limit_value(
-                getattr(self.twist.twist.linear, dim), linear_velocities[i]
-            )
-            angular_velocity = limiter.limit_value(
-                getattr(self.twist.twist.angular, dim), angular_velocities[i]
-            )
-
-            setattr(limited_twist.twist.linear, dim, linear_velocity)
-            setattr(limited_twist.twist.angular, dim, angular_velocity)
+        limited_twist.twist.linear.x = limiter.limit_value(
+            self.twist.twist.linear.x, self.max_velocity_x
+        )
+        limited_twist.twist.linear.y = limiter.limit_value(
+            self.twist.twist.linear.y, self.max_velocity_y
+        )
+        limited_twist.twist.linear.z = limiter.limit_value(
+            self.twist.twist.linear.z, self.max_velocity_z
+        )
+        limited_twist.twist.angular.x = limiter.limit_value(
+            self.twist.twist.angular.x, self.max_velocity_roll
+        )
+        limited_twist.twist.angular.y = limiter.limit_value(
+            self.twist.twist.angular.y, self.max_velocity_pitch
+        )
+        limited_twist.twist.angular.z = limiter.limit_value(
+            self.twist.twist.angular.z, self.max_velocity_yaw
+        )
 
         return limited_twist
 

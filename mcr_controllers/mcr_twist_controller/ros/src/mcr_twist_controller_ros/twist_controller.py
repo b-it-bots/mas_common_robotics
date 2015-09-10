@@ -31,12 +31,12 @@ class TwistController(object):
         self.pose_error = None
 
         # proportional gains for the Cartesian linear velocities
-        self.p_gain_x = rospy.get_param('~p_gain_x', -0.8)
-        self.p_gain_y = rospy.get_param('~p_gain_y', -0.8)
-        self.p_gain_z = rospy.get_param('~p_gain_z', -0.8)
-        self.p_gain_roll = rospy.get_param('~p_gain_roll', -0.8)
-        self.p_gain_pitch = rospy.get_param('~p_gain_pitch', -0.8)
-        self.p_gain_yaw = rospy.get_param('~p_gain_yaw', -0.8)
+        self.p_gain_x = rospy.get_param('~p_gain_x', 0.0)
+        self.p_gain_y = rospy.get_param('~p_gain_y', 0.0)
+        self.p_gain_z = rospy.get_param('~p_gain_z', 0.0)
+        self.p_gain_roll = rospy.get_param('~p_gain_roll', 0.0)
+        self.p_gain_pitch = rospy.get_param('~p_gain_pitch', 0.0)
+        self.p_gain_yaw = rospy.get_param('~p_gain_yaw', 0.0)
 
         # create controllers
         self.x_controller = pid_controller.p_controller(self.p_gain_x)
@@ -46,13 +46,14 @@ class TwistController(object):
         self.pitch_controller = pid_controller.p_controller(self.p_gain_pitch)
         self.yaw_controller = pid_controller.p_controller(self.p_gain_yaw)
 
-        # node cycle time (in seconds)
-        self.cycle_time = rospy.get_param('~cycle_time')
+        # node cycle rate (in hz)
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
         # publishers
-        self.controlled_velocity = rospy.Publisher(
-            '~controlled_velocity', geometry_msgs.msg.TwistStamped
+        self.controlled_twist = rospy.Publisher(
+            '~controlled_twist', geometry_msgs.msg.TwistStamped
         )
+        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
 
         # subscribers
         rospy.Subscriber('~event_in', std_msgs.msg.String, self.event_in_cb)
@@ -80,7 +81,7 @@ class TwistController(object):
                 state = self.running_state()
 
             rospy.logdebug("State: {0}".format(state))
-            rospy.sleep(self.cycle_time)
+            self.loop_rate.sleep()
 
     def event_in_cb(self, msg):
         """
@@ -104,7 +105,7 @@ class TwistController(object):
         :rtype: str
 
         """
-        if self.pose_error:
+        if self.event == 'e_start':
             return 'IDLE'
         else:
             return 'INIT'
@@ -117,10 +118,12 @@ class TwistController(object):
         :rtype: str
 
         """
-        if self.event == 'e_start':
-            return 'RUNNING'
-        elif self.event == 'e_stop':
+        if self.event == 'e_stop':
+            self.event = None
+            self.pose_error = None
             return 'INIT'
+        elif self.pose_error:
+            return 'RUNNING'
         else:
             return 'IDLE'
 
@@ -133,12 +136,21 @@ class TwistController(object):
 
         """
         if self.event == 'e_stop':
+            self.event = None
+            self.pose_error = None
+            self.event_out.publish('e_stopped')
             return 'INIT'
         else:
             cartesian_velocity = self.calculate_cartesian_velocity()
-            self.controlled_velocity.publish(cartesian_velocity)
+            if cartesian_velocity:
+                self.controlled_twist.publish(cartesian_velocity)
+                self.event_out.publish('e_success')
+            else:
+                self.event_out.publish('e_failure')
 
-            return 'RUNNING'
+            self.event = None
+            self.pose_error = None
+            return 'IDLE'
 
     def calculate_cartesian_velocity(self):
         """
