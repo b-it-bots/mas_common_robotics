@@ -6,7 +6,8 @@
         <!-- the cycle rate of the node (in Hz) -->
         <param name="loop_rate" type="double" value="10"/>
 
-        <!-- linear offset applied to the result (a three-element list) -->
+        <!-- linear offset applied to the result (a three-element list), with
+        order X, Y, Z -->
         <rosparam param="linear_offset">
             - -1.0
             - 2.0
