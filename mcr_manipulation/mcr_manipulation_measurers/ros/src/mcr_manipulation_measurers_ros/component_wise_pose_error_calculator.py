@@ -114,9 +114,8 @@ class ComponentWisePoseErrorCalculator(object):
 
         """
         if self.monitor_event == 'e_stop':
-            self.monitor_event = None
-            self.pose_1 = None
-            self.pose_2 = None
+            self.reset_component_data()
+            self.event_out.publish('e_stopped')
             return 'INIT'
         elif self.pose_1 and self.pose_2:
             return 'RUNNING'
@@ -132,9 +131,7 @@ class ComponentWisePoseErrorCalculator(object):
 
         """
         if self.monitor_event == 'e_stop':
-            self.monitor_event = None
-            self.pose_1 = None
-            self.pose_2 = None
+            self.reset_component_data()
             self.event_out.publish('e_stopped')
             return 'INIT'
         else:
@@ -150,9 +147,7 @@ class ComponentWisePoseErrorCalculator(object):
             else:
                 self.event_out.publish('e_failure')
 
-            self.monitor_event = None
-            self.pose_1 = None
-            self.pose_2 = None
+            self.reset_component_data()
             return 'IDLE'
 
     def transform_pose(self, reference_pose, target_pose):
@@ -188,6 +183,15 @@ class ComponentWisePoseErrorCalculator(object):
         except tf.Exception, error:
             rospy.logwarn("Exception occurred: {0}".format(error))
             return None
+
+    def reset_component_data(self):
+        """
+        Clears the data of the component.
+
+        """
+        self.monitor_event = None
+        self.pose_1 = None
+        self.pose_2 = None
 
 
 def calculate_component_wise_pose_error(current_pose, target_pose, offset=None):
