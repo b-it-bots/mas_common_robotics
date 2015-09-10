@@ -9,7 +9,7 @@
   <author email="shehzad.ahmed@smail.inf.h-brs.de">Shehzad Ahmed</author>
   <maintainer email="shehzad.ahmed@smail.inf.h-brs.de">Shehzad Ahmed</maintainer>
 
-  <license>BSD</license>
+  <license>GPLv3</license>
 
   <buildtool_depend>catkin</buildtool_depend> 
 
