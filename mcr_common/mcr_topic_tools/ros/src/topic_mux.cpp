@@ -43,8 +43,10 @@ TopicMux::~TopicMux()
 {
     for (std::vector<SubscriberInfo>::iterator it = subscriptions_.begin();
             it != subscriptions_.end();
-            ++it) {
-        if (it->subscriber) {
+            ++it)
+    {
+        if (it->subscriber)
+        {
             it->subscriber->shutdown();
         }
     }
@@ -59,7 +61,8 @@ void TopicMux::onInit()
     private_nh_ = getPrivateNodeHandle();
     nh_ = getNodeHandle();
 
-    if (args.size() < 3) {
+    if (args.size() < 3)
+    {
         NODELET_ERROR("Not enough arguments provided");
         return;
     }
@@ -69,7 +72,8 @@ void TopicMux::onInit()
     private_nh_.getParam("lazy", is_lazy_);
 
     // get list of input topics
-    for (size_t i = 1; i < args.size(); i++) {
+    for (size_t i = 1; i < args.size(); i++)
+    {
         SubscriberInfo subscription;
         subscription.topic = ros::names::resolve(args[i]);
         subscription.message.reset(new topic_tools::ShapeShifter);
@@ -88,7 +92,8 @@ void TopicMux::onInit()
 void TopicMux::connectionCallback()
 {
     // when someone subscribes to the output topic, check that we're publishing the selected input topic
-    if (is_lazy_ && selected_subscription_ != subscriptions_.end() && !selected_subscription_->subscriber) {
+    if (is_lazy_ && selected_subscription_ != subscriptions_.end() && !selected_subscription_->subscriber)
+    {
         NODELET_INFO("Subscribing to %s", selected_subscription_->topic.c_str());
         selected_subscription_->subscriber.reset(new ros::Subscriber(
                     nh_.subscribe<topic_tools::ShapeShifter>(selected_subscription_->topic, 10,
@@ -101,25 +106,32 @@ void TopicMux::selectTopicCallback(const std_msgs::String::Ptr &topic_name)
 {
     // if the selected topic is not the currently selected one, unsubscribe from it (if in lazy mode)
     if (selected_subscription_ != subscriptions_.end() && is_lazy_ && selected_subscription_->subscriber
-            && selected_subscription_->topic != topic_name->data) {
+            && selected_subscription_->topic != topic_name->data)
+    {
         NODELET_INFO("Unsubscribing from %s", selected_subscription_->topic.c_str());
         selected_subscription_->subscriber->shutdown();
         selected_subscription_->subscriber.reset();
     }
 
     // if we don't want to subscribe to anything
-    if (topic_name->data == "__none") {
+    if (topic_name->data == "__none")
+    {
         NODELET_INFO("Subscribed to no topic");
         selected_subscription_ = subscriptions_.end();
-    } else {
+    }
+    else
+    {
         std::vector<SubscriberInfo>::iterator it;
 
-        for (it = subscriptions_.begin(); it != subscriptions_.end(); ++it) {
-            if (ros::names::resolve(it->topic) == ros::names::resolve(topic_name->data)) {
+        for (it = subscriptions_.begin(); it != subscriptions_.end(); ++it)
+        {
+            if (ros::names::resolve(it->topic) == ros::names::resolve(topic_name->data))
+            {
                 selected_subscription_ = it;
                 NODELET_INFO("Selected topic: %s", selected_subscription_->topic.c_str());
 
-                if (!selected_subscription_->subscriber && (!is_advertised_ || (is_advertised_ && publisher_.getNumSubscribers()))) {
+                if (!selected_subscription_->subscriber && (!is_advertised_ || (is_advertised_ && publisher_.getNumSubscribers())))
+                {
                     selected_subscription_->subscriber.reset(
                         new ros::Subscriber(nh_.subscribe<topic_tools::ShapeShifter>(selected_subscription_->topic, 10,
                                             boost::bind(&TopicMux::inputTopicCallback, this, _1, selected_subscription_->message))));
@@ -131,17 +143,22 @@ void TopicMux::selectTopicCallback(const std_msgs::String::Ptr &topic_name)
 
 void TopicMux::inputTopicCallback(const topic_tools::ShapeShifter::ConstPtr &msg, topic_tools::ShapeShifter::Ptr s)
 {
-    if (!is_advertised_) {
+    if (!is_advertised_)
+    {
         NODELET_INFO("Advertising topic: %s", output_topic_.c_str());
         publisher_ = msg->advertise(nh_, output_topic_, 10, false, boost::bind(&TopicMux::connectionCallback, this));
         is_advertised_ = true;
 
-        if (is_lazy_) {
-            for (std::vector<SubscriberInfo>::iterator it = subscriptions_.begin(); it != subscriptions_.end(); ++it) {
-                if (it != selected_subscription_) {
+        if (is_lazy_)
+        {
+            for (std::vector<SubscriberInfo>::iterator it = subscriptions_.begin(); it != subscriptions_.end(); ++it)
+            {
+                if (it != selected_subscription_)
+                {
                     NODELET_INFO("Unsubscribing: from %s", it->topic.c_str());
 
-                    if (it->subscriber) {
+                    if (it->subscriber)
+                    {
                         it->subscriber->shutdown();
                     }
 
@@ -152,15 +169,19 @@ void TopicMux::inputTopicCallback(const topic_tools::ShapeShifter::ConstPtr &msg
     }
 
     // make sure we've got a message for the selected input topic and not one of the other input topics
-    if (s != selected_subscription_->message) {
+    if (s != selected_subscription_->message)
+    {
         return;
     }
 
-    if (is_lazy_ && !publisher_.getNumSubscribers() && selected_subscription_ != subscriptions_.end()) {
+    if (is_lazy_ && !publisher_.getNumSubscribers() && selected_subscription_ != subscriptions_.end())
+    {
         NODELET_INFO("No subscribers. Unsubscribing from %s", selected_subscription_->topic.c_str());
         selected_subscription_->subscriber->shutdown();
         selected_subscription_->subscriber.reset();
-    } else {
+    }
+    else
+    {
         publisher_.publish(msg);
     }
 }

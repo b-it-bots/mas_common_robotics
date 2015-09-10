@@ -60,73 +60,74 @@ namespace mcr_topic_tools
 
 class TopicMux : public nodelet::Nodelet
 {
-    public:
-        TopicMux();
-        virtual ~TopicMux();
+public:
+    TopicMux();
+    virtual ~TopicMux();
 
 
-    private:
-        virtual void onInit();
-        /**
-         * Callback for output publisher. This gets called when someone subscribes to the output topic
-         * If an input topic has been selected and we're in lazy mode, we subscribe to the input topic here
-         */
-        void connectionCallback();
-        /**
-         * Callback for subscription to ~/select
-         * The name of the input topic to select is to be published on this topic by another node
-         */
-        void selectTopicCallback(const std_msgs::String::Ptr &topic_name);
-        /**
-         * The callback for the selected input topic. If there are subscribers for the output topic,
-         * this message is directly published to the output topic.
-         *
-         * @param msg
-         *      message published on the input topic
-         * @param s
-         *      pointer to message type of selected subscription
-         *      This is used to make sure the input message is for the selected subscription in the case
-         *      that we're subscribed to multiple input topics at once (in non-lazy mode)
-         */
-        void inputTopicCallback(const topic_tools::ShapeShifter::ConstPtr &msg, topic_tools::ShapeShifter::Ptr s);
+private:
+    virtual void onInit();
+    /**
+     * Callback for output publisher. This gets called when someone subscribes to the output topic
+     * If an input topic has been selected and we're in lazy mode, we subscribe to the input topic here
+     */
+    void connectionCallback();
+    /**
+     * Callback for subscription to ~/select
+     * The name of the input topic to select is to be published on this topic by another node
+     */
+    void selectTopicCallback(const std_msgs::String::Ptr &topic_name);
+    /**
+     * The callback for the selected input topic. If there are subscribers for the output topic,
+     * this message is directly published to the output topic.
+     *
+     * @param msg
+     *      message published on the input topic
+     * @param s
+     *      pointer to message type of selected subscription
+     *      This is used to make sure the input message is for the selected subscription in the case
+     *      that we're subscribed to multiple input topics at once (in non-lazy mode)
+     */
+    void inputTopicCallback(const topic_tools::ShapeShifter::ConstPtr &msg, topic_tools::ShapeShifter::Ptr s);
 
 
-    private:
-        /**
-         * describes an input topic subscription
-         */
-        struct SubscriberInfo {
-            std::string topic;
-            boost::shared_ptr<ros::Subscriber> subscriber;
-            topic_tools::ShapeShifter::Ptr message;
-        };
+private:
+    /**
+     * describes an input topic subscription
+     */
+    struct SubscriberInfo
+    {
+        std::string topic;
+        boost::shared_ptr<ros::Subscriber> subscriber;
+        topic_tools::ShapeShifter::Ptr message;
+    };
 
-        /**
-         * List of subscriptions
-         */
-        std::vector<SubscriberInfo> subscriptions_;
-        /**
-         * selected subscription
-         */
-        std::vector<SubscriberInfo>::iterator selected_subscription_;
+    /**
+     * List of subscriptions
+     */
+    std::vector<SubscriberInfo> subscriptions_;
+    /**
+     * selected subscription
+     */
+    std::vector<SubscriberInfo>::iterator selected_subscription_;
 
-        std::string output_topic_;
-        /**
-         * This parameter defines whether or not we subscribe to all input topics or only the selected
-         * input topic
-         * True: subscribe only to selected input topic
-         * False: subscribe to all input topics
-         */
-        bool is_lazy_;
-        /**
-         * Flag indicating whether the output topic has been advertised or not
-         */
-        bool is_advertised_;
+    std::string output_topic_;
+    /**
+     * This parameter defines whether or not we subscribe to all input topics or only the selected
+     * input topic
+     * True: subscribe only to selected input topic
+     * False: subscribe to all input topics
+     */
+    bool is_lazy_;
+    /**
+     * Flag indicating whether the output topic has been advertised or not
+     */
+    bool is_advertised_;
 
-        ros::NodeHandle private_nh_;
-        ros::NodeHandle nh_;
-        ros::Publisher publisher_;
-        ros::Subscriber sub_select_topic_;
+    ros::NodeHandle private_nh_;
+    ros::NodeHandle nh_;
+    ros::Publisher publisher_;
+    ros::Subscriber sub_select_topic_;
 };
 
 PLUGINLIB_DECLARE_CLASS(mcr_topic_tools, TopicMux, mcr_topic_tools::TopicMux, nodelet::Nodelet);

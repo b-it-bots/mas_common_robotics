@@ -43,52 +43,53 @@
 #ifndef ROS_ARM_CARTESIAN_CONTROL_H_
 #define ROS_ARM_CARTESIAN_CONTROL_H_
 
-class RosArmCartesianControl {
+class RosArmCartesianControl
+{
 protected:
 
-	KDL::Chain g_arm_chain;
+    KDL::Chain g_arm_chain;
 
-	std::vector<boost::shared_ptr<urdf::JointLimits> > g_joint_limits;
+    std::vector<boost::shared_ptr<urdf::JointLimits> > g_joint_limits;
 
-	KDL::JntArray g_joint_positions;
+    KDL::JntArray g_joint_positions;
 
-	std::vector<bool> g_joint_positions_initialized;
+    std::vector<bool> g_joint_positions_initialized;
 
-	KDL::Twist targetVelocity;
+    KDL::Twist targetVelocity;
 
-	KDL::ChainIkSolverVel* ik_solver;
+    KDL::ChainIkSolverVel* ik_solver;
 
-	Eigen::MatrixXd weight_ts;
+    Eigen::MatrixXd weight_ts;
 
-	Eigen::MatrixXd weight_js;
+    Eigen::MatrixXd weight_js;
 
-	ros::Publisher cmd_vel_publisher;
+    ros::Publisher cmd_vel_publisher;
 
-	tf::TransformListener *tf_listener;
+    tf::TransformListener *tf_listener;
 
-	bool active = false;
+    bool active = false;
 
-	ros::Time t_last_command;
+    ros::Time t_last_command;
 
-	brics_actuator::JointVelocities jointMsg;
+    brics_actuator::JointVelocities jointMsg;
 
 
 public:
-	RosArmCartesianControl();
-	virtual ~RosArmCartesianControl();
+    RosArmCartesianControl();
+    virtual ~RosArmCartesianControl();
 
-	void jointstateCallback(sensor_msgs::JointStateConstPtr joints);
+    void jointstateCallback(sensor_msgs::JointStateConstPtr joints);
 
-	void ccCallback(geometry_msgs::TwistStampedConstPtr desiredVelocity);
+    void ccCallback(geometry_msgs::TwistStampedConstPtr desiredVelocity);
 
-	void init_ik_solver();
+    void init_ik_solver();
 
-	void init_joint_msgs();
+    void init_joint_msgs();
 
-	void publishJointVelocities(KDL::JntArrayVel& joint_velocities);
+    void publishJointVelocities(KDL::JntArrayVel& joint_velocities);
 
-	void stopMotion();
-	bool watchdog();
+    void stopMotion();
+    bool watchdog();
 };
 
 #endif /* ROS_ARM_CARTESIAN_CONTROL_H_ */

@@ -17,7 +17,8 @@ SVMClassifier::SVMClassifier()
 
 SVMClassifier::~SVMClassifier()
 {
-    if (model_ != 0) {
+    if (model_ != 0)
+    {
         svm_free_and_destroy_model(&model_);
     }
 }
@@ -29,7 +30,8 @@ bool SVMClassifier::loadModel(const bfs::path &model_filepath, const bfs::path &
     std::ifstream config_file;
     config_file.open(config_filepath.string().c_str());
 
-    if (config_file.is_open()) {
+    if (config_file.is_open())
+    {
         boost::archive::text_iarchive archive(config_file);
         archive & num_features_;
         archive & labels_;
@@ -48,7 +50,8 @@ bool SVMClassifier::loadModel(const bfs::path &model_filepath, const bfs::path &
 
 int SVMClassifier::classify(std::vector<double> features, std::string &label) const
 {
-    if (features.size() != num_features_) {
+    if (features.size() != num_features_)
+    {
         label = "";
         return 1;
     }
@@ -59,14 +62,16 @@ int SVMClassifier::classify(std::vector<double> features, std::string &label) co
     std::vector<svm_node> feature_vector(num_features_ + 1);
     feature_vector[num_features_].index = -1;
 
-    for (int i = 0; i < num_features_; i++) {
+    for (int i = 0; i < num_features_; i++)
+    {
         feature_vector[i].index = i + 1;
         feature_vector[i].value = features.at(i);
     }
 
     int label_index = svm_predict(model_, &feature_vector[0]);
 
-    if (labels_.empty() || label_index > labels_.size()) {
+    if (labels_.empty() || label_index > labels_.size())
+    {
         label = "";
         return 2;
     }
@@ -78,7 +83,8 @@ int SVMClassifier::classify(std::vector<double> features, std::string &label) co
 
 int SVMClassifier::classifyWithProbability(std::vector<double> features, std::string &label, double &probability) const
 {
-    if (features.size() != num_features_) {
+    if (features.size() != num_features_)
+    {
         label = "";
         probability = 0.0;
         return 1;
@@ -90,7 +96,8 @@ int SVMClassifier::classifyWithProbability(std::vector<double> features, std::st
     std::vector<svm_node> feature_vector(num_features_ + 1);
     feature_vector[num_features_].index = -1;
 
-    for (int i = 0; i < num_features_; i++) {
+    for (int i = 0; i < num_features_; i++)
+    {
         feature_vector[i].index = i + 1;
         feature_vector[i].value = features.at(i);
     }
@@ -99,15 +106,19 @@ int SVMClassifier::classifyWithProbability(std::vector<double> features, std::st
 
     int label_index = 0;
 
-    if (svm_check_probability_model(model_)) {
+    if (svm_check_probability_model(model_))
+    {
         label_index = svm_predict_probability(model_, &feature_vector[0], &probabilities[0]);
         probability = probabilities.at(label_index - 1);
-    } else {
+    }
+    else
+    {
         label_index = svm_predict(model_, &feature_vector[0]);
         probability = 1.0;
     }
 
-    if (labels_.empty() || label_index > labels_.size()) {
+    if (labels_.empty() || label_index > labels_.size())
+    {
         label = "";
         probability = 0.0;
         return 2;
@@ -120,7 +131,8 @@ int SVMClassifier::classifyWithProbability(std::vector<double> features, std::st
 
 void SVMClassifier::normalizeFeatures(std::vector<double> &features) const
 {
-    for (int i = 0; i < features.size(); i++) {
+    for (int i = 0; i < features.size(); i++)
+    {
         features[i] = (features[i] - means_[i]) / std_deviations_[i];
     }
 }
