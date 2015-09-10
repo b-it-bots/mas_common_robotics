@@ -25,6 +25,7 @@ packagelist=(
   ros-indigo-ros 
   ros-indigo-ros-control
   ros-indigo-roscpp 
+  ros-indigo-roslint
   ros-indigo-rviz
   ros-indigo-srdfdom
   ros-indigo-std-srvs 
