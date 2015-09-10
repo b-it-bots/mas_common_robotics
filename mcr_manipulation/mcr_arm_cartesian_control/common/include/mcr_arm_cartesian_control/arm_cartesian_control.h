@@ -11,36 +11,38 @@
 #include <kdl/kdl.hpp>
 #include <kdl/chainiksolver.hpp>
 
-namespace arm_cc {
+namespace arm_cc
+{
 
-class Arm_Cartesian_Control {
+class Arm_Cartesian_Control
+{
 protected:
 
-	KDL::ChainIkSolverVel* ik_solver;
+    KDL::ChainIkSolverVel* ik_solver;
 
-	KDL::Chain* arm_chain;
+    KDL::Chain* arm_chain;
 
-	std::vector<double> upper_joint_limits;
-	std::vector<double> lower_joint_limits;
+    std::vector<double> upper_joint_limits;
+    std::vector<double> lower_joint_limits;
 
 
 public:
-	Arm_Cartesian_Control(KDL::Chain* arm_chain,
-			KDL::ChainIkSolverVel* ik_solver);
+    Arm_Cartesian_Control(KDL::Chain* arm_chain,
+                          KDL::ChainIkSolverVel* ik_solver);
 
-	virtual ~Arm_Cartesian_Control();
+    virtual ~Arm_Cartesian_Control();
 
 
-	void checkLimits(double dt, KDL::JntArray& joint_positions,
-			KDL::JntArray& jntVel);
+    void checkLimits(double dt, KDL::JntArray& joint_positions,
+                     KDL::JntArray& jntVel);
 
-	//bool watchdog();
+    //bool watchdog();
 
-	//void stopMotion();
+    //void stopMotion();
 
-	void process(double dt, KDL::JntArray& position, KDL::Twist& targetVelocity, KDL::JntArrayVel& out_jnt_velocities);
+    void process(double dt, KDL::JntArray& position, KDL::Twist& targetVelocity, KDL::JntArrayVel& out_jnt_velocities);
 
-	void setJointLimits(std::vector<double> lower, std::vector<double> upper);
+    void setJointLimits(std::vector<double> lower, std::vector<double> upper);
 
 };
 

@@ -28,114 +28,114 @@ namespace bfs = boost::filesystem;
 
 class SVMTrainer
 {
-    private:
-        /**
-         * A training sample is defined as a pair of label (string) and a set of features (vector).
-         * Only used internally by the class.
-         */
-        typedef std::pair<std::string, std::vector<double> > training_sample;
+private:
+    /**
+     * A training sample is defined as a pair of label (string) and a set of features (vector).
+     * Only used internally by the class.
+     */
+    typedef std::pair<std::string, std::vector<double> > training_sample;
 
 
-    public:
-        /**
-         * Constructor
-         * Initializes trainer with number of features.
-         *
-         * @param num_features
-         * The number of features that will describe each training sample.
-         */
-        SVMTrainer(int num_features);
+public:
+    /**
+     * Constructor
+     * Initializes trainer with number of features.
+     *
+     * @param num_features
+     * The number of features that will describe each training sample.
+     */
+    SVMTrainer(int num_features);
 
-        /**
-         * Destructor
-         */
-        virtual ~SVMTrainer();
+    /**
+     * Destructor
+     */
+    virtual ~SVMTrainer();
 
-        /**
-         * Add training sample to set for training.
-         *
-         * @param features
-         * Features of the training sample as a set of doubles.
-         * All samples must have the same number of features.
-         *
-         * @param label
-         * The label of the training sample.
-         *
-         * @return true if added successfully, false otherwise.
-         */
-        bool addTrainingSample(const std::vector<double> &features, const std::string &label);
+    /**
+     * Add training sample to set for training.
+     *
+     * @param features
+     * Features of the training sample as a set of doubles.
+     * All samples must have the same number of features.
+     *
+     * @param label
+     * The label of the training sample.
+     *
+     * @return true if added successfully, false otherwise.
+     */
+    bool addTrainingSample(const std::vector<double> &features, const std::string &label);
 
-        /**
-         * Train the classifier with the training samples added so far.
-         *
-         * @return true if training was successful, false otherwise.
-         */
-        bool trainAndSaveModel(const bfs::path &model_filepath, const bfs::path &config_filepath);
-
-
-    private:
-        /**
-         * Copy constructor.
-         */
-        SVMTrainer(const SVMTrainer &other);
-
-        /**
-         * Copy assignment operator.
-         */
-        SVMTrainer &operator=(SVMTrainer other);
-
-        /**
-         * Normalizes the training samples after calculating the means and
-         * standard deviations of the features.
-         *
-         * @param samples
-         * Set of training samples to be normalized.
-         * The samples are modified in place.
-         */
-        void normalizeTrainingSamples(std::vector<SVMTrainer::training_sample> &samples);
-
-        /**
-         * Save the SVM model to the given file
-         *
-         * @param model_filename
-         * File to save the SVM model to
-         *
-         * @return true if files are saved,
-         *         false otherwise.
-         */
-        bool saveModel(const bfs::path &model_filepath, const bfs::path &config_filepath) const;
+    /**
+     * Train the classifier with the training samples added so far.
+     *
+     * @return true if training was successful, false otherwise.
+     */
+    bool trainAndSaveModel(const bfs::path &model_filepath, const bfs::path &config_filepath);
 
 
-    private:
-        /**
-         * Number of features that define each sample.
-         */
-        int num_features_;
+private:
+    /**
+     * Copy constructor.
+     */
+    SVMTrainer(const SVMTrainer &other);
 
-        /**
-         * SVM model object.
-         */
-        svm_model *model_;
+    /**
+     * Copy assignment operator.
+     */
+    SVMTrainer &operator=(SVMTrainer other);
 
-        /**
-         * Unique and sorted set of labels for the classes.
-         */
-        std::vector<std::string> labels_;
+    /**
+     * Normalizes the training samples after calculating the means and
+     * standard deviations of the features.
+     *
+     * @param samples
+     * Set of training samples to be normalized.
+     * The samples are modified in place.
+     */
+    void normalizeTrainingSamples(std::vector<SVMTrainer::training_sample> &samples);
 
-        /**
-         * Set of training samples defined as a string, vector<double> pair.
-         */
-        std::vector<SVMTrainer::training_sample> training_samples_;
+    /**
+     * Save the SVM model to the given file
+     *
+     * @param model_filename
+     * File to save the SVM model to
+     *
+     * @return true if files are saved,
+     *         false otherwise.
+     */
+    bool saveModel(const bfs::path &model_filepath, const bfs::path &config_filepath) const;
 
-        /**
-         * Set of means for the features.
-         */
-        std::vector<double> means_;
 
-        /**
-         * Set of standard deviations for the features.
-         */
-        std::vector<double> std_deviations_;
+private:
+    /**
+     * Number of features that define each sample.
+     */
+    int num_features_;
+
+    /**
+     * SVM model object.
+     */
+    svm_model *model_;
+
+    /**
+     * Unique and sorted set of labels for the classes.
+     */
+    std::vector<std::string> labels_;
+
+    /**
+     * Set of training samples defined as a string, vector<double> pair.
+     */
+    std::vector<SVMTrainer::training_sample> training_samples_;
+
+    /**
+     * Set of means for the features.
+     */
+    std::vector<double> means_;
+
+    /**
+     * Set of standard deviations for the features.
+     */
+    std::vector<double> std_deviations_;
 
 };
 #endif

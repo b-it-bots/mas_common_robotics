@@ -20,7 +20,8 @@ SVMTrainer::~SVMTrainer()
 
 bool SVMTrainer::addTrainingSample(const std::vector<double> &features, const std::string &label)
 {
-    if (features.size() != num_features_) {
+    if (features.size() != num_features_)
+    {
         return false;
     }
 
@@ -33,7 +34,8 @@ bool SVMTrainer::addTrainingSample(const std::vector<double> &features, const st
 
 bool SVMTrainer::trainAndSaveModel(const bfs::path &model_filepath, const bfs::path &config_filepath)
 {
-    if (training_samples_.empty()) {
+    if (training_samples_.empty())
+    {
         return false;
     }
 
@@ -51,7 +53,8 @@ bool SVMTrainer::trainAndSaveModel(const bfs::path &model_filepath, const bfs::p
     std::vector<std::string>::iterator lab_it;
     int label_index = 0;
 
-    for (lab_it = labels_.begin(); lab_it != labels_.end(); lab_it++) {
+    for (lab_it = labels_.begin(); lab_it != labels_.end(); lab_it++)
+    {
         label_encoder.insert(std::pair<std::string, int>(*lab_it, label_index));
         label_index++;
     }
@@ -72,12 +75,14 @@ bool SVMTrainer::trainAndSaveModel(const bfs::path &model_filepath, const bfs::p
 
     int index = 0;
 
-    for (it = training_samples_.begin(); it != training_samples_.end(); it++) {
+    for (it = training_samples_.begin(); it != training_samples_.end(); it++)
+    {
 
-        std::vector<svm_node> feature_vector(num_features_ + 1);        
+        std::vector<svm_node> feature_vector(num_features_ + 1);
         feature_vector[num_features_].index = -1;
 
-        for (int i = 0; i < num_features_; i++) {
+        for (int i = 0; i < num_features_; i++)
+        {
             feature_vector[i].index = i + 1;
             feature_vector[i].value = it->second.at(i);
         }
@@ -128,7 +133,8 @@ bool SVMTrainer::saveModel(const bfs::path &model_filepath, const bfs::path &con
     std::ofstream config_file;
     config_file.open(config_filepath.string().c_str());
 
-    if (config_file.is_open()) {
+    if (config_file.is_open())
+    {
         boost::archive::text_oarchive archive(config_file);
         archive & num_features_;
         archive & labels_;
@@ -150,36 +156,44 @@ void SVMTrainer::normalizeTrainingSamples(std::vector<training_sample> &samples)
     std::vector<training_sample>::iterator it;
 
     // sum up features
-    for (it = samples.begin(); it != samples.end(); it++) {
+    for (it = samples.begin(); it != samples.end(); it++)
+    {
         std::vector<double> features = it->second;
 
-        for (int j = 0; j < features.size(); j++) {
+        for (int j = 0; j < features.size(); j++)
+        {
             means_[j] = means_[j] + features[j];
         }
     }
 
     // get their means
-    for (int i = 0; i < means_.size(); i++) {
+    for (int i = 0; i < means_.size(); i++)
+    {
         means_[i] = means_[i] / samples.size();
     }
 
     // squared sum of difference from means
-    for (it = samples.begin(); it != samples.end(); it++) {
+    for (it = samples.begin(); it != samples.end(); it++)
+    {
         std::vector<double> features = it->second;
 
-        for (int j = 0; j < features.size(); j++) {
+        for (int j = 0; j < features.size(); j++)
+        {
             std_deviations_[j] = std_deviations_[j] + std::pow((features[j] - means_[j]), 2);
         }
     }
 
     // calculate standard deviations
-    for (int i = 0; i < std_deviations_.size(); i++) {
+    for (int i = 0; i < std_deviations_.size(); i++)
+    {
         std_deviations_[i] = std::sqrt(std_deviations_[i] / samples.size());
     }
 
     // normalize samples
-    for (it = samples.begin(); it != samples.end(); it++) {
-        for (int j = 0; j < it->second.size(); j++) {
+    for (it = samples.begin(); it != samples.end(); it++)
+    {
+        for (int j = 0; j < it->second.size(); j++)
+        {
             it->second[j] = (it->second[j] - means_[j]) / std_deviations_[j];
         }
     }

@@ -55,7 +55,7 @@ namespace internal
 template<class Time, class Segment>
 inline bool isBeforeSegment(const Time& time, const Segment& segment)
 {
-  return time < segment.startTime();
+    return time < segment.startTime();
 }
 
 } // namespace
@@ -79,10 +79,10 @@ inline bool isBeforeSegment(const Time& time, const Segment& segment)
 template<class TrajectoryIterator, class Time>
 inline TrajectoryIterator findSegment(TrajectoryIterator first, TrajectoryIterator last, const Time& time)
 {
-  typedef typename std::iterator_traits<TrajectoryIterator>::value_type Segment;
-  return (first == last || internal::isBeforeSegment(time, *first))
-         ? last // Optimization when time preceeds all segments, or when an empty range is passed
-         : --std::upper_bound(first, last, time, internal::isBeforeSegment<Time, Segment>); // Notice decrement operator
+    typedef typename std::iterator_traits<TrajectoryIterator>::value_type Segment;
+    return (first == last || internal::isBeforeSegment(time, *first))
+           ? last // Optimization when time preceeds all segments, or when an empty range is passed
+           : --std::upper_bound(first, last, time, internal::isBeforeSegment<Time, Segment>); // Notice decrement operator
 }
 
 /**
@@ -98,7 +98,7 @@ inline TrajectoryIterator findSegment(TrajectoryIterator first, TrajectoryIterat
 template<class Trajectory, class Time>
 inline typename Trajectory::const_iterator findSegment(const Trajectory& trajectory, const Time& time)
 {
-  return findSegment(trajectory.begin(), trajectory.end(), time);
+    return findSegment(trajectory.begin(), trajectory.end(), time);
 }
 
 /**
@@ -111,7 +111,7 @@ inline typename Trajectory::const_iterator findSegment(const Trajectory& traject
 template<class Trajectory, class Time>
 inline typename Trajectory::iterator findSegment(Trajectory& trajectory, const Time& time)
 {
-  return findSegment(trajectory.begin(), trajectory.end(), time);
+    return findSegment(trajectory.begin(), trajectory.end(), time);
 }
 
 /**
@@ -136,19 +136,19 @@ inline typename Trajectory::iterator findSegment(Trajectory& trajectory, const T
  */
 template<class Trajectory>
 inline typename Trajectory::const_iterator sample(const Trajectory&                             trajectory,
-                                                  const typename Trajectory::value_type::Time&  time,
-                                                        typename Trajectory::value_type::State& state)
+        const typename Trajectory::value_type::Time&  time,
+        typename Trajectory::value_type::State& state)
 {
-  typename Trajectory::const_iterator it = findSegment(trajectory, time);
-  if (it != trajectory.end())
-  {
-    it->sample(time, state); // Segment found at specified time
-  }
-  else if (!trajectory.empty())
-  {
-    trajectory.front().sample(time, state); // Specified time preceeds trajectory start time
-  }
-  return it;
+    typename Trajectory::const_iterator it = findSegment(trajectory, time);
+    if (it != trajectory.end())
+    {
+        it->sample(time, state); // Segment found at specified time
+    }
+    else if (!trajectory.empty())
+    {
+        trajectory.front().sample(time, state); // Specified time preceeds trajectory start time
+    }
+    return it;
 }
 
 } // namespace

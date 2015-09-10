@@ -70,13 +70,13 @@ void TwistToMotionDirectionConversionNode::computeMotionDirectionAndPublish()
 void TwistToMotionDirectionConversionNode::update()
 {
     // check if a new event has been received
-    if(event_msg_received_)
+    if (event_msg_received_)
     {
         ROS_INFO_STREAM("Received event: " << event_msg_.data);
 
-        if(event_msg_.data == "e_start")
+        if (event_msg_.data == "e_start")
             current_state_ = RUN;
-        else if(event_msg_.data == "e_stop")
+        else if (event_msg_.data == "e_stop")
             current_state_ = INIT;
         else
             ROS_ERROR_STREAM("Event not supported: " << event_msg_.data);
@@ -86,11 +86,11 @@ void TwistToMotionDirectionConversionNode::update()
     }
 
     // if state is INIT, do nothing
-    if(current_state_ == INIT)
+    if (current_state_ == INIT)
         return;
 
     // if not msg received, do nothing
-    if(!twist_msg_received_)
+    if (!twist_msg_received_)
         return;
 
     computeMotionDirectionAndPublish();

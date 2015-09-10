@@ -17,19 +17,19 @@
 int main(int argc, char **argv)
 {
 
-  ros::init(argc, argv, "cpp_example");
+    ros::init(argc, argv, "cpp_example");
 
-  ros::NodeHandle nodeHandle;
+    ros::NodeHandle nodeHandle;
 
-  std::vector<diagnostic_msgs::KeyValue> keyValues;
-  keyValues.push_back(mcr::NodeDiagnostic::keyValue("key", "value"));
+    std::vector<diagnostic_msgs::KeyValue> keyValues;
+    keyValues.push_back(mcr::NodeDiagnostic::keyValue("key", "value"));
 
-  mcr::NodeDiagnostic::warn("IK", mcr::NodeDiagnostic::COMMUNICATION, "IK solver service is missing",
-	  		  keyValues);
+    mcr::NodeDiagnostic::warn("IK", mcr::NodeDiagnostic::COMMUNICATION, "IK solver service is missing",
+                              keyValues);
 
-  usleep(5000000);
+    usleep(5000000);
 
-  mcr::NodeDiagnostic::reset("IK");
+    mcr::NodeDiagnostic::reset("IK");
 
 }
 

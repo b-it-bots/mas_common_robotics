@@ -43,33 +43,33 @@ namespace trajectory_interface
 template <class ScalarType>
 struct PosVelAccState
 {
-  typedef ScalarType Scalar;
+    typedef ScalarType Scalar;
 
-  PosVelAccState() {}
+    PosVelAccState() {}
 
-   /**
-    * \brief Resource-preallocating constructor.
-    *
-    * Position, velocity and acceleration vectors are resized to \p size, and their values are set to zero.
-    * Note that these two situations are different:
-    * \code
-    * // 2-dimensional state specifying zero position, velocity and acceleration
-    * State zero_pos_vel_acc(2);
-    *
-    * // 2-dimensional state specifying zero position
-    * State zero_pos;
-    * zero_pos.position.resize(2);
-    * \endcode
-    */
-  PosVelAccState(const typename std::vector<Scalar>::size_type size)
-    : position(    std::vector<Scalar>(size, static_cast<Scalar>(0))),
-      velocity(    std::vector<Scalar>(size, static_cast<Scalar>(0))),
-      acceleration(std::vector<Scalar>(size, static_cast<Scalar>(0)))
-  {}
+    /**
+     * \brief Resource-preallocating constructor.
+     *
+     * Position, velocity and acceleration vectors are resized to \p size, and their values are set to zero.
+     * Note that these two situations are different:
+     * \code
+     * // 2-dimensional state specifying zero position, velocity and acceleration
+     * State zero_pos_vel_acc(2);
+     *
+     * // 2-dimensional state specifying zero position
+     * State zero_pos;
+     * zero_pos.position.resize(2);
+     * \endcode
+     */
+    PosVelAccState(const typename std::vector<Scalar>::size_type size)
+        : position(std::vector<Scalar>(size, static_cast<Scalar>(0))),
+          velocity(std::vector<Scalar>(size, static_cast<Scalar>(0))),
+          acceleration(std::vector<Scalar>(size, static_cast<Scalar>(0)))
+    {}
 
-  std::vector<Scalar> position;
-  std::vector<Scalar> velocity;
-  std::vector<Scalar> acceleration;
+    std::vector<Scalar> position;
+    std::vector<Scalar> velocity;
+    std::vector<Scalar> acceleration;
 };
 
 } // namespace

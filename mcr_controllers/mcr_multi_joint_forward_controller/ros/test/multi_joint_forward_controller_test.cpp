@@ -7,16 +7,16 @@ using namespace forward_command_controller;
 
 TEST(multi_joint_forward_controller_test, test_construction)
 {
-    MultiJointForwardCommandController<brics_actuator::JointVelocities,
-            hardware_interface::VelocityJointInterface> c;
+    MultiJointForwardCommandController < brics_actuator::JointVelocities,
+                                       hardware_interface::VelocityJointInterface > c;
 }
 
 TEST(multi_joint_forward_controller_test, test_init_with_missing_joints)
 {
     ros::NodeHandle nh;
     hardware_interface::VelocityJointInterface hw;
-    MultiJointForwardCommandController<brics_actuator::JointVelocities,
-            hardware_interface::VelocityJointInterface> c;
+    MultiJointForwardCommandController < brics_actuator::JointVelocities,
+                                       hardware_interface::VelocityJointInterface > c;
 
     double val;
     hardware_interface::JointStateHandle state_handle("arm_1_joint", &val, &val, &val);
@@ -30,8 +30,8 @@ TEST(multi_joint_forward_controller_test, test_init_with_all_joints)
 {
     ros::NodeHandle nh;
     hardware_interface::VelocityJointInterface hw;
-    MultiJointForwardCommandController<brics_actuator::JointVelocities,
-            hardware_interface::VelocityJointInterface> c;
+    MultiJointForwardCommandController < brics_actuator::JointVelocities,
+                                       hardware_interface::VelocityJointInterface > c;
 
     double val;
     hardware_interface::JointStateHandle state_handle_1("arm_1_joint", &val, &val, &val);
@@ -48,8 +48,8 @@ TEST(multi_joint_forward_controller_test, test_sending_command)
 {
     ros::NodeHandle nh;
     hardware_interface::VelocityJointInterface hw;
-    MultiJointForwardCommandController<brics_actuator::JointVelocities,
-            hardware_interface::VelocityJointInterface> c;
+    MultiJointForwardCommandController < brics_actuator::JointVelocities,
+                                       hardware_interface::VelocityJointInterface > c;
 
     double cmd1;
     double val1;
@@ -76,7 +76,8 @@ TEST(multi_joint_forward_controller_test, test_sending_command)
     vel.velocities[1].value = 43.5;
 
     // it takes some time for the message to be sent and received
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 100; i++)
+    {
         pub.publish(vel);
         c.update(time, duration);
         ros::spinOnce();
@@ -91,8 +92,8 @@ TEST(multi_joint_forward_controller_test, test_sending_too_many_joints)
 
     ros::NodeHandle nh;
     hardware_interface::VelocityJointInterface hw;
-    MultiJointForwardCommandController<brics_actuator::JointVelocities,
-            hardware_interface::VelocityJointInterface> c;
+    MultiJointForwardCommandController < brics_actuator::JointVelocities,
+                                       hardware_interface::VelocityJointInterface > c;
 
     double cmd1 = 0.0;
     double val1;
@@ -121,7 +122,8 @@ TEST(multi_joint_forward_controller_test, test_sending_too_many_joints)
     vel.velocities[3].value = 45.5;
 
     // it takes some time for the message to be sent and received
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 100; i++)
+    {
         pub.publish(vel);
         c.update(time, duration);
         ros::spinOnce();

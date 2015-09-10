@@ -16,9 +16,9 @@
 #include "mcr_speech_recognition_microsoft/config_file_reader.h"
 
 SpeechRecognition* recognizer;
-std::string grammarFile ="robot_inspection.xml";
-std::string rosMaster="";
-std::string localIP="";
+std::string grammarFile = "robot_inspection.xml";
+std::string rosMaster = "";
+std::string localIP = "";
 std::string grammarFolder = "";
 std::string mediaFiolder = "";
 std::string acknowledgeSound = "";
@@ -46,122 +46,129 @@ bool active = true;
 
 
 bool changeGrammar(mcr_speech_msgs::ChangeGrammar::Request  &req,
-		mcr_speech_msgs::ChangeGrammar::Response &res )
+                   mcr_speech_msgs::ChangeGrammar::Response &res)
 {
-	recognizer->loadGrammar(req.grammar);
-	res.result = 0;
-	return true;
+    recognizer->loadGrammar(req.grammar);
+    res.result = 0;
+    return true;
 }
 
 bool changeRecognitionThreshold(mcr_speech_msgs::SetRecognitionConfidence::Request  &req,
-		mcr_speech_msgs::SetRecognitionConfidence::Response &res )
+                                mcr_speech_msgs::SetRecognitionConfidence::Response &res)
 {
-	recognizer->setConfidenceThreshold(req.threshold);
-	return true;
+    recognizer->setConfidenceThreshold(req.threshold);
+    return true;
 }
 
 //Initialize data required from file
 void readConfigFile()
 {
-	ConfigFileReader reader;
-	reader.setConfigFile(CONFIG_FILE);
+    ConfigFileReader reader;
+    reader.setConfigFile(CONFIG_FILE);
 
-	if(reader.isFileExisting())
-	{
-		rosMaster=reader.getROSMaster();
-		localIP=reader.getLocalIP();
-		grammarFolder = reader.getGrammarFolder();
-		mediaFiolder = reader.getMediaFolder();
-		acknowledgeSound = reader.getAcknowledgeSoundFile();
-		grammarFile = reader.getGrammar();
-	}
-	else
-	{
-		std::cout<<"!!!Config file not found, using default values!!!" << std::endl;
-		rosMaster=DEFAULT_ROS_MASTER;
-		localIP=DEFAULT_LOCALIP;
-		grammarFolder = DEFAULT_GRAMMAR_FOLDER;
-		mediaFiolder = DEFAULT_MEDIA_FOLDER;
-		acknowledgeSound = DEFAULT_ACKNOWLEDGE_SOUND_FILE;
-		grammarFile = DEFAULT_GRAMMAR_FILE;
-	}
+    if (reader.isFileExisting())
+    {
+        rosMaster = reader.getROSMaster();
+        localIP = reader.getLocalIP();
+        grammarFolder = reader.getGrammarFolder();
+        mediaFiolder = reader.getMediaFolder();
+        acknowledgeSound = reader.getAcknowledgeSoundFile();
+        grammarFile = reader.getGrammar();
+    }
+    else
+    {
+        std::cout << "!!!Config file not found, using default values!!!" << std::endl;
+        rosMaster = DEFAULT_ROS_MASTER;
+        localIP = DEFAULT_LOCALIP;
+        grammarFolder = DEFAULT_GRAMMAR_FOLDER;
+        mediaFiolder = DEFAULT_MEDIA_FOLDER;
+        acknowledgeSound = DEFAULT_ACKNOWLEDGE_SOUND_FILE;
+        grammarFile = DEFAULT_GRAMMAR_FILE;
+    }
 }
 
 int main(int argc, char **argv)
 {
-	try{
-	  recognizer = new SpeechRecognition();
-		//parse arguments, argv[1] should be config file path
-	if(argc > 1)
-	{
-		CONFIG_FILE = argv[1];
-	}
-	else
-	{
-		std::cout<<"*** No config file passed as argument, please use \"speech_recognition_node.exe configfile.cfg\" !!!" << std::endl << "Searching in current folder..." << std::endl;
-	}
-	
-	readConfigFile();
-    
-  ros::init(argc, argv, "mcr_speech_recognition");
-  ros::NodeHandle n("~");
+    try
+    {
+        recognizer = new SpeechRecognition();
+        //parse arguments, argv[1] should be config file path
+        if (argc > 1)
+        {
+            CONFIG_FILE = argv[1];
+        }
+        else
+        {
+            std::cout << "*** No config file passed as argument, please use \"speech_recognition_node.exe configfile.cfg\" !!!" << std::endl << "Searching in current folder..." << std::endl;
+        }
 
-	ros::ServiceServer serviceChangeGrammar = n.advertiseService("change_grammar", changeGrammar);
-	ros::ServiceServer serviceChangeRecognitionThreshold = n.advertiseService("change_recognition_threshold", changeRecognitionThreshold);
+        readConfigFile();
 
-  ros::Publisher pub = n.advertise<mcr_speech_msgs::RecognizedSpeech>("recognized_speech", 1000);
+        ros::init(argc, argv, "mcr_speech_recognition");
+        ros::NodeHandle n("~");
 
-  ros::Rate r(10);
+        ros::ServiceServer serviceChangeGrammar = n.advertiseService("change_grammar", changeGrammar);
+        ros::ServiceServer serviceChangeRecognitionThreshold = n.advertiseService("change_recognition_threshold", changeRecognitionThreshold);
 
-  //load grammar from config
-  recognizer->setAcknowledgeSoundFileName(acknowledgeSound);
-  recognizer->setGrammarFolderName(grammarFolder);
-  recognizer->setMediaFolderName(mediaFiolder);
-  recognizer->initSpeech(grammarFile);
+        ros::Publisher pub = n.advertise<mcr_speech_msgs::RecognizedSpeech>("recognized_speech", 1000);
 
-  ROS_INFO("Speech Recognition started");
-  while (n.ok())
-  {
-    mcr_speech_msgs::RecognizedSpeech msg;
+        ros::Rate r(10);
 
-    std::stringstream ss;	
-	  if(active)
-	  {
-		  recognizer->CheckForPhrase(&understoodPhrase, &matchedKeyword, &resultConfidence, &resultKeywordList, &resultConfidenceList);
+        //load grammar from config
+        recognizer->setAcknowledgeSoundFileName(acknowledgeSound);
+        recognizer->setGrammarFolderName(grammarFolder);
+        recognizer->setMediaFolderName(mediaFiolder);
+        recognizer->initSpeech(grammarFile);
 
-		  if(matchedKeyword != recognizer->noSpeechKeyword)
-		  {
-  			msg.understood_phrase = understoodPhrase.c_str();
-			  msg.keyword = matchedKeyword.c_str();
-			  msg.confidence = resultConfidence;
-			  msg.keyword_list = resultKeywordList;
-			  msg.confidence_list = resultConfidenceList;
+        ROS_INFO("Speech Recognition started");
+        while (n.ok())
+        {
+            mcr_speech_msgs::RecognizedSpeech msg;
 
-  			ROS_INFO("Phrase: %s", understoodPhrase.c_str());
-			  ROS_INFO("MainKeyword: %s", matchedKeyword.c_str());
-			  ROS_INFO("Confidence: %f", resultConfidence);
-			  for(unsigned int i = 0; i < resultKeywordList.size(); i++)
-			  {
-  				ROS_INFO("All_Keywords %s", resultKeywordList[i].c_str());
-				  ROS_INFO("Confidence %f", resultConfidenceList[i]);
-			  }
+            std::stringstream ss;
+            if (active)
+            {
+                recognizer->CheckForPhrase(&understoodPhrase, &matchedKeyword, &resultConfidence, &resultKeywordList, &resultConfidenceList);
 
-			  pub.publish(msg);
-		  }
-	  }
-    ros::spinOnce();
-    r.sleep();
-  }
-  
-  }catch(std::exception &e){
-    std::cout << e.what() << std::endl;
-    }catch( char *str ){
+                if (matchedKeyword != recognizer->noSpeechKeyword)
+                {
+                    msg.understood_phrase = understoodPhrase.c_str();
+                    msg.keyword = matchedKeyword.c_str();
+                    msg.confidence = resultConfidence;
+                    msg.keyword_list = resultKeywordList;
+                    msg.confidence_list = resultConfidenceList;
+
+                    ROS_INFO("Phrase: %s", understoodPhrase.c_str());
+                    ROS_INFO("MainKeyword: %s", matchedKeyword.c_str());
+                    ROS_INFO("Confidence: %f", resultConfidence);
+                    for (unsigned int i = 0; i < resultKeywordList.size(); i++)
+                    {
+                        ROS_INFO("All_Keywords %s", resultKeywordList[i].c_str());
+                        ROS_INFO("Confidence %f", resultConfidenceList[i]);
+                    }
+
+                    pub.publish(msg);
+                }
+            }
+            ros::spinOnce();
+            r.sleep();
+        }
+
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+    catch (char *str)
+    {
         std::cout << "Caught some other exception: " << str << std::endl;
-   }catch(...){
-    std::cout << "unhandled exception" << std::endl;
-  }
-  delete recognizer;
+    }
+    catch (...)
+    {
+        std::cout << "unhandled exception" << std::endl;
+    }
+    delete recognizer;
 
-  return 0;
+    return 0;
 }
 

@@ -8,24 +8,24 @@
 
 TwistDemultiplexerNode::TwistDemultiplexerNode(ros::NodeHandle &nh) : node_handler_(nh)
 {
-    node_handler_.param<std::string>("arm_tf", arm_tf_,"/tower_cam3d_rgb_optical_frame");
+    node_handler_.param<std::string>("arm_tf", arm_tf_, "/tower_cam3d_rgb_optical_frame");
 
-    
-    node_handler_.param<bool>("is_base_linear_x_enabled", is_twist_part_enabled_in_base_[0],false);
-    node_handler_.param<bool>("is_base_linear_y_enabled", is_twist_part_enabled_in_base_[1],false);
-    node_handler_.param<bool>("is_base_linear_z_enabled", is_twist_part_enabled_in_base_[2],false);
-    node_handler_.param<bool>("is_base_angular_x_enabled", is_twist_part_enabled_in_base_[3],false);
-    node_handler_.param<bool>("is_base_angular_y_enabled", is_twist_part_enabled_in_base_[4],false);
-    node_handler_.param<bool>("is_base_angular_z_enabled", is_twist_part_enabled_in_base_[5],false);
 
-    node_handler_.param<bool>("is_arm_linear_x_enabled", is_twist_part_enabled_in_arm_[0],false);
-    node_handler_.param<bool>("is_arm_linear_y_enabled", is_twist_part_enabled_in_arm_[1],false);
-    node_handler_.param<bool>("is_arm_linear_z_enabled", is_twist_part_enabled_in_arm_[2],false);
-    node_handler_.param<bool>("is_arm_angular_x_enabled", is_twist_part_enabled_in_arm_[3],false);
-    node_handler_.param<bool>("is_arm_angular_y_enabled", is_twist_part_enabled_in_arm_[4],false);
-    node_handler_.param<bool>("is_arm_angular_z_enabled", is_twist_part_enabled_in_arm_[5],false);
+    node_handler_.param<bool>("is_base_linear_x_enabled", is_twist_part_enabled_in_base_[0], false);
+    node_handler_.param<bool>("is_base_linear_y_enabled", is_twist_part_enabled_in_base_[1], false);
+    node_handler_.param<bool>("is_base_linear_z_enabled", is_twist_part_enabled_in_base_[2], false);
+    node_handler_.param<bool>("is_base_angular_x_enabled", is_twist_part_enabled_in_base_[3], false);
+    node_handler_.param<bool>("is_base_angular_y_enabled", is_twist_part_enabled_in_base_[4], false);
+    node_handler_.param<bool>("is_base_angular_z_enabled", is_twist_part_enabled_in_base_[5], false);
 
-    node_handler_.param<bool>("is_error_monitor_enabled", is_error_monitor_enabled_,"false");
+    node_handler_.param<bool>("is_arm_linear_x_enabled", is_twist_part_enabled_in_arm_[0], false);
+    node_handler_.param<bool>("is_arm_linear_y_enabled", is_twist_part_enabled_in_arm_[1], false);
+    node_handler_.param<bool>("is_arm_linear_z_enabled", is_twist_part_enabled_in_arm_[2], false);
+    node_handler_.param<bool>("is_arm_angular_x_enabled", is_twist_part_enabled_in_arm_[3], false);
+    node_handler_.param<bool>("is_arm_angular_y_enabled", is_twist_part_enabled_in_arm_[4], false);
+    node_handler_.param<bool>("is_arm_angular_z_enabled", is_twist_part_enabled_in_arm_[5], false);
+
+    node_handler_.param<bool>("is_error_monitor_enabled", is_error_monitor_enabled_, "false");
 
     arm_twist_stamped_pub_ = node_handler_.advertise<geometry_msgs::TwistStamped>("arm_twist", 1);
     base_twist_pub_ = node_handler_.advertise<geometry_msgs::Twist>("base_twist", 1);
@@ -79,54 +79,69 @@ void TwistDemultiplexerNode::errorFeedbackCallback(const mcr_monitoring_msgs::Co
 
 void TwistDemultiplexerNode::states()
 {
-    switch (current_state_) {
-        case INIT:
-            initState();
-            break;
-        case IDLE:
-            idleState();
-            break;
-        case RUNNING:
-            runState();
-            break;
-        default:
-            initState();
+    switch (current_state_)
+    {
+    case INIT:
+        initState();
+        break;
+    case IDLE:
+        idleState();
+        break;
+    case RUNNING:
+        runState();
+        break;
+    default:
+        initState();
     }
 }
 
 void TwistDemultiplexerNode::initState()
 {
-    if(event_in_msg_.data == "e_start"){
+    if (event_in_msg_.data == "e_start")
+    {
         current_state_ = IDLE;
         event_in_msg_.data = "";
         has_twist_data_ = false;
         has_error_feedback_data_ = false;
-    } else {
+    }
+    else
+    {
         current_state_ = INIT;
     }
 }
 
 void TwistDemultiplexerNode::idleState()
 {
-    if (event_in_msg_.data == "e_stop") {
+    if (event_in_msg_.data == "e_stop")
+    {
         current_state_ = INIT;
         event_in_msg_.data = "";
-    } else if (is_error_monitor_enabled_) {
-        if (has_twist_data_ && has_error_feedback_data_) {
+    }
+    else if (is_error_monitor_enabled_)
+    {
+        if (has_twist_data_ && has_error_feedback_data_)
+        {
             current_state_ = RUNNING;
             has_twist_data_ = false;
             has_error_feedback_data_ = false;
-        } else {
+        }
+        else
+        {
             current_state_ = IDLE;
         }
-    } else {
-        if (has_twist_data_) {
-        current_state_ = RUNNING;
-        has_twist_data_ = false;
-        } else {
+    }
+    else
+    {
+        if (has_twist_data_)
+        {
+            current_state_ = RUNNING;
+            has_twist_data_ = false;
+        }
+        else
+        {
             current_state_ = IDLE;
         }
-    }     
+    }
 }
 
 void TwistDemultiplexerNode::runState()
@@ -150,15 +165,17 @@ void TwistDemultiplexerNode::runState()
     arm_twist_.twist.angular.z = arm_twist_array_[5];
     arm_twist_.header.frame_id = arm_tf_;
     arm_twist_stamped_pub_.publish(arm_twist_);
-    
+
     current_state_ = IDLE;
 }
 
 void TwistDemultiplexerNode::demultiplexTwist(double *twist_as_array, bool *is_twist_part_enabled)
 {
-    for (size_t i = 0; i < NO_OF_PARTS_IN_TWIST ; i++) {
+    for (size_t i = 0; i < NO_OF_PARTS_IN_TWIST ; i++)
+    {
         twist_as_array[i] = input_twist_array_[i];
-        if (!is_twist_part_enabled[i] || (is_error_monitor_enabled_ && is_error_part_within_tolerance_[i])) {
+        if (!is_twist_part_enabled[i] || (is_error_monitor_enabled_ && is_error_part_within_tolerance_[i]))
+        {
             twist_as_array[i] = 0.0;
         }
     }
@@ -177,7 +194,8 @@ int main(int argc, char **argv)
     nh.param<int>("loop_rate", loop_rate, 30);
     ros::Rate rate(loop_rate);
 
-    while (ros::ok()) {
+    while (ros::ok())
+    {
         ros::spinOnce();
         twist_demultiplexer_node.states();
         rate.sleep();

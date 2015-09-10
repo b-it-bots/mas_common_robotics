@@ -11,9 +11,9 @@ namespace velocity_controllers
  * \brief Joint trajectory controller that represents trajectory segments as <b>quintic splines</b> and sends
  * commands to a \b velocity interface.
  */
-typedef joint_trajectory_controller::JointTrajectoryController<
-		trajectory_interface::QuinticSplineSegment<double>,
-		hardware_interface::VelocityJointInterface> JointTrajectoryController;
+typedef joint_trajectory_controller::JointTrajectoryController <
+trajectory_interface::QuinticSplineSegment<double>,
+                     hardware_interface::VelocityJointInterface > JointTrajectoryController;
 
 }
 

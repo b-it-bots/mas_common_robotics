@@ -73,76 +73,82 @@
 template<class State>
 class HardwareInterfaceAdapter<hardware_interface::VelocityJointInterface, State>
 {
-	public:
-		HardwareInterfaceAdapter() : joint_handles_ptr_(0)
-		{
-		}
+public:
+    HardwareInterfaceAdapter() : joint_handles_ptr_(0)
+    {
+    }
 
-		bool init(std::vector<hardware_interface::JointHandle> &joint_handles,
-				ros::NodeHandle &controller_nh)
-		{
-			// Store pointer to joint handles
-			joint_handles_ptr_ = &joint_handles;
+    bool init(std::vector<hardware_interface::JointHandle> &joint_handles,
+              ros::NodeHandle &controller_nh)
+    {
+        // Store pointer to joint handles
+        joint_handles_ptr_ = &joint_handles;
 
-			// Initialize PIDs
-			pids_.resize(joint_handles.size());
-			for (unsigned int i = 0; i < pids_.size(); ++i) {
-				// Node handle to PID gains
-				ros::NodeHandle joint_nh(controller_nh, std::string("gains/") + joint_handles[i].getName());
+        // Initialize PIDs
+        pids_.resize(joint_handles.size());
+        for (unsigned int i = 0; i < pids_.size(); ++i)
+        {
+            // Node handle to PID gains
+            ros::NodeHandle joint_nh(controller_nh, std::string("gains/") + joint_handles[i].getName());
 
-				// Init PID gains from ROS parameter server
-				pids_[i].reset(new control_toolbox::Pid());
-				if (!pids_[i]->init(joint_nh)) {
-					ROS_WARN_STREAM("Failed to initialize PID gains from ROS parameter server.");
-					return false;
-				}
-			}
+            // Init PID gains from ROS parameter server
+            pids_[i].reset(new control_toolbox::Pid());
+            if (!pids_[i]->init(joint_nh))
+            {
+                ROS_WARN_STREAM("Failed to initialize PID gains from ROS parameter server.");
+                return false;
+            }
+        }
 
-			return true;
-		}
+        return true;
+    }
 
-		void starting(const ros::Time &time)
-		{
-			if (!joint_handles_ptr_) {
-				return;
-			}
+    void starting(const ros::Time &time)
+    {
+        if (!joint_handles_ptr_)
+        {
+            return;
+        }
 
-			// Reset PIDs, zero effort commands
-			for (unsigned int i = 0; i < pids_.size(); ++i) {
-				pids_[i]->reset();
-				(*joint_handles_ptr_)[i].setCommand(0.0);
-			}
-		}
+        // Reset PIDs, zero effort commands
+        for (unsigned int i = 0; i < pids_.size(); ++i)
+        {
+            pids_[i]->reset();
+            (*joint_handles_ptr_)[i].setCommand(0.0);
+        }
+    }
 
-		void stopping(const ros::Time &time)
-		{
-		}
+    void stopping(const ros::Time &time)
+    {
+    }
 
-		void updateCommand(const ros::Time & time,
-				const ros::Duration &period,
-				const State &desired_state,
-				const State &state_error)
-		{
-			const unsigned int n_joints = joint_handles_ptr_->size();
+    void updateCommand(const ros::Time & time,
+                       const ros::Duration &period,
+                       const State &desired_state,
+                       const State &state_error)
+    {
+        const unsigned int n_joints = joint_handles_ptr_->size();
 
-			// Preconditions
-			if (!joint_handles_ptr_) {
-				return;
-			}
-			assert(n_joints == state_error.position.size());
+        // Preconditions
+        if (!joint_handles_ptr_)
+        {
+            return;
+        }
+        assert(n_joints == state_error.position.size());
 
-			// Update PIDs
-			for (unsigned int i = 0; i < n_joints; ++i) {
-				const double command = pids_[i]->computeCommand(state_error.position[i], period);
-				(*joint_handles_ptr_)[i].setCommand(command);
-			}
-		}
+        // Update PIDs
+        for (unsigned int i = 0; i < n_joints; ++i)
+        {
+            const double command = pids_[i]->computeCommand(state_error.position[i], period);
+            (*joint_handles_ptr_)[i].setCommand(command);
+        }
+    }
 
-	private:
-		typedef boost::shared_ptr<control_toolbox::Pid> PidPtr;
-		std::vector<PidPtr> pids_;
+private:
+    typedef boost::shared_ptr<control_toolbox::Pid> PidPtr;
+    std::vector<PidPtr> pids_;
 
-		std::vector<hardware_interface::JointHandle> *joint_handles_ptr_;
+    std::vector<hardware_interface::JointHandle> *joint_handles_ptr_;
 };
 
 #endif

@@ -14,14 +14,14 @@ ComponentWisePoseErrorMonitorNode::ComponentWisePoseErrorMonitorNode(ros::NodeHa
     event_pub_ = node_handler_.advertise<std_msgs::String>("event_out", 1);
     feedback_pub_ = node_handler_.advertise<mcr_monitoring_msgs::ComponentWisePoseErrorMonitorFeedback>("feedback", 1);
     current_state_ = INIT;
-    has_pose_error_data_ = false;  
+    has_pose_error_data_ = false;
 }
 
 ComponentWisePoseErrorMonitorNode::~ComponentWisePoseErrorMonitorNode()
 {
     event_sub_.shutdown();
     error_sub_.shutdown();
-    event_pub_.shutdown();  
+    event_pub_.shutdown();
     feedback_pub_.shutdown();
 }
 
@@ -48,48 +48,58 @@ void ComponentWisePoseErrorMonitorNode::errorCallback(const mcr_manipulation_msg
 
 void ComponentWisePoseErrorMonitorNode::states()
 {
-    switch (current_state_) {
-        case INIT:
-            initState();
-            break;
-        case IDLE:
-            idleState();
-            break;
-        case RUNNING:
-            runState();
-            break;
-        default:
-            initState();
+    switch (current_state_)
+    {
+    case INIT:
+        initState();
+        break;
+    case IDLE:
+        idleState();
+        break;
+    case RUNNING:
+        runState();
+        break;
+    default:
+        initState();
     }
 }
 
 void ComponentWisePoseErrorMonitorNode::initState()
 {
-    if (event_in_msg_.data == "e_start") {
+    if (event_in_msg_.data == "e_start")
+    {
         current_state_ = IDLE;
-        has_pose_error_data_ = false; 
-        event_in_msg_.data = ""; 
-    } else {
+        has_pose_error_data_ = false;
+        event_in_msg_.data = "";
+    }
+    else
+    {
         current_state_ = INIT;
     }
 }
 
 void ComponentWisePoseErrorMonitorNode::idleState()
 {
-    if(event_in_msg_.data == "e_stop") {
+    if (event_in_msg_.data == "e_stop")
+    {
         current_state_ = INIT;
         event_in_msg_.data = "";
-    } else if (has_pose_error_data_) {
+    }
+    else if (has_pose_error_data_)
+    {
         current_state_ = RUNNING;
         has_pose_error_data_ = false;
-    } else {
+    }
+    else
+    {
         current_state_ = IDLE;
     }
 }
 
 void ComponentWisePoseErrorMonitorNode::runState()
 {
-    if(isComponentWisePoseErrorWithinThreshold()){
+    if (isComponentWisePoseErrorWithinThreshold())
+    {
         status_msg_.data = "e_done";
         event_pub_.publish(status_msg_);
     }
@@ -118,7 +128,7 @@ bool ComponentWisePoseErrorMonitorNode::isComponentWisePoseErrorWithinThreshold(
     feedback_.is_angular_z_within_tolerance = fabs(error_.angular.z) < threshold_angular_z_;
 
     return (feedback_.is_linear_x_within_tolerance && feedback_.is_linear_y_within_tolerance && feedback_.is_linear_z_within_tolerance
-        && feedback_.is_angular_x_within_tolerance && feedback_.is_angular_y_within_tolerance && feedback_.is_angular_z_within_tolerance);
+            && feedback_.is_angular_x_within_tolerance && feedback_.is_angular_y_within_tolerance && feedback_.is_angular_z_within_tolerance);
 }
 
 int main(int argc, char **argv)
@@ -132,11 +142,12 @@ int main(int argc, char **argv)
     nh.param<double>("loop_rate", loop_rate, 30);
     ros::Rate rate(loop_rate);
 
-    while (ros::ok()) {
+    while (ros::ok())
+    {
         ros::spinOnce();
         cwpem.states();
         rate.sleep();
     }
-    
+
     return 0;
 }
