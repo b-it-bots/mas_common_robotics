@@ -19,5 +19,5 @@ endforeach(dir)
 if(CATKIN_ENABLE_TESTING)
   find_package(roslaunch REQUIRED)
 
-  roslaunch_add_file_check(ros/launch robot_env:=brsu-c025)
+  roslaunch_add_file_check(ros/launch robot_env:=brsu-c025-sim)
 endif()
