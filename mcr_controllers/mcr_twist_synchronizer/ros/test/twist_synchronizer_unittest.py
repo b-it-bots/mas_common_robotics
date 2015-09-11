@@ -7,8 +7,7 @@ Test unit for the functions in the twist_synchronizer.py module.
 import numpy.testing as testing
 import unittest
 import rosunit
-import mcr_twist_synchronizer_ros.twist_synchronizer \
-    as twist_synchronizer
+import mcr_twist_synchronizer_ros.twist_synchronizer_utils as twist_synchronizer_utils
 
 PKG = 'mcr_twist_synchronizer'
 
@@ -32,14 +31,14 @@ class TestTwistSynchronizer(unittest.TestCase):
 
         # error and velocity have different dimensions
         with self.assertRaises(AssertionError):
-            twist_synchronizer.calculate_max_time(error_6d, velocity_3d)
+            twist_synchronizer_utils.calculate_max_time(error_6d, velocity_3d)
         # error and velocity should be three-dimensional
         with self.assertRaises(AssertionError):
-            twist_synchronizer.calculate_max_time(error_6d, velocity_6d)
+            twist_synchronizer_utils.calculate_max_time(error_6d, velocity_6d)
         # error and velocity should be six-dimensional,
         # since angular_synchronization is True
         with self.assertRaises(AssertionError):
-            twist_synchronizer.calculate_max_time(
+            twist_synchronizer_utils.calculate_max_time(
                 error_3d, velocity_3d, angular_synchronization=True
             )
 
@@ -58,9 +57,9 @@ class TestTwistSynchronizer(unittest.TestCase):
         desired_2 = 0.25
         desired_3 = 0.10204
 
-        actual_1 = twist_synchronizer.calculate_max_time(error, velocity_1)
-        actual_2 = twist_synchronizer.calculate_max_time(error, velocity_2)
-        actual_3 = twist_synchronizer.calculate_max_time(error, velocity_3)
+        actual_1 = twist_synchronizer_utils.calculate_max_time(error, velocity_1)
+        actual_2 = twist_synchronizer_utils.calculate_max_time(error, velocity_2)
+        actual_3 = twist_synchronizer_utils.calculate_max_time(error, velocity_3)
 
         self.assertAlmostEqual(actual_1, desired_1, places=4)
         self.assertAlmostEqual(actual_2, desired_2, places=4)
@@ -80,10 +79,10 @@ class TestTwistSynchronizer(unittest.TestCase):
         velocity_2 = [20.0, -20.0, 3.0, -4.0, -5.0, 12.0]
         desired_2 = 0.5
 
-        actual_1 = twist_synchronizer.calculate_max_time(
+        actual_1 = twist_synchronizer_utils.calculate_max_time(
             error_1, velocity_1, angular_synchronization=True
         )
-        actual_2 = twist_synchronizer.calculate_max_time(
+        actual_2 = twist_synchronizer_utils.calculate_max_time(
             error_2, velocity_2, angular_synchronization=True
         )
 
@@ -106,18 +105,18 @@ class TestTwistSynchronizer(unittest.TestCase):
 
         # error and velocity have different dimensions
         with self.assertRaises(AssertionError):
-            twist_synchronizer.calculate_sync_velocity(
+            twist_synchronizer_utils.calculate_sync_velocity(
                 error_6d, velocity_3d, max_time
             )
         # error and velocity should be three-dimensional
         with self.assertRaises(AssertionError):
-            twist_synchronizer.calculate_sync_velocity(
+            twist_synchronizer_utils.calculate_sync_velocity(
                 error_6d, velocity_6d, max_time
             )
         # error and velocity should be six-dimensional,
         # since angular_synchronization is True
         with self.assertRaises(AssertionError):
-            twist_synchronizer.calculate_sync_velocity(
+            twist_synchronizer_utils.calculate_sync_velocity(
                 error_3d, velocity_3d, max_time, angular_synchronization=True
             )
 
@@ -132,7 +131,7 @@ class TestTwistSynchronizer(unittest.TestCase):
         velocity = [0.2, -0.6, 0.5]
 
         desired = [0.004, -0.16, 0.392]
-        actual = twist_synchronizer.calculate_sync_velocity(
+        actual = twist_synchronizer_utils.calculate_sync_velocity(
             error, velocity, max_time
         )
 
@@ -154,10 +153,10 @@ class TestTwistSynchronizer(unittest.TestCase):
         velocity_2 = [1.0, -2.0, 3.0, -4.0, -5.0, 6.0]
         desired_2 = [0.5, -1.0, 0.0, 0.0, 0.0, 3.0]
 
-        actual_1 = twist_synchronizer.calculate_sync_velocity(
+        actual_1 = twist_synchronizer_utils.calculate_sync_velocity(
             error_1, velocity_1, max_time, angular_synchronization=True
         )
-        actual_2 = twist_synchronizer.calculate_sync_velocity(
+        actual_2 = twist_synchronizer_utils.calculate_sync_velocity(
             error_2, velocity_2, max_time, angular_synchronization=True
         )
 
