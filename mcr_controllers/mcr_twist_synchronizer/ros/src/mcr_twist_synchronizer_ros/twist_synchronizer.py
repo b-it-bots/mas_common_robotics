@@ -14,8 +14,6 @@ import std_msgs.msg
 import geometry_msgs.msg
 import mcr_manipulation_msgs.msg
 
-# This value prevents division by near-zero values.
-ZERO = 0.001
 
 
 class TwistSynchronizer(object):
@@ -27,25 +25,32 @@ class TwistSynchronizer(object):
 
     """
     def __init__(self):
-        # params
+        # Params
         self.event = None
         self.twist = None
         self.pose_error = None
 
-        # node cycle time (in seconds)
-        self.cycle_time = rospy.get_param('~cycle_time')
+        # If True, it also synchronizes the angular and linear velocities.
+        # By default, it only synchronizes the linear velocities.
+        self.angular_synchronization = rospy.get_param('~angular_synchronization', False)
 
-        # publishers
+        # A value to prevent division by near-zero values.
+        self.near_zero = rospy.get_param('~near_zero', 0.001)
+
+        # Node cycle rate (in hz)
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
+
+        # Publishers
+        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
         self.synchronized_twist = rospy.Publisher(
             '~synchronized_twist', geometry_msgs.msg.TwistStamped
         )
 
-        # subscribers
+        # Subscribers
         rospy.Subscriber('~event_in', std_msgs.msg.String, self.event_in_cb)
         rospy.Subscriber('~twist', geometry_msgs.msg.TwistStamped, self.twist_cb)
         rospy.Subscriber(
-            '~pose_error',
-            mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference,
+            '~pose_error', mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference,
             self.pose_error_cb
         )
 
@@ -67,7 +72,7 @@ class TwistSynchronizer(object):
                 state = self.running_state()
 
             rospy.logdebug("State: {0}".format(state))
-            rospy.sleep(self.cycle_time)
+            self.loop_rate.sleep()
 
     def event_in_cb(self, msg):
         """
@@ -98,7 +103,7 @@ class TwistSynchronizer(object):
         :rtype: str
 
         """
-        if self.twist and self.pose_error:
+        if self.event == 'e_start':
             return 'IDLE'
         else:
             return 'INIT'
@@ -111,10 +116,12 @@ class TwistSynchronizer(object):
         :rtype: str
 
         """
-        if self.event == 'e_start':
-            return 'RUNNING'
-        elif self.event == 'e_stop':
+        if self.event == 'e_stop':
+            self.reset_component_data()
+            self.event_out.publish('e_stopped')
             return 'INIT'
+        elif self.twist and self.pose_error:
+            return 'RUNNING'
         else:
             return 'IDLE'
 
@@ -127,12 +134,19 @@ class TwistSynchronizer(object):
 
         """
         if self.event == 'e_stop':
+            self.reset_component_data()
+            self.event_out.publish('e_stopped')
             return 'INIT'
         else:
             synchronized_twist = self.synchronize_twist()
-            self.synchronized_twist.publish(synchronized_twist)
+            if synchronized_twist:
+                self.synchronized_twist.publish(synchronized_twist)
+                self.event_out.publish('e_success')
+            else:
+                self.event_out.publish('e_failure')
 
-            return 'RUNNING'
+            self.reset_component_data()
+            return 'IDLE'
 
     def synchronize_twist(self):
         """
@@ -146,82 +160,136 @@ class TwistSynchronizer(object):
         synchronized_twist.header.frame_id = self.twist.header.frame_id
         synchronized_twist.header.stamp = self.twist.header.stamp
 
-        error = (self.pose_error.linear.x, self.pose_error.linear.y,
-                 self.pose_error.linear.z)
+        if self.angular_synchronization:
+            error = [
+                self.pose_error.linear.x, self.pose_error.linear.y,
+                self.pose_error.linear.z, self.pose_error.angular.x,
+                self.pose_error.angular.y, self.pose_error.angular.z
+            ]
 
-        velocity = (self.twist.twist.linear.x, self.twist.twist.linear.y,
-                    self.twist.twist.linear.z)
+            velocity = [
+                self.twist.twist.linear.x, self.twist.twist.linear.y,
+                self.twist.twist.linear.z, self.twist.twist.angular.x,
+                self.twist.twist.angular.y, self.twist.twist.angular.z
+            ]
+        else:
+            error = [
+                self.pose_error.linear.x, self.pose_error.linear.y,
+                self.pose_error.linear.z
+            ]
+
+            velocity = [
+                self.twist.twist.linear.x, self.twist.twist.linear.y,
+                self.twist.twist.linear.z
+            ]
 
         # Calculate maximum time to reach the goal.
-        max_time = calculate_max_time(error, velocity)
+        max_time = calculate_max_time(
+            error, velocity, self.angular_synchronization, self.near_zero
+        )
 
         # Calculate the velocities to reach the goal at the same time.
-        sync_velocities = calculate_sync_velocity(error, velocity, max_time)
-
+        sync_velocities = calculate_sync_velocity(
+            error, velocity, max_time, self.angular_synchronization
+        )
         synchronized_twist.twist.linear.x = sync_velocities[0]
         synchronized_twist.twist.linear.y = sync_velocities[1]
         synchronized_twist.twist.linear.z = sync_velocities[2]
+        if self.angular_synchronization:
+            synchronized_twist.twist.angular.x = sync_velocities[3]
+            synchronized_twist.twist.angular.y = sync_velocities[4]
+            synchronized_twist.twist.angular.z = sync_velocities[5]
 
         return synchronized_twist
 
+    def reset_component_data(self):
+        """
+        Clears the data of the component.
 
-def calculate_max_time(error, velocity):
+        """
+        self.event = None
+        self.twist = None
+        self.pose_error = None
+
+
+def calculate_max_time(error, velocity, angular_synchronization=False, zero=0.001):
     """
-    Calculates the maximum time, between all three velocities,
-    required to reach the goal. If a velocity is not specified,
-    it is assumed that that axis is not to be controlled.
+    Calculates the maximum time, between all the velocities, required to reach
+    the goal. By default, it only synchronizes linear velocities.
+    If angular_synchronization is True, then it also synchronizes for angular
+    velocities.
 
     :param error: The distance error tuple in the X, Y and Z axis.
-    :type error: ()float
+    :type error: list
 
     :param velocity: Velocities in the X, Y and Z axis.
-    :type velocity: ()float
+    :type velocity: list
+
+    :param zero: Value to prevent division by near-zero values.
+    :type zero: float
 
     :return: The maximum time required to reach the goal.
     :rtype: float
 
     """
-    t = []
-    for i, vel in enumerate(velocity):
-        if abs(vel) >= ZERO:
-            time = abs(float(error[i]) / vel)
-        else:
-            time = 0.0
-        t.append(time)
+    if angular_synchronization:
+        assert len(error) == len(velocity) == 6
+    else:
+        assert len(error) == len(velocity) == 3
 
-    return max(t)
+    calculate_duration = lambda distance, speed: abs(float(distance) / speed)
+
+    durations = [
+        calculate_duration(ee, vv) if (abs(vv) >= zero) else 0.0
+        for ee, vv in zip(error, velocity)
+    ]
+
+    return max(durations)
 
 
-def calculate_sync_velocity(error, velocity, max_time):
+def calculate_sync_velocity(error, velocity, max_time, angular_synchronization=False):
     """
-    Calculates the synchronized velocity for all velocities to reach
-    their goal at the same time.
+    Calculates the synchronized velocity for all velocities to reach their goal
+    at the same time. By default, it only synchronizes linear velocities.
+    If angular_synchronization is True, then it also synchronizes for angular
+    velocities.
 
-    :param error: The distance error tuple in the X, Y and Z axis.
-    :type error: ()float
+    :param error: The distance error tuple in the X, Y and Z axis. It should either
+        be three-dimensional (i.e. only linear) or six-dimensional (i.e. linear
+        and angular). Its dimension must match that of the velocity argument.
+    :type error: list
 
-    :param velocity: Velocity in the X, Y and Z axis.
-    :type velocity: ()float
+    :param velocity: Velocity in the X, Y and Z axis. It should either
+        be three-dimensional (i.e. only linear) or six-dimensional (i.e. linear
+        and angular). Its dimension must match that of the error argument.
+    :type velocity: list
 
     :param max_time: The maximum time required, between the velocities,
     to reach their goal.
     :type max_time: float
 
+    :param angular_synchronization: If True, the twist is synchronized for linear
+        and angular velocities. Otherwise the twist is only synchronized for linear
+        velocities.
+    :type angular_synchronization: bool
+
     :return: The synchronized velocities.
-    :rtype: float
+    :rtype: list
 
     """
-    sync_velocity = []
+    if angular_synchronization:
+        assert len(error) == len(velocity) == 6
+    else:
+        assert len(error) == len(velocity) == 3
 
-    for i, vel in enumerate(velocity):
-        if max_time and vel:
-            temp_velocity = abs(float(error[i]) / max_time) * cmp(vel, 0)
-        else:
-            temp_velocity = 0.0
+    # A velocity is computed to cover a distance (dist) in a given time (max_time),
+    # where max_time is the same for all distances.
+    synchronize_velocity = lambda dist, vel: abs(float(dist) / max_time) * cmp(vel, 0)
 
-        sync_velocity.append(temp_velocity)
-
-    return sync_velocity
+    return [
+        synchronize_velocity(ee, vv) if (max_time and vv) else 0.0
+        for ee, vv in zip(error, velocity)
+    ]
 
 
 def main():
