@@ -1,13 +1,24 @@
 #!/usr/bin/env python
 """
-This module contains a component that synchronizes the velocities
-of a twist (represented as a geometry_msgs/TwistStamped message),
-such that each component of a Cartesian error (compensated by the
-twist's velocities) simultaneously reaches zero.
+This component synchronizes the velocities of a twist (represented as a
+geometry_msgs/TwistStamped message), such that each component of a Cartesian error
+(compensated by the twist's velocities) simultaneously reaches zero.
+
+**Input(s):**
+  * `twist`: The twist to be synchronized.
+  * `pose_error`: The component-wise Cartesian difference (error).
+
+**Output(s):**
+  * `synchronized_twist`: The synchronized twist.
+
+**Parameter(s):**
+  * `angular_synchronization`: If True, it also synchronizes the angular and linear
+  velocities. By default, it only synchronizes the linear velocities (bool).
+  * `near_zero`: A value to prevent division by near-zero values.
+  * `loop_rate`: Node cycle rate (in hz).
 
 """
 #-*- encoding: utf-8 -*-
-__author__ = 'jsanch'
 
 import rospy
 import std_msgs.msg
@@ -16,13 +27,9 @@ import mcr_manipulation_msgs.msg
 import mcr_twist_synchronizer_ros.twist_synchronizer_utils as utils
 
 
-
 class TwistSynchronizer(object):
     """
-    Synchronizes the velocities of a twist (represented as a
-    geometry_msgs/TwistStamped message), such that each component
-    of a Cartesian error (compensated by the twist's velocities)
-    simultaneously reaches zero.
+    Synchronizes a twist.
 
     """
     def __init__(self):
