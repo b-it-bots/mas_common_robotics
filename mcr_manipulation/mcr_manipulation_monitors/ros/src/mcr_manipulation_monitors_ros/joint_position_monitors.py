@@ -24,8 +24,8 @@ class JointPositionMonitor(object):
         self.current_joint_positions = None
         self.mapping_table = {}
 
-        # node cycle rate (in seconds)
-        self.loop_rate = rospy.get_param('~loop_rate')
+        # node cycle rate (in hz)
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
         # tolerance for the joint positions
         self.epsilon = rospy.get_param('~epsilon')
         # target joint names
@@ -78,7 +78,7 @@ class JointPositionMonitor(object):
                     state = 'INIT'
                     rospy.logdebug("Joint position monitor: event e_done, state=" + str(state))
 
-            rospy.sleep(self.loop_rate)
+            self.loop_rate.sleep()
 
     def event_in_cb(self, msg):
         """
