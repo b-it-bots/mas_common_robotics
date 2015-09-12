@@ -7,6 +7,7 @@ the joint position of a manipulator.
 #-*- encoding: utf-8 -*-
 __author__ = 'jsanch'
 
+import numpy
 import rospy
 import std_msgs.msg
 import sensor_msgs.msg
@@ -31,6 +32,11 @@ class JointPositionMonitor(object):
         # target joint names
         self.target_joint_names = rospy.get_param('~target_joint_names')
 
+        # create a mapping table of the target joint names and their indices
+        self.current_joint_positions = [None for _ in self.target_joint_names]
+        for index, joint in enumerate(self.target_joint_names):
+            self.mapping_table[joint] = index
+
         # publishers
         self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String)
 
@@ -40,11 +46,6 @@ class JointPositionMonitor(object):
                          self.configure_joint_monitor_cb)
         rospy.Subscriber("~joint_states", sensor_msgs.msg.JointState,
                          self.read_joint_positions_cb)
-
-        # create a mapping table of the target joint names and their indices
-        self.current_joint_positions = [None for _ in self.target_joint_names]
-        for index, joint in enumerate(self.target_joint_names):
-            self.mapping_table[joint] = index
 
     def event_in_cb(self, msg):
         """
@@ -73,7 +74,7 @@ class JointPositionMonitor(object):
 
     def start(self):
         """
-        Starts the component.
+        Starts the joint position monitor.
 
         """
         rospy.loginfo("Ready to start...")
@@ -146,6 +147,31 @@ class JointPositionMonitor(object):
 
         return 'IDLE'
 
+    def joint_positions_reached(self):
+        """
+        Checks if all the desired joint positions have been reached
+        (within a tolerance).
+
+        :return: True, if all the desired joint positions have reached
+            their target values; otherwise False is returned.
+        :rtype: bool
+
+        """
+        current_joint_positions = sensor_msgs.msg.JointState()
+        current_joint_positions.name = [joint for joint in self.target_joint_names]
+        current_joint_positions.position = [
+            self.current_joint_positions[self.mapping_table[joint]]
+            for joint in self.target_joint_names
+        ]
+
+        sorted_joint_positions = sort_joint_values(
+            current_joint_positions, self.desired_joint_positions
+        )
+
+        return check_joint_positions(
+            self.current_joint_positions, sorted_joint_positions, self.epsilon
+        )
+
     def reset_component_data(self):
         """
         Clears the data of the component.
@@ -154,6 +180,31 @@ class JointPositionMonitor(object):
         self.current_joint_positions = [None for _ in self.target_joint_names]
         self.desired_joint_positions = None
         self.monitor_event = None
+
+
+def sort_joint_values(actual, reference):
+    """
+    Sorts a set of joint values matching the order of the 'actual'
+    joint values.
+
+    :param actual: The current joint positions.
+    :type actual: sensor_msgs.msg.JointState
+
+    :param reference: The reference joint positions.
+    :type reference: sensor_msgs.msg.JointState
+
+    :return: The joint positions values sorted with the order of the 'actual'
+        joint values.
+    :rtype: []Float
+
+    """
+    assert len(actual.name) == len(reference.name), \
+        "The length of the current and reference joint must be the same."
+
+    return [
+        reference.position[ii] for a_name in actual.name
+        for ii, r_name in enumerate(reference.name) if a_name == r_name
+    ]
 
 
 def check_joint_positions(actual, reference, tolerance):
@@ -175,19 +226,11 @@ def check_joint_positions(actual, reference, tolerance):
     :rtype: Boolean
 
     """
-    try:
-        for i, desired in enumerate(reference):
-            below_limit = (actual[i] >= desired + tolerance)
-            above_limit = (actual[i] <= desired - tolerance)
-
+    for i, desired in enumerate(reference):
+        below_limit = (actual[i] >= desired + tolerance)
+        above_limit = (actual[i] <= desired - tolerance)
         if below_limit or above_limit:
             return False
-
-    except IndexError:
-        rospy.logwarn(
-            "The length of the current and reference joint positions do not match."
-        )
-        return False
 
     return True
 
