@@ -29,7 +29,7 @@ tolerance = visualization_msgs.msg.Marker()
 
 def create_window():
     master = Tkinter.Tk()
-    
+
     label = Tkinter.Label(master, text="Target Pose")
     label.pack(side=Tkinter.TOP)
 
