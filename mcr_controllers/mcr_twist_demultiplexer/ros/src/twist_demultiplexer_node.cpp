@@ -10,7 +10,6 @@ TwistDemultiplexerNode::TwistDemultiplexerNode(ros::NodeHandle &nh) : node_handl
 {
     node_handler_.param<std::string>("arm_tf", arm_tf_, "/tower_cam3d_rgb_optical_frame");
 
-
     node_handler_.param<bool>("is_base_linear_x_enabled", is_twist_part_enabled_in_base_[0], false);
     node_handler_.param<bool>("is_base_linear_y_enabled", is_twist_part_enabled_in_base_[1], false);
     node_handler_.param<bool>("is_base_linear_z_enabled", is_twist_part_enabled_in_base_[2], false);
@@ -36,12 +35,14 @@ TwistDemultiplexerNode::TwistDemultiplexerNode(ros::NodeHandle &nh) : node_handl
 
     current_state_ = INIT;
     has_twist_data_ = false;
+    has_error_feedback_data_ = false;
 }
 
 TwistDemultiplexerNode::~TwistDemultiplexerNode()
 {
     event_sub_.shutdown();
     twist_sub_.shutdown();
+    error_feedback_sub_.shutdown();
     arm_twist_stamped_pub_.shutdown();
     base_twist_pub_.shutdown();
 }
@@ -116,6 +117,11 @@ void TwistDemultiplexerNode::idleState()
     {
         current_state_ = INIT;
         event_in_msg_.data = "";
+        geometry_msgs::TwistStamped zero_arm_twist;
+        zero_arm_twist.header.frame_id = arm_tf_;
+        arm_twist_stamped_pub_.publish(zero_arm_twist);
+        geometry_msgs::Twist zero_base_twist;
+        base_twist_pub_.publish(zero_base_twist);
     }
     else if (is_error_monitor_enabled_)
     {

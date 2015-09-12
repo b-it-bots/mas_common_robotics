@@ -55,23 +55,29 @@ class TestTwistSynchronizer(unittest.TestCase):
         """
         pose_error = mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference()
         pose_error.linear.x = 0.2
-        pose_error.linear.y = 0.0
-        pose_error.linear.z = 0.3
+        pose_error.linear.y = 0.3
+        pose_error.linear.z = 0.0
         pose_error.angular.x = 0.0
         pose_error.angular.y = 0.0
-        pose_error.angular.z = 0.0
+        pose_error.angular.z = 0.5
 
         twist = geometry_msgs.msg.TwistStamped()
         twist.header.frame_id = "base_link"
         twist.twist.linear.x = 0.08
-        twist.twist.linear.y = 0.2
-        twist.twist.linear.z = 1.0
+        twist.twist.linear.y = 1.0
+        twist.twist.linear.z = 0.2
+        twist.twist.angular.x = -0.4
+        twist.twist.angular.y = 0.0
+        twist.twist.angular.z = 0.7
 
         expected_result = geometry_msgs.msg.TwistStamped()
         expected_result.header.frame_id = "base_link"
         expected_result.twist.linear.x = 0.08
-        expected_result.twist.linear.y = 0.0
-        expected_result.twist.linear.z = 0.12
+        expected_result.twist.linear.y = 0.12
+        expected_result.twist.linear.z = 0.0
+        expected_result.twist.angular.x = 0.0
+        expected_result.twist.angular.y = 0.0
+        expected_result.twist.angular.z = 0.2
 
         while not self.wait_for_result:
             self.twist.publish(twist)
@@ -86,6 +92,15 @@ class TestTwistSynchronizer(unittest.TestCase):
         )
         self.assertAlmostEqual(
             self.result.twist.linear.z, expected_result.twist.linear.z, places=4
+        )
+        self.assertAlmostEqual(
+            self.result.twist.angular.x, expected_result.twist.angular.x, places=4
+        )
+        self.assertAlmostEqual(
+            self.result.twist.angular.y, expected_result.twist.angular.y, places=4
+        )
+        self.assertAlmostEqual(
+            self.result.twist.angular.z, expected_result.twist.angular.z, places=4
         )
 
     def result_callback(self, msg):

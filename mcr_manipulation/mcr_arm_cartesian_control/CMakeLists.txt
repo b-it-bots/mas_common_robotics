@@ -9,6 +9,8 @@ catkin_package(
   CATKIN_DEPENDS  
     mcr_manipulation_utils
     sensor_msgs
+  DEPENDS
+    eigen
 )
 
 include_directories(
