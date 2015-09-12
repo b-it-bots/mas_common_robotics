@@ -16,7 +16,6 @@ find_package(catkin REQUIRED
     moveit_core
     moveit_ros_planning
     roscpp
-    rosconsole
     pluginlib
     tf
     eigen_conversions
