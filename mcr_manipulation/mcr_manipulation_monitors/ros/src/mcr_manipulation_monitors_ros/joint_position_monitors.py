@@ -46,40 +46,6 @@ class JointPositionMonitor(object):
         for index, joint in enumerate(self.target_joint_names):
             self.mapping_table[joint] = index
 
-    def start_joint_position_monitor(self):
-        """
-        Starts the joint position monitor.
-
-        """
-        rospy.loginfo("Joint position monitor ready to start...")
-        state = 'INIT'
-
-        while not rospy.is_shutdown():
-
-            if state == 'INIT':
-                if self.current_joint_positions and \
-                   self.desired_joint_positions:
-                    state = 'IDLE'
-                    rospy.logdebug("Joint position monitor: state=" + str(state))
-            elif state == 'IDLE':
-                if self.monitor_event == 'e_start':
-                    state = 'RUNNING'
-                    rospy.logdebug("Joint position monitor: event e_start, state=" + str(state))
-            elif state == 'RUNNING':
-                if check_joint_positions(self.current_joint_positions,
-                                         self.desired_joint_positions.position,
-                                         self.epsilon):
-                    rospy.logdebug("Joint position monitor finished: state=" + str(state))
-                    self.event_out.publish('e_done')
-
-                if self.monitor_event == 'e_stop':
-                    self.current_joint_positions = None
-                    self.desired_joint_positions = None
-                    state = 'INIT'
-                    rospy.logdebug("Joint position monitor: event e_done, state=" + str(state))
-
-            self.loop_rate.sleep()
-
     def event_in_cb(self, msg):
         """
         Obtains an event for the joint position monitor.
@@ -104,6 +70,90 @@ class JointPositionMonitor(object):
 
         """
         self.desired_joint_positions = msg
+
+    def start(self):
+        """
+        Starts the component.
+
+        """
+        rospy.loginfo("Ready to start...")
+        state = 'INIT'
+
+        while not rospy.is_shutdown():
+
+            if state == 'INIT':
+                state = self.init_state()
+            elif state == 'IDLE':
+                state = self.idle_state()
+            elif state == 'RUNNING':
+                state = self.running_state()
+
+            rospy.logdebug("State: {0}".format(state))
+            self.loop_rate.sleep()
+
+    def init_state(self):
+        """
+        Executes the INIT state of the state machine.
+
+        :return: The updated state.
+        :rtype: str
+
+        """
+        if self.monitor_event == 'e_start':
+            return 'IDLE'
+        else:
+            return 'INIT'
+
+    def idle_state(self):
+        """
+        Executes the IDLE state of the state machine.
+
+        :return: The updated state.
+        :rtype: str
+
+        """
+        if self.monitor_event == 'e_stop':
+            self.event_out.publish('e_stopped')
+            self.reset_component_data()
+            return 'INIT'
+
+        if numpy.all(self.current_joint_positions) is not None and \
+                self.desired_joint_positions is not None:
+            return 'RUNNING'
+        else:
+            return 'IDLE'
+
+    def running_state(self):
+        """
+        Executes the RUNNING state of the state machine.
+
+        :return: The updated state.
+        :rtype: str
+
+        """
+        if self.monitor_event == 'e_stop':
+            self.event_out.publish('e_stopped')
+            self.reset_component_data()
+            return 'INIT'
+
+        if self.joint_positions_reached():
+            self.event_out.publish('e_done')
+            self.reset_component_data()
+            return 'INIT'
+        else:
+            self.event_out.publish('e_configuration_not_reached')
+            self.reset_component_data()
+
+        return 'IDLE'
+
+    def reset_component_data(self):
+        """
+        Clears the data of the component.
+
+        """
+        self.current_joint_positions = [None for _ in self.target_joint_names]
+        self.desired_joint_positions = None
+        self.monitor_event = None
 
 
 def check_joint_positions(actual, reference, tolerance):
@@ -145,4 +195,4 @@ def check_joint_positions(actual, reference, tolerance):
 def main():
     rospy.init_node("joint_position_monitors", anonymous=True)
     joint_position_monitor = JointPositionMonitor()
-    joint_position_monitor.start_joint_position_monitor()
+    joint_position_monitor.start()
