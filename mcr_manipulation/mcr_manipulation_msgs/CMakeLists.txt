@@ -6,12 +6,14 @@ find_package(catkin REQUIRED
     message_generation
     std_msgs
     geometry_msgs
+    moveit_msgs
     mcr_common_msgs
 )
 
 add_message_files(
   FILES
     ComponentWiseCartesianDifference.msg
+    GraspList.msg
     JointDistance.msg
     SphericalSamplerParameters.msg
     GripperCommand.msg
@@ -21,6 +23,7 @@ generate_messages(
   DEPENDENCIES
     std_msgs
     geometry_msgs
+    moveit_msgs
     mcr_common_msgs
 )
 
@@ -29,5 +32,6 @@ catkin_package(
     message_runtime
     std_msgs
     geometry_msgs
+    moveit_msgs
     mcr_common_msgs
 )
