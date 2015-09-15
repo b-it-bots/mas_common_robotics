@@ -14,6 +14,7 @@ add_message_files(
     ComponentWiseCartesianDifference.msg
     JointDistance.msg
     SphericalSamplerParameters.msg
+    GripperCommand.msg
 )
 
 generate_messages(
