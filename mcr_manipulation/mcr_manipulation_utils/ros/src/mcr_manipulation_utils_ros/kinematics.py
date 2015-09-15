@@ -6,6 +6,7 @@ Kinematics module.
 #-*- encoding: utf-8 -*-
 
 import rospy
+import actionlib
 import moveit_msgs.msg
 import moveit_msgs.srv
 import moveit_commander
@@ -20,6 +21,12 @@ class Kinematics:
         self.state = moveit_commander.RobotState()
         self.joint_names = self.commander.get_joint_names(self.group_name)
         self.link_names = self.commander.get_link_names(self.group_name)
+
+        # wait for MoveIt! to come up
+        client = actionlib.SimpleActionClient(self.group, moveit_msgs.msg.MoveGroupAction)
+        rospy.loginfo("Waiting for '{0}' server".format(self.group))
+        client.wait_for_server()
+        rospy.loginfo("Found server '{0}'".format(self.group))
 
         # service clients
         rospy.loginfo("Waiting for 'compute_ik' service")
