@@ -70,8 +70,8 @@ def position_z(slider):
 
 
 def publish_topics():
-    # node cycle rate (in seconds)
-    loop_rate = rospy.get_param('~loop_rate')
+    # node cycle rate (in hz)
+    loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
     # the minimum Euclidean distance to activate the monitor (in meters)
     specified_tolerance = rospy.get_param('~tolerance')
 
@@ -100,7 +100,7 @@ def publish_topics():
         start_converter.publish('e_start')
         pub_target_pose.publish(target_pose)
         pub_tolerance.publish(tolerance)
-        rospy.sleep(loop_rate)
+        loop_rate.sleep()
 
 
 def main():
