@@ -23,8 +23,8 @@ class CartesianMotion(object):
         self.event = None
         self.desired_velocity = None
 
-        # node cycle time (in seconds)
-        self.cycle_time = rospy.get_param('~cycle_time')
+        # node cycle rate (in hz)
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
         # publishers
         self.event_out = rospy.Publisher(
@@ -56,7 +56,7 @@ class CartesianMotion(object):
             elif state == 'RUNNING':
                 state = self.running_state()
 
-            rospy.sleep(self.cycle_time)
+            self.loop_rate.sleep()
 
     def desired_velocity_cb(self, msg):
         """
