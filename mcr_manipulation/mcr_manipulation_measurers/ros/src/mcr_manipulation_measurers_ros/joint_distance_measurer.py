@@ -93,7 +93,7 @@ class JointDistanceMeasurer(object):
                 state = self.running_state()
 
             rospy.logdebug("State: {0}".format(state))
-            rospy.sleep(self.loop_rate.sleep())
+            self.loop_rate.sleep()
 
     def init_state(self):
         """
