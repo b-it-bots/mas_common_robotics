@@ -11,7 +11,6 @@ catkin_python_setup()
 
 catkin_package(
   CATKIN_DEPENDS
-    numpy
     rospy
     std_msgs
     sensor_msgs

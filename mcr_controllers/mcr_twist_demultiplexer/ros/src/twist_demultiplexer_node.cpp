@@ -8,7 +8,7 @@
 
 TwistDemultiplexerNode::TwistDemultiplexerNode(ros::NodeHandle &nh) : node_handler_(nh)
 {
-    node_handler_.param<std::string>("arm_tf", arm_tf_, "/tower_cam3d_rgb_optical_frame");
+    node_handler_.param<std::string>("arm_tf", arm_tf_, "/arm_cam3d_rgb_optical_frame");
 
     node_handler_.param<bool>("is_base_linear_x_enabled", is_twist_part_enabled_in_base_[0], false);
     node_handler_.param<bool>("is_base_linear_y_enabled", is_twist_part_enabled_in_base_[1], false);
