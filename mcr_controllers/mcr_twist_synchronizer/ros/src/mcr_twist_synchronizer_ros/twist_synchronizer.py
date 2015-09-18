@@ -51,7 +51,7 @@ class TwistSynchronizer(object):
         # Publishers
         self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
         self.synchronized_twist = rospy.Publisher(
-            '~synchronized_twist', geometry_msgs.msg.TwistStamped
+            '~synchronized_twist', geometry_msgs.msg.Twist
         )
 
         # Subscribers
@@ -164,9 +164,8 @@ class TwistSynchronizer(object):
         :rtype: geometry_msgs.msg.TwistStamped
 
         """
-        synchronized_twist = geometry_msgs.msg.TwistStamped()
-        synchronized_twist.header.frame_id = self.twist.header.frame_id
-        synchronized_twist.header.stamp = self.twist.header.stamp
+        synchronized_twist = geometry_msgs.msg.Twist()
+
 
         if self.angular_synchronization:
             error = [
@@ -201,13 +200,13 @@ class TwistSynchronizer(object):
             error, velocity, max_time, self.angular_synchronization
         )
 
-        synchronized_twist.twist.linear.x = sync_velocities[0]
-        synchronized_twist.twist.linear.y = sync_velocities[1]
-        synchronized_twist.twist.linear.z = sync_velocities[2]
+        synchronized_twist.linear.x = sync_velocities[0]
+        synchronized_twist.linear.y = sync_velocities[1]
+        synchronized_twist.linear.z = sync_velocities[2]
         if self.angular_synchronization:
-            synchronized_twist.twist.angular.x = sync_velocities[3]
-            synchronized_twist.twist.angular.y = sync_velocities[4]
-            synchronized_twist.twist.angular.z = sync_velocities[5]
+            synchronized_twist.angular.x = sync_velocities[3]
+            synchronized_twist.angular.y = sync_velocities[4]
+            synchronized_twist.angular.z = sync_velocities[5]
 
         return synchronized_twist
 
