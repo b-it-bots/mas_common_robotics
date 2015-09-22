@@ -5,7 +5,7 @@
  *      Author: Frederik Hegger
  */
 
-#include "mcr_algorithms/machine_learning/random_trees.h"
+#include <mcr_algorithms/machine_learning/random_trees.h>
 
 RandomTrees::RandomTrees(const unsigned int no_of_features)
 {
