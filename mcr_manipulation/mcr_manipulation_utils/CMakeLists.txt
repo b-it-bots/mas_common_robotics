@@ -18,6 +18,7 @@ catkin_package(
   CATKIN_DEPENDS
     roscpp
     rospy
+    actionlib
     urdf
     kdl_parser
     geometry_msgs

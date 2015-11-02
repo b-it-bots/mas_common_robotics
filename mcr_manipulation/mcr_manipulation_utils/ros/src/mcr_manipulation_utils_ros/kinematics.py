@@ -6,6 +6,7 @@ Kinematics module.
 #-*- encoding: utf-8 -*-
 
 import rospy
+import actionlib
 import moveit_msgs.msg
 import moveit_msgs.srv
 import moveit_commander
@@ -13,7 +14,13 @@ import extractors
 
 
 class Kinematics:
-    def __init__(self, group_name):
+    def __init__(self, group_name, move_group='move_group'):
+        # wait for MoveIt! to come up
+        client = actionlib.SimpleActionClient(move_group, moveit_msgs.msg.MoveGroupAction)
+        rospy.loginfo("Waiting for '{0}' server".format(move_group))
+        client.wait_for_server()
+        rospy.loginfo("Found server '{0}'".format(move_group))
+
         self.group_name = group_name
         self.group = moveit_commander.MoveGroupCommander(self.group_name)
         self.commander = moveit_commander.RobotCommander()
