@@ -11,7 +11,7 @@ If you do not have a Ubuntu distribution on your computer you can download it he
 ### Install Git Software
 Install the Git core components and some additional GUI's for the version control:
 
-     sudo apt-get install git-core gitg gitk
+     sudo apt-get install git-core gitg gitk git-gui
 
 ### Set Up Git
 Now it's time to configure your settings. To do this you need to open a new Terminal. First you need to tell git your name, so that it can properly label the commits you make:
