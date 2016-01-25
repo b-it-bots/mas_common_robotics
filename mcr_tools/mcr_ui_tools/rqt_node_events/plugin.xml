@@ -1,0 +1,12 @@
+<library path="src">
+  <class name="Node Events Plugin" type="rqt_node_events.node_events_plugin.NodeEventsPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+        Rqt plugin for subscribing to node events and publishing to node events. This can currently only be used in standalone mode
+    </description>
+    <qtgui>
+      <label>Node Events Monitor</label>
+      <icon type="theme">system-help</icon>
+      <statustip>Rqt plugin for subscribing to node events and publishing to node events</statustip>
+    </qtgui>
+  </class>
+</library>
