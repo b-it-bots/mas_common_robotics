@@ -3,7 +3,7 @@
 <launch>
   <arg name="config_file" default="$(find mcr_dynamic_reconfigure_client)/ros/config/named_configurations_example.yaml" />
   <node pkg="mcr_dynamic_reconfigure_client" type="dynamic_reconfigure_client_node"
-        name="dynamic_reconfigure_client" output="screen">
+        name="dynamic_reconfigure_client" ns="mcr_common" output="screen">
 
     <!-- Node cycle rate (in hz) -->
     <param name="loop_rate" type="double" value="10"/>

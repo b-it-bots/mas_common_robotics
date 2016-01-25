@@ -7,8 +7,8 @@
   <test pkg="mcr_dynamic_reconfigure_client" type="test_dynamic_reconfigure_client.py"
         test-name="test_dynamic_reconfigure_client">
 
-    <remap from="~event_in" to="/dynamic_reconfigure_client/event_out" />
-    <remap from="~event_out" to="/dynamic_reconfigure_client/event_in" />
-    <remap from="~configuration_name" to="/dynamic_reconfigure_client/configuration_name" />
+    <remap from="~event_in" to="/mcr_common/dynamic_reconfigure_client/event_out" />
+    <remap from="~event_out" to="/mcr_common/dynamic_reconfigure_client/event_in" />
+    <remap from="~configuration_name" to="/mcr_common/dynamic_reconfigure_client/configuration_name" />
   </test>
 </launch>
