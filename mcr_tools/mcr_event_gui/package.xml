@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>rqt_node_events</name>
+  <name>mcr_event_gui</name>
   <version>0.1.0</version>
-  <description>Rqt plugin for sending event_in receiving event_out messages from nodes</description>
+  <description>GUI for sending event_in and receiving event_out messages from nodes</description>
 
   <maintainer email="santosh.thoduka@smail.h-brs.de">Santosh Thoduka</maintainer>
   <author email="santosh.thoduka@smail.h-brs.de">Santosh Thoduka</author>
@@ -17,7 +17,6 @@
   <run_depend>rqt_gui</run_depend>
   <run_depend>rqt_gui_py</run_depend>
 
-  <export>
-    <rqt_gui plugin="${prefix}/plugin.xml"/>
-  </export>
+  <test_depend>roslaunch</test_depend>
+
 </package>

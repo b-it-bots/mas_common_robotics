@@ -5,8 +5,8 @@ from catkin_pkg.python_setup import generate_distutils_setup
 
 # fetch values from package.xml
 setup_args = generate_distutils_setup(
-    packages=['rqt_node_events'],
-    package_dir={'rqt_node_events': 'ros/src'},
+    packages=['mcr_event_gui'],
+    package_dir={'mcr_event_gui': 'ros/src'},
     requires=['std_msgs', 'rospy']
 )
 

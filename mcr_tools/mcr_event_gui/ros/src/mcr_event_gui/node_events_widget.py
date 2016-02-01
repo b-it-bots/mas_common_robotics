@@ -22,11 +22,10 @@ class NodeEventsWidget(QWidget):
     It also subscribes and displays event_in and event_out for the node.
     event_in string is expected to be any of 'e_start', 'e_stop' or 'e_trigger'
     """
-    def __init__(self, context, node_name, topic_dict):
+    def __init__(self, node_name, topic_dict):
         super(NodeEventsWidget, self).__init__()
         rp = rospkg.RosPack()
-        ui_file = os.path.join(rp.get_path('rqt_node_events'),
-                               'ros', 'src', 'rqt_node_events', 'resources', 'NodeEventsWidget.ui')
+        ui_file = os.path.join(rp.get_path('mcr_event_gui'), 'ros', 'resources', 'NodeEventsWidget.ui')
         loadUi(ui_file, self, {'NodeEventsGraphicsView': NodeEventsGraphicsView})
 
         self.setObjectName('NodeEventsWidget')
