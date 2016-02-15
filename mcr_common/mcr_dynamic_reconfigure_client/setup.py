@@ -5,7 +5,7 @@ from catkin_pkg.python_setup import generate_distutils_setup
 
 d = generate_distutils_setup(
     packages=['mcr_dynamic_reconfigure_client_ros'],
-    package_dir={'mcr_dynamic_reconfigure_client_ros': 'ros/src'}
+    package_dir={'mcr_dynamic_reconfigure_client_ros': 'ros/src/mcr_dynamic_reconfigure_client_ros'}
 )
 
 setup(**d)
