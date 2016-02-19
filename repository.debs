@@ -4,38 +4,39 @@
 packagelist=(
   liblog4cpp5-dev
   libsvm-dev
-  python-rosinstall 
-  python-scipy 
+  python-catkin-lint
+  python-rosinstall
+  python-scipy
   python-setuptools
-  python-sklearn 
-  python-vcstools 
-  ros-indigo-angles 
-  ros-indigo-bfl 
-  ros-indigo-brics-actuator 
-  ros-indigo-diagnostic-aggregator 
-  ros-indigo-diagnostic-analysis 
-  ros-indigo-diagnostic-msgs 
-  ros-indigo-dynamic-reconfigure 
-  ros-indigo-image-transport 
-  ros-indigo-joint-trajectory-controller 
+  python-sklearn
+  python-vcstools
+  ros-indigo-angles
+  ros-indigo-bfl
+  ros-indigo-brics-actuator
+  ros-indigo-diagnostic-aggregator
+  ros-indigo-diagnostic-analysis
+  ros-indigo-diagnostic-msgs
+  ros-indigo-dynamic-reconfigure
+  ros-indigo-image-transport
+  ros-indigo-joint-trajectory-controller
   ros-indigo-kdl-parser
   ros-indigo-laser-filters
-  ros-indigo-nav-msgs 
-  ros-indigo-pcl-ros 
+  ros-indigo-nav-msgs
+  ros-indigo-pcl-ros
   ros-indigo-robot-state-publisher
-  ros-indigo-ros 
+  ros-indigo-ros
   ros-indigo-ros-control
-  ros-indigo-roscpp 
+  ros-indigo-roscpp
   ros-indigo-roslint
   ros-indigo-rviz
   ros-indigo-srdfdom
-  ros-indigo-std-srvs 
-  ros-indigo-tf 
-  ros-indigo-tf-conversions 
+  ros-indigo-std-srvs
+  ros-indigo-tf
+  ros-indigo-tf-conversions
   ros-indigo-trajectory-msgs
-  ros-indigo-urdf 
-  ros-indigo-vision-opencv 
-  ros-indigo-visualization-msgs 
+  ros-indigo-urdf
+  ros-indigo-vision-opencv
+  ros-indigo-visualization-msgs
 )
 
 ### Install debian packages listed in array above
