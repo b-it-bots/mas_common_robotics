@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- NOTE: This is a test launch file, please do not modify! -->
+
+    <node pkg="mcr_task_planning_tools" type="run_script_node" name="run_script_node" output="screen">
+        <param name="script_path" value="$(find mcr_task_planning_tools)/ros/test/test_script.sh" />
+        <rosparam file="$(find mcr_task_planning_tools)/ros/config/run_script_params.yaml" command="load" />
+    </node>
+
+    <test pkg="mcr_task_planning_tools" type="run_script_node_test" test-name="run_script_node_test"/>
+
+</launch>
