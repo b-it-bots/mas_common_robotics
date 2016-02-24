@@ -17,6 +17,7 @@ packagelist=(
   ros-indigo-diagnostic-analysis
   ros-indigo-diagnostic-msgs
   ros-indigo-dynamic-reconfigure
+  ros-indigo-global-planner
   ros-indigo-image-transport
   ros-indigo-joint-trajectory-controller
   ros-indigo-kdl-parser
