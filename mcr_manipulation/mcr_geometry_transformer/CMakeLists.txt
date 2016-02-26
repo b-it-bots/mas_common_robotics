@@ -52,5 +52,5 @@ if(CATKIN_ENABLE_TESTING)
     ${catkin_LIBRARIES}
   )
 
-  catkin_add_nosetests(common/scripts/test)
+  catkin_add_nosetests(common/test)
 endif()
