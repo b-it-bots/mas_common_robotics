@@ -1,16 +1,16 @@
 #!/usr/bin/env python
+# -*- encoding: utf-8 -*-
 """
 This module contains components that monitor
 the joint position of a manipulator.
-
 """
-#-*- encoding: utf-8 -*-
-__author__ = 'jsanch'
 
 import numpy
 import rospy
 import std_msgs.msg
 import sensor_msgs.msg
+
+__author__ = 'jsanch'
 
 
 class JointPositionMonitor(object):
