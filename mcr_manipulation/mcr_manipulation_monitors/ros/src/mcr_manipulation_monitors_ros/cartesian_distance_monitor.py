@@ -1,17 +1,18 @@
 #!/usr/bin/env python
+# -*- encoding: utf-8 -*-
 """
 This module contains a component that monitors if the
 distance between two poses is within a specified tolerance.
 
 """
-#-*- encoding: utf-8 -*-
-__author__ = 'jsanch'
 
 import math
 import rospy
 import std_msgs.msg
 import geometry_msgs.msg
 import tf
+
+__author__ = 'jsanch'
 
 
 class CartesianDistanceMonitor(object):

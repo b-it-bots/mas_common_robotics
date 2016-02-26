@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- encoding: utf-8 -*-
 """
 This component synchronizes the velocities of a twist (represented as a
 geometry_msgs/TwistStamped message), such that each component of a Cartesian error
@@ -18,7 +19,6 @@ geometry_msgs/TwistStamped message), such that each component of a Cartesian err
   * `loop_rate`: Node cycle rate (in hz).
 
 """
-#-*- encoding: utf-8 -*-
 
 import rospy
 import std_msgs.msg

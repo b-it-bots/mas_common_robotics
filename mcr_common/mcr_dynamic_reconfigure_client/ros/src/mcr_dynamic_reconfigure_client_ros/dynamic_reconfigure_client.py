@@ -1,8 +1,5 @@
 #!/usr/bin/env python
-"""
-
-"""
-#-*- encoding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 
 import rospy
 import std_msgs.msg

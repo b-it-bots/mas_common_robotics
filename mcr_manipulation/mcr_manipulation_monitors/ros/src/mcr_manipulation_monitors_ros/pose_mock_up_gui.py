@@ -1,16 +1,17 @@
 #!/usr/bin/env python
+# -*- encoding: utf-8 -*-
 """
 This module contains a component that publishes an artificial object pose.
 
 """
-#-*- encoding: utf-8 -*-
-__author__ = 'jsanch'
 
 import rospy
 import std_msgs.msg
 import geometry_msgs.msg
 import visualization_msgs.msg
 import Tkinter
+
+__author__ = 'jsanch'
 
 RESOLUTION = 0.005      # in meters
 MAX_POSITION_X = 0.6    # in meters
