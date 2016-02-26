@@ -4,14 +4,14 @@ Test unit for the functions/methods used in joint_position_monitors.py module.
 
 """
 
-PKG = 'mcr_joint_position_monitors'
-
 import unittest
 import numpy.testing as testing
 import rosunit
 import sensor_msgs.msg
 import mcr_manipulation_monitors_ros.joint_position_monitors \
     as joint_position_monitors
+
+PKG = 'mcr_joint_position_monitors'
 
 
 class TestJointMonitors(unittest.TestCase):
