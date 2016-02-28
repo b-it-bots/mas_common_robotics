@@ -7,7 +7,7 @@
   <xacro:include filename="$(find mcr_description)/urdf/motors/dynamixel_motor_ax-12a.gazebo.xacro" />
   <xacro:include filename="$(find mcr_description)/urdf/motors/dynamixel_motor_ax-12a.transmission.xacro" />
 
-  <xacro:macro name="dynamixel_motor_AX-12A" params="parent name *origin">
+  <xacro:macro name="dynamixel_motor_AX-12A" params="parent name *origin motor_direction">
 
     <joint name="${name}_base_joint" type="fixed" >
       <insert_block name="origin" />
@@ -40,8 +40,8 @@
     <joint name="${name}_joint" type="revolute" >
       <parent link="${name}_base_link" />
       <child link="${name}_link" />
-      <origin xyz="0 0 0.03" rpy="0 0 0"/>
-      <axis xyz="-1 0 0"/>
+      <origin xyz="0 0 0.03" rpy="0 0 ${M_PI}"/>
+      <axis xyz="${motor_direction} 0 0"/>
       <limit effort="1.5" lower="-${M_PI / 180 * 150}" upper="${M_PI / 180 * 150}" velocity="6.178465545"/>
     </joint>
 
