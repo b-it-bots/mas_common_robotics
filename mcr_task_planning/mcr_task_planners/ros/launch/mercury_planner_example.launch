@@ -1,13 +1,15 @@
 <?xml version="1.0"?>
 <launch>
 
+    <!-- NOTE : This is an example launch file, please do not modify ! -->
+    
     <!-- Calls mas_third_party_software mercury_planner plan script -->
 
-    <arg name="domain" default="test_domain" />
+    <arg name="domain" default="example_domain" />
     <arg name="problem" default="p01" />
 
-    <arg name="domain_full_path" default="$(find mir_knowledge)/common/pddl/$(arg domain)/domain.pddl" />
-    <arg name="problem_full_path" default="$(find mir_knowledge)/common/pddl/$(arg domain)/problems/$(arg problem).pddl" />
+    <arg name="domain_full_path" default="$(find mcr_knowledge)/common/pddl/$(arg domain)/domain.pddl" />
+    <arg name="problem_full_path" default="$(find mcr_knowledge)/common/pddl/$(arg domain)/problems/$(arg problem).pddl" />
     
     <node pkg="mcr_task_planning_tools" type="run_script_node" name="mercury_planner" output="screen">
         <param name="script_path" value="$(find mercury_planner)/build/seq-sat-mercury/plan" />
