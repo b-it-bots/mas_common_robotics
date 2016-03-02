@@ -36,11 +36,6 @@ include_directories(
   ${orocos_kdl_INCLUDE_DIRS}
 )
 
-link_directories(
-  ${catkin_LIBRARY_DIRS}
-  ${Boost_LIBRARY_DIRS}
-)
-
 add_library(moveit_interpolation_planner_plugin
   ros/src/interpolation_planner_manager.cpp
   ros/src/interpolation_planner_interface.cpp
