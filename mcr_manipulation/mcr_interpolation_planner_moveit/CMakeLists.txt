@@ -25,6 +25,7 @@ find_package(catkin REQUIRED
 catkin_package(
   CATKIN_DEPENDS
     moveit_core
+    trajectory_msgs
   LIBRARIES
     moveit_interpolation_planner_plugin
 )
