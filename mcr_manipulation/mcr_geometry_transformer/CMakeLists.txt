@@ -54,3 +54,14 @@ if(CATKIN_ENABLE_TESTING)
 
   catkin_add_nosetests(common/test)
 endif()
+
+### INSTALL
+install(
+  TARGETS geometry_transformer
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+install(DIRECTORY ros/include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+)
