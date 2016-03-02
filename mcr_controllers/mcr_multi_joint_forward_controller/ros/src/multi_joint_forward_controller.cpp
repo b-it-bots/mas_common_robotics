@@ -10,9 +10,9 @@ namespace position_controllers
  * brics_actuator joint positions and sends commands to a position interface.
  */
 typedef forward_command_controller::MultiJointForwardCommandController <
-brics_actuator::JointPositions,
-               hardware_interface::PositionJointInterface >
-               MultiJointForwardPositionController;
+        brics_actuator::JointPositions,
+        hardware_interface::PositionJointInterface >
+    MultiJointForwardPositionController;
 }
 
 namespace velocity_controllers
@@ -22,9 +22,9 @@ namespace velocity_controllers
  * brics_actuator joint velocities and sends commands to a velocity interface.
  */
 typedef forward_command_controller::MultiJointForwardCommandController <
-brics_actuator::JointVelocities,
-               hardware_interface::VelocityJointInterface >
-               MultiJointForwardVelocityController;
+        brics_actuator::JointVelocities,
+        hardware_interface::VelocityJointInterface >
+    MultiJointForwardVelocityController;
 }
 
 namespace effort_controllers
@@ -34,9 +34,9 @@ namespace effort_controllers
  * brics_actuator joint torques and sends commands to a effort interface.
  */
 typedef forward_command_controller::MultiJointForwardCommandController <
-brics_actuator::JointTorques,
-               hardware_interface::EffortJointInterface >
-               MultiJointForwardEffortController;
+        brics_actuator::JointTorques,
+        hardware_interface::EffortJointInterface >
+    MultiJointForwardEffortController;
 }
 
 PLUGINLIB_EXPORT_CLASS(
