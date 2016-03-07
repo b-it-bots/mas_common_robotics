@@ -22,7 +22,9 @@ packagelist=(
   ros-indigo-joint-trajectory-controller
   ros-indigo-kdl-parser
   ros-indigo-laser-filters
+  ros-indigo-moveit-core
   ros-indigo-moveit-msgs
+  ros-indigo-moveit-ros-planning
   ros-indigo-nav-msgs
   ros-indigo-pcl-ros
   ros-indigo-robot-state-publisher
