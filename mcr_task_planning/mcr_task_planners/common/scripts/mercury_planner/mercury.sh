@@ -5,13 +5,13 @@
 # check if number of received arguments is ok, if not then prints USAGE instructions
 if [[ $# != 3 ]]; then
     printf 'USAGE : domain_path problem_number mercury_path\n\n'
-    echo '1 argument = path to domain                      (folder which contains problem.pddl file)'
-    echo '2 argument = problem number #                    (asumes you have a folder which contains problems/p#.pddl)'
+    echo '1 argument = path to domain'
+    echo '2 argument = path to pddl problem definition'
     echo '3 argument = path to mercury_planner binaries    (path to seq-sat-mercury code)'
     printf '\nEXAMPLE :\n'
     echo './mercury'
-    echo '/home/user/indigo/src/mas_industrial_robotics/mir_task_planning/mir_knowledge/common/pddl/general_domain'
-    echo '1'
+    echo '/home/user/indigo/src/mas_common_robotics/mcr_task_planning/mcr_knowledge/common/pddl/example_domain/domain.pddl'
+    echo '/home/user/indigo/src/mas_common_robotics/mcr_task_planning/mcr_knowledge/common/pddl/example_domain/problems/p1.pddl'
     echo '/home/user/indigo/src/mas_third_party_software/mercury_planner/build/Mercury-fixed/seq-sat-mercury'
     printf '\nWARNING : Script execution will be aborted\n'
     exit 1
@@ -23,10 +23,10 @@ fi
 # Paths to planner components
 
 # contains the PDDL domain definition
-PDDL_DOMAIN_PATH="${1}/domain.pddl"
+PDDL_DOMAIN_PATH=${1}
 
 # contains PDDL problem instance
-PDDL_PROBLEM_PATH="${1}/problems/p${2}.pddl"
+PDDL_PROBLEM_PATH=${2}
 
 # the directoy which holds mercury_planner code
 BASEDIR=${3}'/src'
