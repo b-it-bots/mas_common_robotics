@@ -20,28 +20,25 @@ fi
 
 #--------------SETUP--------------
 
-# get the current directory
-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
 # Paths to planner components
 
-# PDDL_DOMAIN="$BASEDIR/domain.pddl"
+# contains the PDDL domain definition
 PDDL_DOMAIN_PATH="${1}/domain.pddl"
 
-# PDDL_PROBLEM="$BASEDIR/p01.pddl"
+# contains PDDL problem instance
 PDDL_PROBLEM_PATH="${1}/problems/p${2}.pddl"
 
 # the directoy which holds mercury_planner code
-BASEDIR=${3}
+BASEDIR=${3}'/src'
 
 # full path to translate.py file
-TRANSLATE_PATH="$BASEDIR/src/translate/translate.py"
+TRANSLATE_PATH="$BASEDIR/translate/translate.py"
 
 # full path to preprocess binary
-PREPROCESS_PATH="$BASEDIR/src/preprocess/preprocess"
+PREPROCESS_PATH="$BASEDIR/preprocess/preprocess"
 
 # full path to search binary
-SEARCH_PATH="$BASEDIR/src/search/downward-1"
+SEARCH_PATH="$BASEDIR/search/downward-1"
 
 # command used to determine how much time took to plan
 TIME="command time --output=elapsed.time --format=%S\n%U\n"
