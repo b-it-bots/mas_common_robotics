@@ -9,12 +9,12 @@
     <arg name="problem" default="p1" />
     <arg name="mercury_planner_base_path" default="$(find mercury_planner)/build/Mercury-fixed/seq-sat-mercury" />
 
-    <arg name="domain_full_path" default="$(find mcr_knowledge)/common/pddl/$(arg domain)/domain.pddl" />
-    <arg name="problem_full_path" default="$(find mcr_knowledge)/common/pddl/$(arg domain)/problems/$(arg problem).pddl" />
+    <arg name="domain_path" default="$(find mcr_knowledge)/common/pddl/$(arg domain)/domain.pddl" />
+    <arg name="problem_path" default="$(find mcr_knowledge)/common/pddl/$(arg domain)/problems/$(arg problem).pddl" />
 
     <node pkg="mcr_task_planning_tools" type="run_script_node" name="mercury_planner" output="screen">
         <param name="script_path" value="$(find mcr_task_planners)/common/scripts/mercury_planner/mercury_planner.sh" />
-        <rosparam param="script_arguments" subst_value="True">[$(arg domain_full_path), $(arg problem_full_path), $(arg mercury_planner_base_path)]</rosparam>
+        <rosparam param="script_arguments" subst_value="True">[$(arg domain_path), $(arg problem_path), $(arg mercury_planner_base_path)]</rosparam>
     </node>
 
 </launch>
