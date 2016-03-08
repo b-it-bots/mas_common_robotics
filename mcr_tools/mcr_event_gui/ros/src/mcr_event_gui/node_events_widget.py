@@ -31,8 +31,8 @@ class NodeEventsWidget(QWidget):
         self.setObjectName('NodeEventsWidget')
 
         self.event_out_sub = rospy.Subscriber(topic_dict['event_out_topic'], std_msgs.msg.String, self.event_out_cb)
-        self.event_out_pub = rospy.Publisher(topic_dict['event_out_topic'], std_msgs.msg.String)
-        self.event_in_pub = rospy.Publisher(topic_dict['event_in_topic'], std_msgs.msg.String)
+        self.event_out_pub = rospy.Publisher(topic_dict['event_out_topic'], std_msgs.msg.String, queue_size=1)
+        self.event_in_pub = rospy.Publisher(topic_dict['event_in_topic'], std_msgs.msg.String, queue_size=1)
         self.event_in_sub = rospy.Subscriber(topic_dict['event_in_topic'], std_msgs.msg.String, self.event_in_cb)
 
         self.label_node_name.setText(node_name)
