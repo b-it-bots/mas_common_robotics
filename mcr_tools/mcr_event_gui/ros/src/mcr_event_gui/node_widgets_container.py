@@ -2,6 +2,7 @@ import os
 import time
 import sys
 import yaml
+import signal
 
 import rospy
 import rospkg
@@ -79,4 +80,5 @@ def main():
     app = QApplication(sys.argv)
     event_gui = NodeWidgetsContainer()
     event_gui.show()
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
     sys.exit(app.exec_())
