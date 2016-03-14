@@ -59,6 +59,7 @@ add_dependencies(twist_to_motion_direction_conversion_node ${catkin_EXPORTED_TAR
 roslint_cpp()
 roslint_python(
   ros/scripts/transform_to_pose_converter_node
+  ros/scripts/pose_to_transform_converter_node
 )
 
 if(CATKIN_ENABLE_TESTING)
@@ -74,6 +75,7 @@ endif()
 ### INSTALL
 install(PROGRAMS
   ros/scripts/transform_to_pose_converter_node
+  ros/scripts/pose_to_transform_converter_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
