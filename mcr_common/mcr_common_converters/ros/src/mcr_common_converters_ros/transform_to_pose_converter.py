@@ -30,13 +30,13 @@ class TransformToPoseConverter(object):
         self.listener = tf.TransformListener()
 
         # node cycle rate (in hz)
-        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10.0))
         # how long to wait for transform (in seconds)
         self.wait_for_transform = rospy.get_param('~wait_for_transform', 0.1)
 
         # publishers
         self.converted_pose = rospy.Publisher(
-            '~converted_pose', geometry_msgs.msg.PoseStamped
+            '~converted_pose', geometry_msgs.msg.PoseStamped, queue_size=1
         )
 
         # subscribers
