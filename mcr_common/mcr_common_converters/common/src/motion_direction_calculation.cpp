@@ -1,4 +1,5 @@
-/*
+/* 
+ * Copyright [2015] <Bonn-Rhein-Sieg University>  
  * motion_direction_calculation.cpp
  *
  *  Created on: Mar 28, 2015
@@ -6,6 +7,8 @@
  */
 
 #include <mcr_common_converters/motion_direction_calculation.h>
+
+#include <algorithm>
 
 double getMotionDirectionFromTwist2D(const double &linear_x, const double &linear_y, const double &angular_z)
 {
@@ -20,7 +23,10 @@ double getMotionDirectionFromTwist2D(const double &linear_x, const double &linea
 
     // NOTE: the following calculation neglect the time, i.e. we consider the distance/angle traveled in one second.
 
-    // calculate the resulting motion vector for linear x and linear x velocities, d.h. the polar coordinates for the point (x,y)
+    /* 
+     * calculate the resulting motion vector for linear x and linear y velocities, 
+     * d.h. the polar coordinates for the point (x,y)
+     */
     linear_velocity = linear_distance = sqrt((pow(linear_x, 2) + pow(linear_y, 2)));
     linear_angle = atan2(linear_y, linear_x);
 
@@ -30,11 +36,17 @@ double getMotionDirectionFromTwist2D(const double &linear_x, const double &linea
     if ((linear_velocity == 0) && (angular_velocity == 0))
         return 0.0;
 
-    // TODO: this is wrong. We need to account for the velocity and the maximum range here, i.e. how far we can look, e.g. only 90 or 180
+    /*
+     * TODO: this is wrong. We need to account for the velocity and the maximum range here, 
+     * i.e. how far we can look, e.g. only 90 or 180
+     */
     if (angular_velocity == 0)
         return linear_angle;
 
-    // take the actual angular angle and limit it to be max. the value specified by "max_allowed_angular_angle" and keep the original sign
+    /*
+     * take the actual angular angle and limit it to be max. the value specified 
+     * by "max_allowed_angular_angle" and keep the original sign
+     */
     if (linear_velocity == 0)
         return (std::min(fabs(angular_velocity), max_allowed_angular_angle) * (angular_angle / fabs(angular_angle)));
 
@@ -49,7 +61,10 @@ double getMotionDirectionFromTwist2D(const double &linear_x, const double &linea
         // get the opposite angle of the angle between the hypotenuse and one side
         angular_linear_angle = (M_PI / 2) - ((M_PI - angular_angle) / 2);
 
-        // add the two angles, i.e. the angle calculated from the linear motion and the linear angle from the angular motion
+        /*
+         * add the two angles, i.e. the angle calculated from the linear motion and the 
+         * linear angle from the angular motion
+         */
         motion_direction = angular_linear_angle + linear_angle;
 
         // check if calculated angle is with the range of the specified one (max_allowed_angular_angle)
