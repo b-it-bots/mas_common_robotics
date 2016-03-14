@@ -2,18 +2,23 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(mcr_topic_tools)
 
-find_package(catkin REQUIRED
+find_package(catkin
   COMPONENTS
     roscpp
     std_msgs
     nodelet
     pluginlib
     topic_tools
+    roslint
 )
+
+catkin_python_setup()
 
 catkin_package(
   CATKIN_DEPENDS
-    std_msgs
+    rospy
+    sensor_msgs
+    brics_actuator
 )
 
 include_directories(
@@ -31,9 +36,18 @@ target_link_libraries(topic_mux
 )
 
 ### TESTS
+roslint_cpp()
+roslint_python(
+  ros/scripts/brics_joints_to_joint_states_node
+)
+
 if(CATKIN_ENABLE_TESTING)
   find_package(roslaunch REQUIRED)
+  find_package(rostest REQUIRED)
+
   roslaunch_add_file_check(ros/launch)
+  add_rostest(ros/launch/brics_joints_to_joint_states.test)
+  catkin_add_nosetests(ros/test/test_transform_topic_utils.py)
 endif()
 
 ### INSTALLS
@@ -54,3 +68,8 @@ install(DIRECTORY ros/launch
 
 install(FILES nodelet_plugins.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+install(PROGRAMS
+  ros/scripts/brics_joints_to_joint_states_node
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
