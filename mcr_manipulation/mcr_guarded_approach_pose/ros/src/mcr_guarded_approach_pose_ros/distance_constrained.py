@@ -38,12 +38,12 @@ class DistanceConstrained(object):
         assert self.desired_tolerances is not None, "Desired tolerances must not be empty."
 
         # publishers
-        self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String)
+        self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String, queue_size=1)
         self.start_monitor = rospy.Publisher(
-            '~start_monitor', std_msgs.msg.String, latch=True
+            '~start_monitor', std_msgs.msg.String, latch=True, queue_size=1
         )
         self.start_cartesian_motion = rospy.Publisher(
-            '~start_cartesian_motion', std_msgs.msg.String, latch=True
+            '~start_cartesian_motion', std_msgs.msg.String, latch=True, queue_size=1
         )
 
         # subscribers

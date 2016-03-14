@@ -36,21 +36,21 @@ class ApproachPoseDistanceConstrained(object):
         self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
         # publishers
-        self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String)
+        self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String, queue_size=1)
         self.start_pose_converter = rospy.Publisher(
-            '~start_pose_converter', std_msgs.msg.String, latch=True
+            '~start_pose_converter', std_msgs.msg.String, latch=True, queue_size=1
         )
         self.start_calculator = rospy.Publisher(
-            '~start_calculator', std_msgs.msg.String, latch=True
+            '~start_calculator', std_msgs.msg.String, latch=True, queue_size=1
         )
         self.start_twist_controller = rospy.Publisher(
-            '~start_twist_controller', std_msgs.msg.String, latch=True
+            '~start_twist_controller', std_msgs.msg.String, latch=True, queue_size=1
         )
         self.start_twist_limiter = rospy.Publisher(
-            '~start_twist_limiter', std_msgs.msg.String, latch=True
+            '~start_twist_limiter', std_msgs.msg.String, latch=True, queue_size=1
         )
         self.start_guarded_approach = rospy.Publisher(
-            '~start_guarded_approach', std_msgs.msg.String, latch=True
+            '~start_guarded_approach', std_msgs.msg.String, latch=True, queue_size=1
         )
 
         # subscribers
