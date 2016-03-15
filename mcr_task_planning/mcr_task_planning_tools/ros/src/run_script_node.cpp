@@ -106,7 +106,7 @@ void RunScriptNode::main_loop()
             if (event_in_msg_.data == "e_trigger")
             {
                 // run script
-                if (script_handler_.Run())
+                if (script_handler_.run())
                 {
                     ROS_INFO("Script succesfully called !");
                     // publish even_out : "e_success"
