@@ -15,17 +15,17 @@
 RunScriptNode::RunScriptNode() : nh_("~")
 {
     // subscriptions
-    event_in_sub_ = nh_.subscribe("event_in", 1, &RunScriptNode::runScript, this);
+    sub_ = nh_.subscribe("event_in", 1, &RunScriptNode::runScript, this);
 
     // publications
-    event_out_pub_ = nh_.advertise<std_msgs::String>("event_out", 2);
+    pub_ = nh_.advertise<std_msgs::String>("event_out", 2);
 }
 
 RunScriptNode::~RunScriptNode()
 {
     // shut down publishers and subscribers
-    event_in_sub_.shutdown();
-    event_out_pub_.shutdown();
+    sub_.shutdown();
+    pub_.shutdown();
 }
 
 void RunScriptNode::init()
@@ -111,13 +111,13 @@ void RunScriptNode::update()
                     ROS_INFO("Script succesfully called !");
                     // publish even_out : "e_success"
                     even_out_msg_.data = std::string("e_success");
-                    event_out_pub_.publish(even_out_msg_);
+                    pub_.publish(even_out_msg_);
                 }
                 else
                 {
                     // publish even_out : "e_failure"
                     even_out_msg_.data = std::string("e_failure");
-                    event_out_pub_.publish(even_out_msg_);
+                    pub_.publish(even_out_msg_);
                     ROS_ERROR("Failed to run script, does it exist? is it executable?");
                 }
             }
@@ -125,7 +125,7 @@ void RunScriptNode::update()
             {
                 // publish even_out : "e_failure"
                 even_out_msg_.data = std::string("e_failure");
-                event_out_pub_.publish(even_out_msg_);
+                pub_.publish(even_out_msg_);
                 ROS_ERROR("event_in message received not known, admissible strings are : e_trigger");
             }
         }

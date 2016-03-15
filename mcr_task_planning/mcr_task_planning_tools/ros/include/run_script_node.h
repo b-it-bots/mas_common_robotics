@@ -50,8 +50,8 @@ class RunScriptNode
 
         // ros related variables
         ros::NodeHandle nh_;
-        ros::Publisher event_out_pub_;
-        ros::Subscriber event_in_sub_;
+        ros::Publisher pub_;
+        ros::Subscriber sub_;
 
         // for receiving event in msg
         std_msgs::String event_in_msg_;
