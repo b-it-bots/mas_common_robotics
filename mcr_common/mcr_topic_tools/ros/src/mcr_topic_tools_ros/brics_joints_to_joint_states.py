@@ -23,7 +23,7 @@ class BricsJointsToJointStates(object):
         self.configuration_in = None
 
         # Node cycle rate (in hz)
-        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10.0))
 
         # Publishers
         self.configuration_out = rospy.Publisher(
