@@ -19,13 +19,13 @@ void RunScript::run(std::string &full_path_to_script)
     system(full_path_to_script.c_str());
 }
 
-void RunScript::set_script_path(std::string &full_path_to_script)
+void RunScript::setScriptPath(std::string &full_path_to_script)
 {
     full_path_to_script_ = full_path_to_script;
     script_path_is_set_ = true;
 }
 
-void RunScript::set_script_args(std::vector<std::string> &script_arguments)
+void RunScript::setScriptArgs(std::vector<std::string> &script_arguments)
 {
     args_are_available_ = true;
 

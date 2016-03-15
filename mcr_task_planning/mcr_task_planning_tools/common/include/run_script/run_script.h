@@ -28,10 +28,10 @@ class RunScript
         void run(std::string &full_path_to_script);
 
         // to set the script path and store in member variable
-        void set_script_path(std::string &full_path_to_script);
+        void setScriptPath(std::string &full_path_to_script);
 
         // to set script arguments
-        void set_script_args(std::vector<std::string> &script_arguments);
+        void setScriptArgs(std::vector<std::string> &script_arguments);
 
         // call an external script previously set by this class
         // return true if path to script is set, false if not

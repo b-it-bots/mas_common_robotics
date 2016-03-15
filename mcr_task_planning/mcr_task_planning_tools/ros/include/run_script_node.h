@@ -27,16 +27,16 @@ class RunScriptNode
         void init();
 
         // callback for event_in received msg
-        void run_script(const std_msgs::String::ConstPtr& msg);
+        void runScript(const std_msgs::String::ConstPtr& msg);
 
         // get parameters from param server
-        void get_params();
+        void getParams();
 
         // doing one time node operations
-        void one_time_node_setup();
+        void oneTimeNodeSetup();
 
         // ros node main loop
-        void main_loop();
+        void update();
 
         // to store the path of the script
         std::string full_path_to_script_;

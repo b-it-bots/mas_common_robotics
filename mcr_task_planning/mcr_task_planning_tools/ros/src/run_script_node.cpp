@@ -15,7 +15,7 @@
 RunScriptNode::RunScriptNode() : nh_("~")
 {
     // subscriptions
-    event_in_sub_ = nh_.subscribe("event_in", 1, &RunScriptNode::run_script, this);
+    event_in_sub_ = nh_.subscribe("event_in", 1, &RunScriptNode::runScript, this);
 
     // publications
     event_out_pub_ = nh_.advertise<std_msgs::String>("event_out", 2);
@@ -39,7 +39,7 @@ void RunScriptNode::init()
     node_frequency_ = 0.0;
 }
 
-void RunScriptNode::get_params()
+void RunScriptNode::getParams()
 {
     // setup script default arguments
     std::vector<std::string> default_args;
@@ -72,25 +72,25 @@ void RunScriptNode::get_params()
     }
 }
 
-void RunScriptNode::one_time_node_setup()
+void RunScriptNode::oneTimeNodeSetup()
 {
     // set script path
-    script_handler_.set_script_path(full_path_to_script_);
+    script_handler_.setScriptPath(full_path_to_script_);
 
     // set script arguments
     if (args_available_)
     {
-        script_handler_.set_script_args(script_arguments_);
+        script_handler_.setScriptArgs(script_arguments_);
     }
 }
 
-void RunScriptNode::run_script(const std_msgs::String::ConstPtr& msg)
+void RunScriptNode::runScript(const std_msgs::String::ConstPtr& msg)
 {
     callback_received_ = true;
     event_in_msg_ = *msg;
 }
 
-void RunScriptNode::main_loop()
+void RunScriptNode::update()
 {
     // setting the frequency at which the node will run
     ros::Rate loop_rate(node_frequency_);
@@ -150,13 +150,13 @@ int main(int argc, char **argv)
     run_script_node.init();
 
     // get parameters
-    run_script_node.get_params();
+    run_script_node.getParams();
 
     // one time node setup
-    run_script_node.one_time_node_setup();
+    run_script_node.oneTimeNodeSetup();
 
     // main loop function
-    run_script_node.main_loop();
+    run_script_node.update();
 
     return 0;
 }
