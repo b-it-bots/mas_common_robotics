@@ -2,9 +2,10 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(mcr_topic_tools)
 
-find_package(catkin
+find_package(catkin REQUIRED
   COMPONENTS
     roscpp
+    rospy
     std_msgs
     nodelet
     pluginlib
@@ -16,9 +17,12 @@ catkin_python_setup()
 
 catkin_package(
   CATKIN_DEPENDS
+    roscpp
     rospy
     sensor_msgs
     brics_actuator
+    std_msgs
+    nodelet
 )
 
 include_directories(
