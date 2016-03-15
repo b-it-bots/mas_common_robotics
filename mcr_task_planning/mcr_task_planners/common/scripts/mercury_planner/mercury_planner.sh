@@ -62,7 +62,29 @@ $TIME --append "$SEARCH_PATH" \
 --plan-file mercury.plan < output
 
 #--------------CLEAN--------------
+#remove output file if exists
+file=output
+if [ ! -e "$file" ]; then
+    echo "nothing to clean for : output"
+else 
+    echo "clean : removing file output"
+    rm output
+fi
 
-rm output
-rm output.sas
-rm plan_numbers_and_cost
+#remove output file if exists
+file=output.sas
+if [ ! -e "$file" ]; then
+    echo "nothing to clean for : output.sas"
+else 
+    echo "clean : removing file output.sas"
+    rm output.sas
+fi
+
+#remove output file if exists
+file=plan_numbers_and_cost
+if [ ! -e "$file" ]; then
+    echo "nothing to clean for : plan_numbers_and_cost)"
+else 
+    echo "clean : removing file plan_numbers_and_cost"
+    rm plan_numbers_and_cost
+fi
