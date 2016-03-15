@@ -38,15 +38,12 @@ class RunScriptNode
         // ros node main loop
         void update();
 
-        // to store the path of the script
-        std::string full_path_to_script_;
+        // frequency at which the node will run
+        double node_frequency_;
 
     private:
         // flag used to know when we have received a callback
         bool callback_received_;
-
-        // frequency at which the node will run
-        double node_frequency_;
 
         // ros related variables
         ros::NodeHandle nh_;
@@ -61,6 +58,9 @@ class RunScriptNode
 
         // for storing the arguments that will be read from param server
         std::vector<std::string> script_arguments_;
+
+        // to store the path of the script
+        std::string full_path_to_script_;
 
         // flag that indicates of script arguments are available
         bool are_args_available_;

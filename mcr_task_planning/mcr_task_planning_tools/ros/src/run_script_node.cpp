@@ -90,11 +90,6 @@ void RunScriptNode::runScript(const std_msgs::String::ConstPtr& msg)
 
 void RunScriptNode::update()
 {
-    // setting the frequency at which the node will run
-    ros::Rate loop_rate(node_frequency_);
-
-    while (ros::ok())
-    {
         // listen to callbacks
         ros::spinOnce();
 
@@ -131,9 +126,7 @@ void RunScriptNode::update()
             }
         }
 
-        // sleep to control the node frequency
-        loop_rate.sleep();
-    }
+
 }
 
 int main(int argc, char **argv)
@@ -153,8 +146,17 @@ int main(int argc, char **argv)
     // one time node setup
     run_script_node.oneTimeNodeSetup();
 
-    // main loop function
-    run_script_node.update();
+    // setting the frequency at which the node will run
+    ros::Rate loop_rate(run_script_node.node_frequency_);
+
+    while (ros::ok())
+    {
+        // main loop function
+        run_script_node.update();
+
+        // sleep to control the node frequency
+        loop_rate.sleep();
+    }
 
     return 0;
 }
