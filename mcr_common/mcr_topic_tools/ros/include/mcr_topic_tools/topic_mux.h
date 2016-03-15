@@ -30,13 +30,15 @@
 //          publisher/subcriber to select input topic.
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef TOPIC_MUX_H_
-#define TOPIC_MUX_H_
+#ifndef MCR_TOPIC_TOOLS_TOPIC_MUX_H_
+#define MCR_TOPIC_TOOLS_TOPIC_MUX_H_
 
 #include <nodelet/nodelet.h>
 #include <pluginlib/class_list_macros.h>
 #include <ros/ros.h>
 #include <std_msgs/String.h>
+#include <string>
+#include <vector>
 
 #include <topic_tools/shape_shifter.h>
 #include <topic_tools/parse.h>
@@ -129,7 +131,7 @@ private:
     ros::Publisher publisher_;
     ros::Subscriber sub_select_topic_;
 };
-
 PLUGINLIB_DECLARE_CLASS(mcr_topic_tools, TopicMux, mcr_topic_tools::TopicMux, nodelet::Nodelet);
-}
-#endif
+} /* namespace mcr_topic_tools */
+
+#endif  // MCR_TOPIC_TOOLS_TOPIC_MUX_H_
