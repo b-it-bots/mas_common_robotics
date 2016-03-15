@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Test unit for the functions/methods used in planned_motion.py module.
+Test unit for the functions in the planned_motion_utils.py module.
 
 """
 
@@ -10,7 +10,7 @@ import unittest
 import numpy.testing
 import rosunit
 import brics_actuator.msg
-import mcr_arm_motions_ros.planned_motion as planned_motion
+import mcr_arm_motions_ros.planned_motion_utils as planned_motion
 
 
 class TestPlannedMotion(unittest.TestCase):
@@ -45,4 +45,3 @@ class TestPlannedMotion(unittest.TestCase):
 
 if __name__ == '__main__':
     rosunit.unitrun(PKG, 'test_planned_motion', TestPlannedMotion)
-
