@@ -7,3 +7,9 @@
     local-name: srdf_parser_py
     uri: https://github.com/mas-group/srdf_parser_py.git
     version: master
+
+- git:
+    local-name: dmp
+    uri: https://github.com/mas-group/dmp.git
+    version: master
+
