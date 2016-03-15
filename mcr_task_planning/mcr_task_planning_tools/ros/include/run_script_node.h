@@ -63,7 +63,7 @@ class RunScriptNode
         std::vector<std::string> script_arguments_;
 
         // flag that indicates of script arguments are available
-        bool args_available_;
+        bool are_args_available_;
 
         // generic class to call external scripts
         RunScript script_handler_;

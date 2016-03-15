@@ -35,7 +35,7 @@ void RunScriptNode::init()
 
     // set initial member variables values
     callback_received_ = false;
-    args_available_ = false;
+    are_args_available_ = false;
     node_frequency_ = 0.0;
 }
 
@@ -56,12 +56,12 @@ void RunScriptNode::getParams()
 
     if (script_arguments_.at(0) == std::string("no_args"))
     {
-        args_available_ = false;
+        are_args_available_ = false;
         ROS_INFO("Script will run with no arguments");
     }
     else
     {
-        args_available_ = true;
+        are_args_available_ = true;
         std::string args;
         for (int i =0 ; i < script_arguments_.size() ; i++)
         {
@@ -78,7 +78,7 @@ void RunScriptNode::oneTimeNodeSetup()
     script_handler_.setScriptPath(full_path_to_script_);
 
     // set script arguments
-    if (args_available_)
+    if (are_args_available_)
     {
         script_handler_.setScriptArgs(script_arguments_);
     }
