@@ -30,13 +30,11 @@ RunScriptNode::~RunScriptNode()
 
 void RunScriptNode::init()
 {
-    // initial message
-    ROS_INFO("Run script node initialized...");
-
     // set initial member variables values
     callback_received_ = false;
     are_args_available_ = false;
     node_frequency_ = 0.0;
+    ROS_INFO("Run script node initialized...");
 }
 
 void RunScriptNode::getParams()
