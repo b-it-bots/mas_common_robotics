@@ -31,12 +31,13 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <mcr_topic_tools/topic_mux.h>
+#include <string>
+#include <vector>
 
-using namespace mcr_topic_tools;
+using  mcr_topic_tools::TopicMux;
 
 TopicMux::TopicMux() : is_advertised_(false), selected_subscription_(subscriptions_.end())
 {
-
 }
 
 TopicMux::~TopicMux()
@@ -78,8 +79,8 @@ void TopicMux::onInit()
         subscription.topic = ros::names::resolve(args[i]);
         subscription.message.reset(new topic_tools::ShapeShifter);
         subscription.subscriber.reset(new ros::Subscriber(
-                                          nh_.subscribe<topic_tools::ShapeShifter>(subscription.topic, 10,
-                                                  boost::bind(&TopicMux::inputTopicCallback, this, _1, subscription.message))));
+                                       nh_.subscribe<topic_tools::ShapeShifter>(subscription.topic, 10,
+                                        boost::bind(&TopicMux::inputTopicCallback, this, _1, subscription.message))));
         subscriptions_.push_back(subscription);
     }
 
@@ -130,11 +131,13 @@ void TopicMux::selectTopicCallback(const std_msgs::String::Ptr &topic_name)
                 selected_subscription_ = it;
                 NODELET_INFO("Selected topic: %s", selected_subscription_->topic.c_str());
 
-                if (!selected_subscription_->subscriber && (!is_advertised_ || (is_advertised_ && publisher_.getNumSubscribers())))
+                if (!selected_subscription_->subscriber &&
+                    (!is_advertised_ || (is_advertised_ && publisher_.getNumSubscribers())))
                 {
                     selected_subscription_->subscriber.reset(
                         new ros::Subscriber(nh_.subscribe<topic_tools::ShapeShifter>(selected_subscription_->topic, 10,
-                                            boost::bind(&TopicMux::inputTopicCallback, this, _1, selected_subscription_->message))));
+                                                                boost::bind(&TopicMux::inputTopicCallback, this, _1,
+                                                                selected_subscription_->message))));
                 }
             }
         }
