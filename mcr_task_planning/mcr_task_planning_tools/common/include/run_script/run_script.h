@@ -38,9 +38,6 @@ class RunScript
         bool Run();
 
     private:
-        // flag to tell wether if a callback was received
-        bool callback_received;
-
         // string to store the script path
         std::string full_path_to_script_;
 
