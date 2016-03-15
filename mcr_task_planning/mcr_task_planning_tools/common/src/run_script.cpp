@@ -14,7 +14,7 @@
 
 RunScript::RunScript() : full_path_to_script_(""), script_arguments_(""), script_path_is_set_(false) {}
 
-void RunScript::Run(std::string &full_path_to_script)
+void RunScript::run(std::string &full_path_to_script)
 {
     system(full_path_to_script.c_str());
 }

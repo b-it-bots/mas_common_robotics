@@ -25,7 +25,7 @@ class RunScript
         RunScript();
 
         // calls an external script
-        void Run(std::string &full_path_to_script);
+        void run(std::string &full_path_to_script);
 
         // to set the script path and store in member variable
         void set_script_path(std::string &full_path_to_script);
