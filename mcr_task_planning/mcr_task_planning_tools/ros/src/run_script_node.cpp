@@ -84,8 +84,8 @@ void RunScriptNode::oneTimeNodeSetup()
 
 void RunScriptNode::runScript(const std_msgs::String::ConstPtr& msg)
 {
-    callback_received_ = true;
     event_in_msg_ = *msg;
+    callback_received_ = true;
 }
 
 void RunScriptNode::update()
