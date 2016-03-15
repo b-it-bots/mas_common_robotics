@@ -3,7 +3,7 @@
 
     <!-- NOTE: This is a test launch file, please do not modify! -->
 
-    <node pkg="mcr_task_planning_tools" type="run_script_node" name="run_script_node" output="screen">
+    <node pkg="mcr_task_planning_tools" type="run_script_node" name="run_script_node" output="screen" ns="mcr_task_planning_tools" >
         <param name="script_path" value="$(find mcr_task_planning_tools)/ros/test/test_script.sh" />
         <rosparam file="$(find mcr_task_planning_tools)/ros/config/run_script_params.yaml" command="load" />
     </node>
