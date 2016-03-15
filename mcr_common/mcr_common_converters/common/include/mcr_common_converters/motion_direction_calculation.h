@@ -1,14 +1,14 @@
 /*
+ * Copyright [2015] <Bonn-Rhein-Sieg University>
  * motion_direction_calculation.h
  *
  *  Created on: Mar 28, 2015
  *      Author: fred
  */
 
-#ifndef MOTION_DIRECTION_CALCULATION_H_
-#define MOTION_DIRECTION_CALCULATION_H_
+#ifndef MCR_COMMON_CONVERTERS_MOTION_DIRECTION_CALCULATION_H_
+#define MCR_COMMON_CONVERTERS_MOTION_DIRECTION_CALCULATION_H_
 
-#include <algorithm>
 #include <math.h>
 
 /**
@@ -20,4 +20,4 @@
  */
 double getMotionDirectionFromTwist2D(const double &linear_x, const double &linear_y, const double &angular_z);
 
-#endif /* MOTION_DIRECTION_CALCULATION_H_ */
+#endif /* MCR_COMMON_CONVERTERS_MOTION_DIRECTION_CALCULATION_H_ */

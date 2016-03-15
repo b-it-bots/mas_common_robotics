@@ -9,9 +9,15 @@ find_package(catkin REQUIRED
     tf
     std_msgs
     mcr_manipulation_msgs
+    dynamic_reconfigure
+    roslint
 )
 
 catkin_python_setup()
+
+generate_dynamic_reconfigure_options(
+  ros/config/LinearOffset.cfg
+)
 
 catkin_package(
   INCLUDE_DIRS
@@ -25,6 +31,7 @@ catkin_package(
     geometry_msgs
     tf
     mcr_manipulation_msgs
+    dynamic_reconfigure
 )
 
 include_directories(
@@ -49,6 +56,12 @@ add_dependencies(twist_to_motion_direction_conversion_node ${catkin_EXPORTED_TAR
 
 
 ### TESTS
+roslint_cpp()
+roslint_python(
+  ros/scripts/transform_to_pose_converter_node
+  ros/scripts/pose_to_transform_converter_node
+)
+
 if(CATKIN_ENABLE_TESTING)
   find_package(roslaunch REQUIRED)
   find_package(rostest REQUIRED)
@@ -62,6 +75,7 @@ endif()
 ### INSTALL
 install(PROGRAMS
   ros/scripts/transform_to_pose_converter_node
+  ros/scripts/pose_to_transform_converter_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
