@@ -45,7 +45,7 @@ class RunScript
         std::string script_arguments_;
 
         // flag to indicate if the script path is set
-        bool script_path_is_set_;
+        bool is_script_path_set_;
 
         // flag to indicate that arguments are available for running the script
         bool args_are_available_;

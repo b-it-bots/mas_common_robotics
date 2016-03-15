@@ -12,7 +12,7 @@
 #include <string>
 #include <vector>
 
-RunScript::RunScript() : full_path_to_script_(""), script_arguments_(""), script_path_is_set_(false) {}
+RunScript::RunScript() : full_path_to_script_(""), script_arguments_(""), is_script_path_set_(false) {}
 
 void RunScript::run(std::string &full_path_to_script)
 {
@@ -22,7 +22,7 @@ void RunScript::run(std::string &full_path_to_script)
 void RunScript::setScriptPath(std::string &full_path_to_script)
 {
     full_path_to_script_ = full_path_to_script;
-    script_path_is_set_ = true;
+    is_script_path_set_ = true;
 }
 
 void RunScript::setScriptArgs(std::vector<std::string> &script_arguments)
@@ -38,7 +38,7 @@ void RunScript::setScriptArgs(std::vector<std::string> &script_arguments)
 
 bool RunScript::run()
 {
-    if (script_path_is_set_)
+    if (is_script_path_set_)
     {
         if (args_are_available_)
         {
