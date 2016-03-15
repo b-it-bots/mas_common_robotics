@@ -125,8 +125,6 @@ void RunScriptNode::update()
                 ROS_ERROR("event_in message received not known, admissible strings are : e_trigger");
             }
         }
-
-
 }
 
 int main(int argc, char **argv)
