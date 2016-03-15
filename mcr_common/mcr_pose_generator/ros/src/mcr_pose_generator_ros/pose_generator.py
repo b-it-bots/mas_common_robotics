@@ -29,7 +29,7 @@ class PoseGenerator:
         self.sampling_parameters = None
 
         # node cycle rate (in hz)
-        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10.0))
         # the sampling step for linear variables (in meters)
         self.linear_step = rospy.get_param('~linear_step', 0.01)
         # the sampling step for angular variables (in radians)
@@ -45,7 +45,7 @@ class PoseGenerator:
 
         # publishers
         self.poses_list = rospy.Publisher(
-            '~poses_list', geometry_msgs.msg.PoseArray
+            '~poses_list', geometry_msgs.msg.PoseArray, queue_size=1
         )
 
         # subscribers
