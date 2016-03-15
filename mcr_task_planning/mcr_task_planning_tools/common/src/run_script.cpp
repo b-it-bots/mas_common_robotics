@@ -36,7 +36,7 @@ void RunScript::set_script_args(std::vector<std::string> &script_arguments)
     }
 }
 
-bool RunScript::Run()
+bool RunScript::run()
 {
     if (script_path_is_set_)
     {

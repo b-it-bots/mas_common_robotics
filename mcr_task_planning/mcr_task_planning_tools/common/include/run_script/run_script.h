@@ -35,7 +35,7 @@ class RunScript
 
         // call an external script previously set by this class
         // return true if path to script is set, false if not
-        bool Run();
+        bool run();
 
     private:
         // string to store the script path
