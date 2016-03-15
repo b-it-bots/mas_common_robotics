@@ -34,7 +34,7 @@
 #include <string>
 #include <vector>
 
-using declarations mcr_topic_tools;
+using  mcr_topic_tools::TopicMux;
 
 TopicMux::TopicMux() : is_advertised_(false), selected_subscription_(subscriptions_.end())
 {
