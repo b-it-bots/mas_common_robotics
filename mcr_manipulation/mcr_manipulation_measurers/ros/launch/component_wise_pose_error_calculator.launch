@@ -4,6 +4,6 @@
           name="component_wise_pose_error_calculator" output="screen">
 
         <!-- the cycle rate of the node (in Hz) -->
-        <param name="loop_rate" type="double" value="10"/>
+        <param name="loop_rate" type="double" value="10.0"/>
     </node>
 </launch>
