@@ -26,8 +26,8 @@ void event_out_cb(const std_msgs::StringConstPtr &event_out)
 TEST(run_script_node_test, success_test)
 {
     ros::NodeHandle nh("~");
-    ros::Publisher event_in_pub = nh.advertise<std_msgs::String>("/run_script_node/event_in", 1);
-    ros::Subscriber event_out_sub = nh.subscribe<std_msgs::String>("/run_script_node/event_out", 1, &event_out_cb);
+    ros::Publisher event_in_pub = nh.advertise<std_msgs::String>("event_in", 1);
+    ros::Subscriber event_out_sub = nh.subscribe<std_msgs::String>("event_out", 1, &event_out_cb);
 
     // give some time for publishers/ subscribers to register in the network
     sleep(1.0);

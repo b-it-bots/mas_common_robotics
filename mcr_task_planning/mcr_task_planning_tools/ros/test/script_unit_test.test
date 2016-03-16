@@ -8,6 +8,9 @@
         <rosparam file="$(find mcr_task_planning_tools)/ros/config/run_script_params.yaml" command="load" />
     </node>
 
-    <test pkg="mcr_task_planning_tools" type="run_script_node_test" test-name="run_script_node_test"/>
+    <test pkg="mcr_task_planning_tools" type="run_script_node_test" test-name="run_script_node_test" >
+        <remap from="~event_in" to="/mcr_task_planning_tools/run_script_node/event_in" />
+        <remap from="~event_out" to="/mcr_task_planning_tools/run_script_node/event_out" />
+    </test>
 
 </launch>
