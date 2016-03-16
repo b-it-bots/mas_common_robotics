@@ -27,19 +27,13 @@ class RunScriptNode
         void init();
 
         // callback for event_in received msg
-        void runScript(const std_msgs::String::ConstPtr& msg);
+        void runScriptCallBack(const std_msgs::String::ConstPtr& msg);
 
         // get parameters from param server
         void getParams();
 
-        // doing one time node operations
-        void oneTimeNodeSetup();
-
         // ros node main loop
         void update();
-
-        // frequency at which the node will run
-        double node_frequency_;
 
     private:
         // flag used to know when we have received a callback
@@ -47,8 +41,8 @@ class RunScriptNode
 
         // ros related variables
         ros::NodeHandle nh_;
-        ros::Publisher pub_;
-        ros::Subscriber sub_;
+        ros::Publisher pub_event_in_;
+        ros::Subscriber sub_event_in_;
 
         // for receiving event in msg
         std_msgs::String event_in_msg_;

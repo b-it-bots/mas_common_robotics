@@ -12,29 +12,37 @@
 #include <string>
 #include <vector>
 
-RunScriptNode::RunScriptNode() : nh_("~")
+RunScriptNode::RunScriptNode() : nh_("~"), 
 {
+      // set initial member variables values
+    callback_received_ = false;
+    are_args_available_ = false;
+    
     // subscriptions
-    sub_ = nh_.subscribe("event_in", 1, &RunScriptNode::runScript, this);
+    sub_event_in_ = nh_.subscribe("event_in", 1, &RunScriptNode::runScript, this);
 
     // publications
-    pub_ = nh_.advertise<std_msgs::String>("event_out", 2);
+    pub_event_in_ = nh_.advertise<std_msgs::String>("event_out", 2);
+    
+    getParams();
+    
+    // set script path
+    script_handler_.setScriptPath(full_path_to_script_);
+
+    // set script arguments
+    if (are_args_available_)
+    {
+        script_handler_.setScriptArgs(script_arguments_);
+    }
+    
+     ROS_INFO("Run script node initialized...");
 }
 
 RunScriptNode::~RunScriptNode()
 {
     // shut down publishers and subscribers
-    sub_.shutdown();
-    pub_.shutdown();
-}
-
-void RunScriptNode::init()
-{
-    // set initial member variables values
-    callback_received_ = false;
-    are_args_available_ = false;
-    node_frequency_ = 0.0;
-    ROS_INFO("Run script node initialized...");
+    sub_event_in_.shutdown();
+    pub_event_in_.shutdown();
 }
 
 void RunScriptNode::getParams()
@@ -44,12 +52,11 @@ void RunScriptNode::getParams()
     default_args.push_back("no_args");
 
     // getting required parameters from parameter server
-    nh_.param("node_frequency", node_frequency_, 10.0);
+    
     nh_.param<std::string>("script_path", full_path_to_script_, "/home/user/my_script.sh");
     nh_.param<std::vector<std::string> >("script_arguments", script_arguments_, default_args);
 
     // informing the user about the parameters which will be used
-    ROS_INFO("Node will run at : %lf [hz]", node_frequency_);
     ROS_INFO("Script path : %s", full_path_to_script_.c_str());
 
     if (script_arguments_.at(0) == std::string("no_args"))
@@ -70,19 +77,7 @@ void RunScriptNode::getParams()
     }
 }
 
-void RunScriptNode::oneTimeNodeSetup()
-{
-    // set script path
-    script_handler_.setScriptPath(full_path_to_script_);
-
-    // set script arguments
-    if (are_args_available_)
-    {
-        script_handler_.setScriptArgs(script_arguments_);
-    }
-}
-
-void RunScriptNode::runScript(const std_msgs::String::ConstPtr& msg)
+void RunScriptNode::runScriptCallBack(const std_msgs::String::ConstPtr& msg)
 {
     event_in_msg_ = *msg;
     callback_received_ = true;
@@ -90,41 +85,41 @@ void RunScriptNode::runScript(const std_msgs::String::ConstPtr& msg)
 
 void RunScriptNode::update()
 {
-        // listen to callbacks
-        ros::spinOnce();
+    // listen to callbacks
+    ros::spinOnce();
 
-        if (callback_received_)
+    if (callback_received_)
+    {
+        // lower flag
+        callback_received_ = false;
+
+        // checking for event in msg content
+        if (event_in_msg_.data == "e_trigger")
         {
-            // lower flag
-            callback_received_ = false;
-
-            // checking for event in msg content
-            if (event_in_msg_.data == "e_trigger")
+            // run script
+            if (script_handler_.run())
             {
-                // run script
-                if (script_handler_.run())
-                {
-                    ROS_INFO("Script succesfully called !");
-                    // publish even_out : "e_success"
-                    even_out_msg_.data = std::string("e_success");
-                    pub_.publish(even_out_msg_);
-                }
-                else
-                {
-                    // publish even_out : "e_failure"
-                    even_out_msg_.data = std::string("e_failure");
-                    pub_.publish(even_out_msg_);
-                    ROS_ERROR("Failed to run script, does it exist? is it executable?");
-                }
+                ROS_INFO("Script succesfully called !");
+                // publish even_out : "e_success"
+                even_out_msg_.data = std::string("e_success");
+                pub_.publish(even_out_msg_);
             }
             else
             {
                 // publish even_out : "e_failure"
                 even_out_msg_.data = std::string("e_failure");
                 pub_.publish(even_out_msg_);
-                ROS_ERROR("event_in message received not known, admissible strings are : e_trigger");
+                ROS_ERROR("Failed to run script, does it exist? is it executable?");
             }
         }
+        else
+        {
+            // publish even_out : "e_failure"
+            even_out_msg_.data = std::string("e_failure");
+            pub_.publish(even_out_msg_);
+            ROS_ERROR("event_in message received not known, admissible strings are : e_trigger");
+        }
+    }
 }
 
 int main(int argc, char **argv)
@@ -135,17 +130,12 @@ int main(int argc, char **argv)
     // create object of this node class
     RunScriptNode run_script_node;
 
-    // initialize
-    run_script_node.init();
-
-    // get parameters
-    run_script_node.getParams();
-
-    // one time node setup
-    run_script_node.oneTimeNodeSetup();
-
-    // setting the frequency at which the node will run
-    ros::Rate loop_rate(run_script_node.node_frequency_);
+    // setup node frequency
+    double node_frequency = 10.0;
+    ros::NodeHandle nh("~");
+    nh.param("node_frequency", node_frequency, 10.0);
+    ros::Rate loop_rate(node_frequency);
+    ROS_INFO("Node will run at : %lf [hz]", node_frequency);
 
     while (ros::ok())
     {
