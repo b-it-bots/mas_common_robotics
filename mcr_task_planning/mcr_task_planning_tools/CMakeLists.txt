@@ -32,10 +32,10 @@ target_link_libraries(run_script_node ${catkin_LIBRARIES} run_script)
 if(CATKIN_ENABLE_TESTING)
     find_package(roslaunch REQUIRED)
     roslaunch_add_file_check(ros/launch)
-  
+
     add_rostest_gtest(run_script_node_test 
-        ros/test/script_unit_test.test 
-        ros/test/script_unit_test.cpp
+            ros/test/run_script_node.test
+            ros/test/run_script_node_test.cpp
         )
     target_link_libraries(run_script_node_test ${catkin_LIBRARIES})
 endif()
