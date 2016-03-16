@@ -42,18 +42,18 @@ class GuardedApproachPose(object):
         self.twist_angular_z = rospy.get_param('~twist_angular_z', 0.0)
 
         # node cycle rate (in hz)
-        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10.0))
 
         # publishers
-        self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String)
+        self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String, queue_size=1)
         self.start_twitch_detector = rospy.Publisher(
-            '~start_twitch_detector', std_msgs.msg.String, latch=True
+            '~start_twitch_detector', std_msgs.msg.String, latch=True, queue_size=1
         )
         self.start_cartesian_motion = rospy.Publisher(
-            '~start_cartesian_motion', std_msgs.msg.String, latch=True
+            '~start_cartesian_motion', std_msgs.msg.String, latch=True, queue_size=1
         )
         self.pub_desired_twist = rospy.Publisher(
-            '~desired_twist', geometry_msgs.msg.TwistStamped
+            '~desired_twist', geometry_msgs.msg.TwistStamped, queue_size=1
         )
 
         # subscribers

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <group ns="guarded_motion">
+    <group ns="mcr_manipulation/guarded_motion">
         <node pkg="mcr_geometric_relation_monitors" type="component_wise_pose_error_monitor_node"
                 name="pose_error_monitor" output="screen" respawn="true">
 
@@ -20,7 +20,7 @@
             <!-- the duration of the arm motion (in seconds) -->
             <param name="motion_duration" type="double" value="5.0"/>
 
-            <remap from="~event_out" to="/guarded_approach_pose/coordinator/motion_feedback"/>
+            <remap from="~event_out" to="/mcr_manipulation/guarded_approach_pose/coordinator/motion_feedback"/>
             <remap from="~velocity_command" to="/arm_1/arm_controller/cartesian_velocity_command"/>
         </node>
 
@@ -36,10 +36,10 @@
                 - 'linear_z'
             </rosparam>
 
-            <remap from="~start_monitor" to="/guarded_motion/pose_error_monitor/event_in"/>
-            <remap from="~start_cartesian_motion" to="/guarded_motion/cartesian_motion/event_in"/>
-            <remap from="~monitor_feedback" to="/guarded_motion/pose_error_monitor/feedback"/>
-            <remap from="~event_out" to="/guarded_approach_pose/coordinator/event_in"/>
+            <remap from="~start_monitor" to="/mcr_manipulation/guarded_motion/pose_error_monitor/event_in"/>
+            <remap from="~start_cartesian_motion" to="/mcr_manipulation/guarded_motion/cartesian_motion/event_in"/>
+            <remap from="~monitor_feedback" to="/mcr_manipulation/guarded_motion/pose_error_monitor/feedback"/>
+            <remap from="~event_out" to="/mcr_manipulation/guarded_approach_pose/coordinator/event_in"/>
         </node>
     </group>
 
@@ -79,9 +79,9 @@
             <!-- the cycle rate of the node (in Hz) -->
             <param name="loop_rate" type="double" value="20.0" />
 
-            <remap from="~pose_1" to="/guarded_approach_pose/pose_publisher/pose_out"/>
-            <remap from="~pose_2" to="/guarded_approach_pose/pose_converter/converted_pose"/>
-            <remap from="~pose_error" to="/guarded_motion/pose_error_monitor/pose_error"/>
+            <remap from="~pose_1" to="/mcr_manipulation/guarded_approach_pose/pose_publisher/pose_out"/>
+            <remap from="~pose_2" to="/mcr_manipulation/guarded_approach_pose/pose_converter/converted_pose"/>
+            <remap from="~pose_error" to="/mcr_manipulation/guarded_motion/pose_error_monitor/pose_error"/>
         </node>
 
         <node pkg="mcr_arm_motions" type="twist_publisher_node"
@@ -95,7 +95,7 @@
             <param name="twist_linear_x" type="double" value="-0.9"/>
             <param name="twist_linear_z" type="double" value="1.0"/>
 
-            <remap from="~twist_out" to="/guarded_motion/cartesian_motion/desired_velocity"/>
+            <remap from="~twist_out" to="/mcr_manipulation/guarded_motion/cartesian_motion/desired_velocity"/>
         </node>
 
         <node pkg="mcr_guarded_approach_pose" type="approach_pose_distance_constrained_node"
@@ -104,11 +104,11 @@
             <!-- the node cycle rate (in hz) -->
             <param name="loop_rate" type="double" value="30.0"/>
 
-            <remap from="~start_calculator" to="/guarded_approach_pose/pose_error_calculator/event_in"/>
-            <remap from="~start_guarded_approach" to="/guarded_motion/distance_constrained/event_in"/>
-            <remap from="~start_pose_publisher" to="/guarded_approach_pose/pose_publisher/event_in"/>
-            <remap from="~start_pose_converter" to="/guarded_approach_pose/pose_converter/event_in"/>
-            <remap from="~start_twist_publisher" to="/guarded_approach_pose/twist_publisher/event_in"/>
+            <remap from="~start_calculator" to="/mcr_manipulation/guarded_approach_pose/pose_error_calculator/event_in"/>
+            <remap from="~start_guarded_approach" to="/mcr_manipulation/guarded_motion/distance_constrained/event_in"/>
+            <remap from="~start_pose_publisher" to="/mcr_manipulation/guarded_approach_pose/pose_publisher/event_in"/>
+            <remap from="~start_pose_converter" to="/mcr_manipulation/guarded_approach_pose/pose_converter/event_in"/>
+            <remap from="~start_twist_publisher" to="/mcr_manipulation/guarded_approach_pose/twist_publisher/event_in"/>
         </node>
     </group>
 
