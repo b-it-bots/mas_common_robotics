@@ -30,8 +30,10 @@ int main(int argc, char *argv[])
 
     while (nh.ok())
     {
-        trajectory_time_parameterizer.executeCycle();
         ros::spinOnce();
+
+        trajectory_time_parameterizer.executeCycle();
+
         r.sleep();
     }
 
