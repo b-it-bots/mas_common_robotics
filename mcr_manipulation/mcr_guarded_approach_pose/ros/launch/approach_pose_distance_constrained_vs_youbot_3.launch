@@ -5,7 +5,7 @@
                 name="pose_error_monitor" output="screen" respawn="true">
 
             <!-- the cycle rate of the node (in Hz) -->
-            <param name="loop_rate" type="double" value="20" />
+            <param name="loop_rate" type="double" value="20.0" />
 
             <!-- the threshold for detecting if is within tolerance (in meters) -->
             <param name="threshold_linear_z" type="double" value="0.01" />
@@ -15,7 +15,7 @@
                 name="cartesian_motion" output="screen">
 
             <!-- the cycle rate of the node (in Hz) -->
-            <param name="loop_rate" type="double" value="10" />
+            <param name="loop_rate" type="double" value="10.0" />
 
             <!-- the duration of the arm motion (in seconds) -->
             <param name="motion_duration" type="double" value="5.0"/>
@@ -28,7 +28,7 @@
                 name="distance_constrained" output="screen">
 
             <!-- the cycle rate of the node (in Hz) -->
-            <param name="loop_rate" type="double" value="25"/>
+            <param name="loop_rate" type="double" value="25.0"/>
 
             <!-- the elements of a component-wise pose error to be checked if they are
                 within tolerance (e.g. this checks the linear tolerance on the Z axis -->
@@ -48,7 +48,7 @@
                 name="pose_publisher" output="screen">
 
             <!-- the node cycle rate (in hz) -->
-            <param name="loop_rate" type="double" value="10"/>
+            <param name="loop_rate" type="double" value="10.0"/>
 
             <!-- desired pose -->
             <param name="pose_frame" type="str" value="base_link"/>
@@ -67,7 +67,7 @@
                 name="pose_converter" output="screen">
 
             <!-- the cycle rate of the node (in Hz) -->
-            <param name="loop_rate" type="double" value="10" />
+            <param name="loop_rate" type="double" value="10.0" />
 
             <param name="reference_frame" type="str" value="base_link"/>
             <param name="target_frame" type="str" value="gripper_tip_link"/>
@@ -77,7 +77,7 @@
                 name="pose_error_calculator" output="screen">
 
             <!-- the cycle rate of the node (in Hz) -->
-            <param name="loop_rate" type="double" value="20" />
+            <param name="loop_rate" type="double" value="20.0" />
 
             <remap from="~pose_1" to="/guarded_approach_pose/pose_publisher/pose_out"/>
             <remap from="~pose_2" to="/guarded_approach_pose/pose_converter/converted_pose"/>
@@ -88,7 +88,7 @@
                 name="twist_publisher" output="screen">
 
             <!-- the node cycle rate (in hz) -->
-            <param name="loop_rate" type="double" value="10"/>
+            <param name="loop_rate" type="double" value="10.0"/>
 
             <!-- desired twist -->
             <param name="twist_frame" type="str" value="gripper_tip_link"/>
@@ -102,7 +102,7 @@
                 name="coordinator" output="screen">
 
             <!-- the node cycle rate (in hz) -->
-            <param name="loop_rate" type="double" value="30"/>
+            <param name="loop_rate" type="double" value="30.0"/>
 
             <remap from="~start_calculator" to="/guarded_approach_pose/pose_error_calculator/event_in"/>
             <remap from="~start_guarded_approach" to="/guarded_motion/distance_constrained/event_in"/>

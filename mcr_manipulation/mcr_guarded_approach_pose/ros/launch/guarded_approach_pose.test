@@ -11,7 +11,7 @@
             name="twitch_detector" output="screen">
 
         <!-- the cycle rate of the node (in Hz) -->
-        <param name="loop_rate" type="double" value="10"/>
+        <param name="loop_rate" type="double" value="10.0"/>
 
         <!-- a list of the joint names to check -->
         <rosparam param="target_joint_names">
@@ -25,7 +25,7 @@
             name="guarded_approach_pose" output="screen">
 
         <!-- the cycle rate of the node (in Hz) -->
-        <param name="loop_rate" type="double" value="10"/>
+        <param name="loop_rate" type="double" value="10.0"/>
 
         <!-- desired twist -->
         <param name="twist_frame" type="str" value="arm_link_5"/>

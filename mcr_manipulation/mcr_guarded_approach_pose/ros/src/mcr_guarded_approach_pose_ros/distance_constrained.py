@@ -30,7 +30,7 @@ class DistanceConstrained(object):
         self.monitor_feedback = None
 
         # node cycle rate (in hz)
-        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10.0))
 
         # a boolean list containing which elements of a component-wise pose
         # error should be checked if they are within tolerance

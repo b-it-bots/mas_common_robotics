@@ -25,13 +25,16 @@ class TestDistanceConstrained(unittest.TestCase):
         self.wait_for_result = None
 
         # publishers
-        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String, latch=True)
+        self.event_out = rospy.Publisher(
+            '~event_out', std_msgs.msg.String, latch=True, queue_size=1
+
+        )
         self.pose_error = rospy.Publisher(
             '~pose_error', mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference,
-            latch=True
+            latch=True, queue_size=1
         )
         self.desired_twist = rospy.Publisher(
-            '~desired_twist', geometry_msgs.msg.TwistStamped
+            '~desired_twist', geometry_msgs.msg.TwistStamped, queue_size=1
         )
 
         # subscribers

@@ -33,7 +33,7 @@ class ApproachPoseDistanceConstrained(object):
         self.motion_feedback = None
 
         # node cycle rate (in hz)
-        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10.0))
 
         # publishers
         self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String, queue_size=1)

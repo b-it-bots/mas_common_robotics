@@ -25,9 +25,11 @@ class TestGuardedApproachPose(unittest.TestCase):
         self.wait_for_result = None
 
         # publishers
-        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String, latch=True)
+        self.event_out = rospy.Publisher(
+            '~event_out', std_msgs.msg.String, latch=True, queue_size=1
+        )
         self.pub_current_joints = rospy.Publisher(
-            '~current_joint_values', sensor_msgs.msg.JointState
+            '~current_joint_values', sensor_msgs.msg.JointState, queue_size=1
         )
 
         # subscribers

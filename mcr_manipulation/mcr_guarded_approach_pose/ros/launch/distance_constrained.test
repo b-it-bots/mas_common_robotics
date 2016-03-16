@@ -15,7 +15,7 @@
             name="component_wise_pose_error_monitor" output="screen">
 
         <!-- the cycle rate of the node (in Hz) -->
-        <param name="loop_rate" type="double" value="10"/>
+        <param name="loop_rate" type="double" value="10.0"/>
 
         <!-- the linear threshold for the Z axis -->
         <param name="threshold_linear_z" type="double" value="0.5"/>
@@ -25,7 +25,7 @@
             name="distance_constrained" output="screen">
 
         <!-- the cycle rate of the node (in Hz) -->
-        <param name="loop_rate" type="double" value="10"/>
+        <param name="loop_rate" type="double" value="10.0"/>
 
         <!-- the elements of a component-wise pose error to be checked if they are
             within tolerance (e.g. this checks the linear tolerance on the Z axis -->
