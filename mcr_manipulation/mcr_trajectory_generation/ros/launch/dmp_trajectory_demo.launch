@@ -57,8 +57,6 @@
 
     <remap from="~trajectory_in"
            to="/mcr_manipulation/dmp_trajectory_demo/trajectory_generator/trajectory_out"/>
-    <remap from="~trajectory_out"
-         to="/arm_1/arm_controller/follow_joint_trajectory/goal"/>
   </node>
 
   <group ns="mcr_manipulation/dmp_trajectory_demo">

@@ -49,9 +49,6 @@ class TrajectoryExecutor(object):
 
         # Publishers
         self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String, queue_size=1)
-        self.trajectory_out = rospy.Publisher(
-            "~trajectory_out", trajectory_msgs.msg.JointTrajectory, queue_size=1
-        )
 
         # Subscribers
         rospy.Subscriber("~event_in", std_msgs.msg.String, self.event_in_cb)
