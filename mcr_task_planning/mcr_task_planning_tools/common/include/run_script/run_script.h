@@ -48,6 +48,6 @@ class RunScript
         bool is_script_path_set_;
 
         // flag to indicate that arguments are available for running the script
-        bool args_are_available_;
+        bool are_args_available_;
 };
 #endif  // RUN_SCRIPT_RUN_SCRIPT_H

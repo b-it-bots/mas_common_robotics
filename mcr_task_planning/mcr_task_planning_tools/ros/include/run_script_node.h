@@ -3,7 +3,8 @@
  *
  * Author: Oscar Lima (olima_84@yahoo.com)
  * 
- * Node used to call external scripts on your local pc
+ * Uses common class RunScript which calls system() function 
+ * for calling external bash scripts from code.
  * 
  */
 
@@ -23,31 +24,28 @@ class RunScriptNode
         RunScriptNode();
         ~RunScriptNode();
 
-        // variable initialization function
-        void init();
-
-        // callback for event_in received msg
-        void runScriptCallBack(const std_msgs::String::ConstPtr& msg);
-
         // get parameters from param server
         void getParams();
+
+        // callback for event_in received msg
+        void eventInCallBack(const std_msgs::String::ConstPtr& msg);
 
         // ros node main loop
         void update();
 
     private:
-        // flag used to know when we have received a callback
-        bool callback_received_;
-
         // ros related variables
         ros::NodeHandle nh_;
-        ros::Publisher pub_event_in_;
+        ros::Publisher pub_event_out_;
         ros::Subscriber sub_event_in_;
 
-        // for receiving event in msg
+        // flag used to know when we have received a callback
+        bool is_event_in_received_;
+
+        // stores the received msg in event_in callback (runScriptCallBack)
         std_msgs::String event_in_msg_;
 
-        // for publishing event_out string msg
+        // stores the message that will be published on event_out topic
         std_msgs::String even_out_msg_;
 
         // for storing the arguments that will be read from param server
@@ -55,9 +53,6 @@ class RunScriptNode
 
         // to store the path of the script
         std::string full_path_to_script_;
-
-        // flag that indicates of script arguments are available
-        bool are_args_available_;
 
         // generic class to call external scripts
         RunScript script_handler_;
