@@ -14,7 +14,7 @@ import mcr_manipulation_msgs.msg
 import tf
 
 
-class ComponentWisePoseErrorCalculator(object):
+class ComponentWisePoseErrorCalculatorTrigger(object):
     """
     Calculates the error between two poses in three
     linear components and three angular components.
@@ -27,15 +27,11 @@ class ComponentWisePoseErrorCalculator(object):
         self.pose_2 = None
         self.listener = tf.TransformListener()
 
-        # linear offset applied to the result (a three-element list)
-        self.linear_offset = rospy.get_param('~linear_offset', None)
-        if self.linear_offset is not None:
-            assert (
-                isinstance(self.linear_offset, list) and len(self.linear_offset) == 3
-            ), "If linear offset is specified, it must be a three-dimensional array."
-
         # node cycle rate (in hz)
         self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
+
+        # linear offset applied to the result (a three-element list)
+        self.linear_offset = rospy.get_param('~linear_offset', None)
 
         # how long to wait for transform (in seconds)
         self.wait_for_transform = rospy.get_param('~wait_for_transform', 0.1)
@@ -44,7 +40,7 @@ class ComponentWisePoseErrorCalculator(object):
         self.pose_error = rospy.Publisher(
             '~pose_error', mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference
         )
-        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
+        self.event_out_pub = rospy.Publisher('~event_out', std_msgs.msg.String)
 
         # subscribers
         rospy.Subscriber('~event_in', std_msgs.msg.String, self.event_in_cb)
@@ -101,6 +97,7 @@ class ComponentWisePoseErrorCalculator(object):
 
         """
         if self.monitor_event == 'e_start':
+            self.monitor_event = None
             return 'IDLE'
         else:
             return 'INIT'
@@ -114,10 +111,11 @@ class ComponentWisePoseErrorCalculator(object):
 
         """
         if self.monitor_event == 'e_stop':
-            self.reset_component_data()
-            self.event_out.publish('e_stopped')
+            self.pose_1 = None
+            self.pose_2 = None
+            self.monitor_event = None
             return 'INIT'
-        elif self.pose_1 and self.pose_2:
+        elif self.pose_2 and self.pose_1:
             return 'RUNNING'
         else:
             return 'IDLE'
@@ -131,24 +129,32 @@ class ComponentWisePoseErrorCalculator(object):
 
         """
         if self.monitor_event == 'e_stop':
-            self.reset_component_data()
-            self.event_out.publish('e_stopped')
+            self.monitor_event = None
+            self.pose_1 = None
+            self.pose_2 = None
             return 'INIT'
         else:
             transformed_pose = self.transform_pose(self.pose_1, self.pose_2)
 
             if transformed_pose:
-                pose_error = calculate_component_wise_pose_error(
-                    self.pose_1, transformed_pose, self.linear_offset
-                )
+                if self.linear_offset:
+                    pose_error = calculate_component_wise_pose_error(
+                        self.pose_1, transformed_pose, tuple(self.linear_offset)
+                    )
+                else:
+                    pose_error = calculate_component_wise_pose_error(
+                        self.pose_1, transformed_pose
+                    )
 
                 self.pose_error.publish(pose_error)
-                self.event_out.publish('e_success')
+                self.event_out_pub.publish('e_success')
             else:
-                self.event_out.publish('e_failure')
-
-            self.reset_component_data()
-            return 'IDLE'
+                self.event_out_pub.publish('e_fail')
+            
+            self.monitor_event = None
+            self.pose_1 = None
+            self.pose_2 = None
+            return 'INIT'
 
     def transform_pose(self, reference_pose, target_pose):
         """
@@ -184,15 +190,6 @@ class ComponentWisePoseErrorCalculator(object):
             rospy.logwarn("Exception occurred: {0}".format(error))
             return None
 
-    def reset_component_data(self):
-        """
-        Clears the data of the component.
-
-        """
-        self.monitor_event = None
-        self.pose_1 = None
-        self.pose_2 = None
-
 
 def calculate_component_wise_pose_error(current_pose, target_pose, offset=None):
     """
@@ -207,41 +204,44 @@ def calculate_component_wise_pose_error(current_pose, target_pose, offset=None):
     :type target_pose: geometry_msgs.msg.PoseStamped
 
     :param offset: A linear offset in X, Y, Z.
-    :type offset: list
+    :type offset: tuple
 
     :return: The difference in the six components
     (three linear and three angular).
     :rtype: mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference
 
     """
+    current_quaternion = []
+    target_quaternion = []
     error = mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference()
     error.header.frame_id = current_pose.header.frame_id
 
-    # calculate linear distances
-    error.linear.x = target_pose.pose.position.x - current_pose.pose.position.x
-    error.linear.y = target_pose.pose.position.y - current_pose.pose.position.y
-    error.linear.z = target_pose.pose.position.z - current_pose.pose.position.z
+    point_dimensions = ['x', 'y', 'z']
+    quaternion_dimensions = ['x', 'y', 'z', 'w']
 
-    current_quaternion = [
-        current_pose.pose.orientation.x, current_pose.pose.orientation.y,
-        current_pose.pose.orientation.z, current_pose.pose.orientation.w
-    ]
-    target_quaternion = [
-        target_pose.pose.orientation.x, target_pose.pose.orientation.y,
-        target_pose.pose.orientation.z, target_pose.pose.orientation.w
-    ]
+    # calculate linear distances
+    for _, dim in enumerate(point_dimensions):
+        difference = getattr(target_pose.pose.position, dim) - \
+            getattr(current_pose.pose.position, dim)
+        setattr(error.linear, dim, difference)
 
     # convert quaternions into roll, pitch, yaw angles
+    for _, dim in enumerate(quaternion_dimensions):
+        current_quaternion.append(getattr(current_pose.pose.orientation, dim))
+        target_quaternion.append(getattr(target_pose.pose.orientation, dim))
+
     current_angles = tf.transformations.euler_from_quaternion(current_quaternion)
     target_angles = tf.transformations.euler_from_quaternion(target_quaternion)
 
     # calculate angular distances
-    error.angular.x = target_angles[0] - current_angles[0]
-    error.angular.y = target_angles[1] - current_angles[1]
-    error.angular.z = target_angles[2] - current_angles[2]
+    for i, (target, current) in enumerate(
+            zip(target_angles, current_angles)
+    ):
+        difference = target - current
+        setattr(error.angular, point_dimensions[i], difference)
 
     if offset is not None:
-        offset = tuple(offset)
+        assert isinstance(offset, tuple), "offset is not an tuple: {0}".format(offset)
         error.linear.x += offset[0]
         error.linear.y += offset[1]
         error.linear.z += offset[2]
@@ -250,6 +250,6 @@ def calculate_component_wise_pose_error(current_pose, target_pose, offset=None):
 
 
 def main():
-    rospy.init_node('component_wise_pose_error_calculator_node', anonymous=True)
-    component_wise_pose_error_calculator = ComponentWisePoseErrorCalculator()
-    component_wise_pose_error_calculator.start()
+    rospy.init_node('component_wise_pose_error_calculator_trigger_node', anonymous=True)
+    component_wise_pose_error_calculator_trigger = ComponentWisePoseErrorCalculatorTrigger()
+    component_wise_pose_error_calculator_trigger.start()
