@@ -5,6 +5,7 @@ find_package(catkin REQUIRED
   COMPONENTS
     rospy
     tf
+    roslint
 )
 
 catkin_python_setup()
@@ -18,12 +19,12 @@ catkin_package(
     tf
 )
 
-install(PROGRAMS
+### TESTS
+roslint_python(
   ros/scripts/pose_generator_node
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  ros/scripts/pose_publisher_node
 )
 
-### TESTS
 if(CATKIN_ENABLE_TESTING)
   find_package(roslaunch REQUIRED)
   find_package(rostest REQUIRED)
@@ -33,3 +34,9 @@ if(CATKIN_ENABLE_TESTING)
   catkin_add_nosetests(ros/test/pose_generator_unittest.py)
   catkin_add_nosetests(common/test/transformation_unit_test.py)
 endif()
+
+install(PROGRAMS
+  ros/scripts/pose_generator_node
+  ros/scripts/pose_publisher_node
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
