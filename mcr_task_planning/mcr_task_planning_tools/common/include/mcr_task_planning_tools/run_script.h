@@ -10,8 +10,8 @@
 *   
 */
 
-#ifndef RUN_SCRIPT_RUN_SCRIPT_H
-#define RUN_SCRIPT_RUN_SCRIPT_H
+#ifndef MCR_TASK_PLANNING_TOOLS_RUN_SCRIPT_H
+#define MCR_TASK_PLANNING_TOOLS_RUN_SCRIPT_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,4 +50,4 @@ class RunScript
         // flag to indicate that arguments are available for running the script
         bool are_args_available_;
 };
-#endif  // RUN_SCRIPT_RUN_SCRIPT_H
+#endif  // MCR_TASK_PLANNING_TOOLS_RUN_SCRIPT_H
