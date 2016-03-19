@@ -39,8 +39,6 @@ RunScriptNode::RunScriptNode() : nh_("~"), is_event_in_received_(false)
             args += script_arguments_.at(i);
             args += std::string(" ");
         }
-
-        ROS_INFO("Script will run with the following arguments : %s", args.c_str());
     }
 }
 
@@ -62,6 +60,12 @@ void RunScriptNode::getParams()
 
     // informing the user about the parameters which will be used
     ROS_INFO("Script path : %s", full_path_to_script_.c_str());
+
+    ROS_INFO("Script will run with the following arguments :");
+    for (int i = 0; i < script_arguments_.size() ; i++)
+    {
+        ROS_INFO("arg %d : %s", i + 1, script_arguments_.at(i).c_str());
+    }
 }
 
 void RunScriptNode::eventInCallBack(const std_msgs::String::ConstPtr& msg)
