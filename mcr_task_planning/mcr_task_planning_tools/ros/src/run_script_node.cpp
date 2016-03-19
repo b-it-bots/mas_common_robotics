@@ -8,7 +8,7 @@
  * 
  */
 
-#include <run_script_node.h>
+#include <mcr_task_planning_tools/run_script_node.h>
 #include <string>
 #include <vector>
 

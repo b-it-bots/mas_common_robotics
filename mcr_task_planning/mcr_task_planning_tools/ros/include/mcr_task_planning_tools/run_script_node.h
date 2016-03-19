@@ -8,8 +8,8 @@
  * 
  */
 
-#ifndef RUN_SCRIPT_NODE_H
-#define RUN_SCRIPT_NODE_H
+#ifndef MCR_TASK_PLANNING_TOOLS_RUN_SCRIPT_NODE_H
+#define MCR_TASK_PLANNING_TOOLS_RUN_SCRIPT_NODE_H
 
 #include <ros/ros.h>
 #include <ros/package.h>
@@ -57,4 +57,4 @@ class RunScriptNode
         // generic class to call external scripts
         RunScript script_handler_;
 };
-#endif  // RUN_SCRIPT_NODE_H
+#endif  // MCR_TASK_PLANNING_TOOLS_RUN_SCRIPT_NODE_H
