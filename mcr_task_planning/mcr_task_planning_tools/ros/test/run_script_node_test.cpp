@@ -10,7 +10,7 @@
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include <gtest/gtest.h>
-#include <run_script_node.h>
+#include <mcr_task_planning_tools/run_script_node.h>
 #include <string>
 
 std::string event_out_response;
