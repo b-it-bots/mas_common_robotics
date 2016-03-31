@@ -191,7 +191,7 @@ class ComponentWisePoseErrorCalculator(object):
         """
         self.monitor_event = None
         self.pose_1 = None
-        #self.pose_2 = None
+        self.pose_2 = None
 
 
 def calculate_component_wise_pose_error(current_pose, target_pose, offset=None):
