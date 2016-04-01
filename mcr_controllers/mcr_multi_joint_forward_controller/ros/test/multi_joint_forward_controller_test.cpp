@@ -76,7 +76,7 @@ TEST(multi_joint_forward_controller_test, test_sending_command)
     vel.velocities[1].value = 43.5;
 
     // it takes some time for the message to be sent and received
-    for (int i = 0; i < 200; i++)
+    for (int i = 0; i < 1000; i++)
     {
         pub.publish(vel);
         c.update(time, duration);
