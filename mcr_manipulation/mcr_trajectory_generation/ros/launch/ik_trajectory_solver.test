@@ -14,11 +14,11 @@
 
   <!-- Do not use namespace to avoid mismatch with Moveit! topics/services -->
   <include file="$(find mcr_trajectory_generation)/ros/launch/ik_trajectory_solver_example.launch">
-    <arg name="move_group" default="move_group"/>
-    <arg name="arm" default="arm_1"/>
-    <arg name="reference_frame" default="base_link"/>
+    <arg name="move_group" value="move_group"/>
+    <arg name="arm" value="arm_1"/>
+    <arg name="reference_frame" value="base_link"/>
     <arg name="joint_names"
-         default="['arm_joint_1', 'arm_joint_2', 'arm_joint_3', 'arm_joint_4', 'arm_joint_5']"/>
+         value="['arm_joint_1', 'arm_joint_2', 'arm_joint_3', 'arm_joint_4', 'arm_joint_5']"/>
   </include>
 
   <test pkg="mcr_trajectory_generation" type="ik_trajectory_solver_test.py"
