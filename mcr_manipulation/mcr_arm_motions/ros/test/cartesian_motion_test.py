@@ -51,7 +51,7 @@ class TestCartesianMotion(unittest.TestCase):
 
         """
         # Note: This parameter has to match the one specified in the .test file.
-        motion_duration = 0.2       # in seconds
+        motion_duration = 0.5       # in seconds
 
         test_velocity = geometry_msgs.msg.TwistStamped()
         test_velocity.twist.linear.x = 0.0
