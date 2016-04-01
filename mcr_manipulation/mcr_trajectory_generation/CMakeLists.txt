@@ -42,7 +42,6 @@ if(CATKIN_ENABLE_TESTING)
 
   roslaunch_add_file_check(ros/launch)
   add_rostest(ros/launch/dmp_based_task_space.test)
-  add_rostest(ros/launch/ik_trajectory_solver.test)
   add_rostest(ros/launch/trajectory_generator.test)
   catkin_add_nosetests(ros/test/dmp_based_task_space_unittest.py)
   catkin_add_nosetests(ros/test/ik_trajectory_solver_unittest.py)
