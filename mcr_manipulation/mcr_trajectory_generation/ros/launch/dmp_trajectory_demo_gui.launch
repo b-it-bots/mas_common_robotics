@@ -99,13 +99,13 @@
   </group>
 
   <!-- GUI Helper(s) -->
-  <node pkg="mir_pregrasp_planning" type="pose_mock_up_gui_node"
+  <!-- TODO: this node should be also somewhere in the common repository and not in the industrial one -->
+  <!--node pkg="mir_pregrasp_planning" type="pose_mock_up_gui_node"
         name="pose_mock_up_gui" output="screen" ns="mcr_manipulation">
 
-    <!-- the cycle rate of the node (in hz) -->
     <param name="loop_rate" type="double" value="10.0"/>
     <param name="reference_frame" type="str" value="base_link"/>
 
     <remap from="~mock_up_pose" to="/mcr_manipulation/dmp_trajectory_demo/goal_pose"/>
-  </node>
+  </node-->
 </launch>
