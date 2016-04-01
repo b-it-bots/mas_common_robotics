@@ -4,7 +4,7 @@ import math
 import numpy
 import unittest
 import geometry_msgs.msg
-import geometry_transformer_util
+import geometry_transformer_util.geometry_transformer_util
 
 
 class TestWrenchTransformer(unittest.TestCase):
@@ -19,7 +19,7 @@ class TestWrenchTransformer(unittest.TestCase):
         wrench_in.wrench.torque.x = 0.0
         wrench_in.wrench.torque.y = 0.0
         wrench_in.wrench.torque.z = 0.0
-        w = geometry_transformer_util.transform_wrench(transform, wrench_in)
+        w = geometry_transformer_util.geometry_transformer_util.transform_wrench(transform, wrench_in)
         self.assertEquals(0.0, w.wrench.force.x)
         self.assertEquals(0.0, w.wrench.force.y)
         self.assertEquals(0.0, w.wrench.force.z)
@@ -33,7 +33,7 @@ class TestWrenchTransformer(unittest.TestCase):
         wrench_in.wrench.torque.x = 4.0
         wrench_in.wrench.torque.y = 5.0
         wrench_in.wrench.torque.z = 6.0
-        w = geometry_transformer_util.transform_wrench(transform, wrench_in)
+        w = geometry_transformer_util.geometry_transformer_util.transform_wrench(transform, wrench_in)
         self.assertEquals(1.0, w.wrench.force.x)
         self.assertEquals(2.0, w.wrench.force.y)
         self.assertEquals(3.0, w.wrench.force.z)
@@ -56,7 +56,7 @@ class TestWrenchTransformer(unittest.TestCase):
         wrench_in.wrench.torque.x = 0.0
         wrench_in.wrench.torque.y = 0.0
         wrench_in.wrench.torque.z = 0.0
-        w = geometry_transformer_util.transform_wrench(transform, wrench_in)
+        w = geometry_transformer_util.geometry_transformer_util.transform_wrench(transform, wrench_in)
         self.assertEquals(0.0, w.wrench.force.x)
         self.assertEquals(0.0, w.wrench.force.y)
         self.assertEquals(0.0, w.wrench.force.z)
@@ -74,7 +74,7 @@ class TestWrenchTransformer(unittest.TestCase):
         wrench_in.wrench.torque.x = 0.0
         wrench_in.wrench.torque.y = 0.0
         wrench_in.wrench.torque.z = 0.0
-        w = geometry_transformer_util.transform_wrench(transform, wrench_in)
+        w = geometry_transformer_util.geometry_transformer_util.transform_wrench(transform, wrench_in)
         self.assertEquals(0.0, w.wrench.force.x)
         self.assertEquals(1.0, w.wrench.force.y)
         self.assertEquals(0.0, w.wrench.force.z)
@@ -98,7 +98,7 @@ class TestWrenchTransformer(unittest.TestCase):
         wrench_in.wrench.torque.x = 1.0
         wrench_in.wrench.torque.y = 0.0
         wrench_in.wrench.torque.z = 0.0
-        w = geometry_transformer_util.transform_wrench(transform, wrench_in)
+        w = geometry_transformer_util.geometry_transformer_util.transform_wrench(transform, wrench_in)
         self.assertEquals(1.0, w.wrench.force.x)
         self.assertEquals(0.0, w.wrench.force.y)
         self.assertEquals(0.0, w.wrench.force.z)
@@ -122,7 +122,7 @@ class TestWrenchTransformer(unittest.TestCase):
         wrench_in.wrench.torque.x = 1.0
         wrench_in.wrench.torque.y = 0.0
         wrench_in.wrench.torque.z = 0.0
-        w = geometry_transformer_util.transform_wrench(transform, wrench_in)
+        w = geometry_transformer_util.geometry_transformer_util.transform_wrench(transform, wrench_in)
         self.assertAlmostEquals(0.0, w.wrench.force.x)
         self.assertAlmostEquals(0.0, w.wrench.force.y)
         self.assertAlmostEquals(-1.0, w.wrench.force.z)
@@ -146,7 +146,7 @@ class TestWrenchTransformer(unittest.TestCase):
         wrench_in.wrench.torque.x = 1.0
         wrench_in.wrench.torque.y = 0.0
         wrench_in.wrench.torque.z = 0.0
-        w = geometry_transformer_util.transform_wrench(transform, wrench_in)
+        w = geometry_transformer_util.geometry_transformer_util.transform_wrench(transform, wrench_in)
         self.assertAlmostEquals(0.0, w.wrench.force.x)
         self.assertAlmostEquals(1.0, w.wrench.force.y)
         self.assertAlmostEquals(0.0, w.wrench.force.z)
