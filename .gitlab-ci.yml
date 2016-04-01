@@ -28,6 +28,6 @@ build:
     - catkin_make run_tests
     - catkin_test_results
     - catkin_make roslint
-    - catkin_lint src
+    - catkin_lint --strict --ignore LINK_DIRECTORY src/
     - catkin_make install
     - rm -rf src build devel install
