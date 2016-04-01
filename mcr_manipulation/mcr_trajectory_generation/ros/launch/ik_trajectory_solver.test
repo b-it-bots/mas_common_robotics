@@ -22,7 +22,7 @@
   </include>
 
   <test pkg="mcr_trajectory_generation" type="ik_trajectory_solver_test.py"
-        test-name="test_ik_trajectory_solver">
+        test-name="test_ik_trajectory_solver" time-limit="180.0">
 
     <remap from="~event_out" to="/ik_trajectory_solver/event_in"/>
     <remap from="~poses" to="/ik_trajectory_solver/poses"/>
