@@ -76,11 +76,12 @@ TEST(multi_joint_forward_controller_test, test_sending_command)
     vel.velocities[1].value = 43.5;
 
     // it takes some time for the message to be sent and received
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 100; i++)
     {
         pub.publish(vel);
         c.update(time, duration);
         ros::spinOnce();
+        sleep(0.01);
     }
 
     ASSERT_NEAR(handle_1.getCommand(), 42.5, 0.0001);
