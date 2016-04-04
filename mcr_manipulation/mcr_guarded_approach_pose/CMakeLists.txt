@@ -32,8 +32,8 @@ if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
 
   roslaunch_add_file_check(ros/launch)
-  add_rostest(ros/launch/distance_constrained.test)
-  add_rostest(ros/launch/guarded_approach_pose.test)
+  #add_rostest(ros/launch/distance_constrained.test)
+  #add_rostest(ros/launch/guarded_approach_pose.test)
   catkin_add_nosetests(ros/test/distance_constrained_unittest.py)
 endif()
 
