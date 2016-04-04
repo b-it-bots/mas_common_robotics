@@ -87,19 +87,17 @@
                    to="/mcr_manipulation/guarded_motion/pose_error_monitor/pose_error"/>
         </node>
 
-        <node pkg="mcr_arm_motions" type="twist_publisher_node"
+        <!--node pkg="mcr_arm_motions" type="twist_publisher_node"
                 name="twist_publisher" output="screen">
 
-            <!-- the node cycle rate (in hz) -->
             <param name="loop_rate" type="double" value="10.0"/>
 
-            <!-- desired twist -->
             <param name="twist_frame" type="str" value="arm_link_5"/>
             <param name="twist_linear_x" type="double" value="0.7"/>
             <param name="twist_linear_z" type="double" value="1.0"/>
 
             <remap from="~twist_out" to="/mcr_manipulation/guarded_motion/cartesian_motion/desired_velocity"/>
-        </node>
+        </node-->
 
         <node pkg="mcr_guarded_approach_pose" type="approach_pose_distance_constrained_node"
                 name="coordinator" output="screen">
