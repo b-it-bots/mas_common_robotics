@@ -68,7 +68,7 @@ TEST(multi_joint_forward_controller_test, test_sending_command)
     ASSERT_TRUE(c.init(&hw, nh, nh));
     c.starting(time);
 
-    ros::Publisher pub = nh.advertise<brics_actuator::JointVelocities>("command_vel", 1);
+    ros::Publisher pub = nh.advertise<brics_actuator::JointVelocities>("command_vel", 1, true);
 
     brics_actuator::JointVelocities vel;
     vel.velocities.resize(2);
@@ -81,7 +81,6 @@ TEST(multi_joint_forward_controller_test, test_sending_command)
         pub.publish(vel);
         c.update(time, duration);
         ros::spinOnce();
-        sleep(0.01);
     }
 
     ASSERT_NEAR(handle_1.getCommand(), 42.5, 0.0001);
