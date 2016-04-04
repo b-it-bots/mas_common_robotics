@@ -25,6 +25,11 @@
   <run_depend>sensor_msgs</run_depend>
   <run_depend>mcr_manipulation_msgs</run_depend>
   <run_depend>mcr_monitoring_msgs</run_depend>
+  <run_depend>mcr_manipulation_measurers</run_depend>
+  <run_depend>mcr_pose_generator</run_depend>
+  <run_depend>mcr_geometric_relation_monitors</run_depend>
+  <run_depend>mcr_arm_motions</run_depend>
+  <run_depend>mcr_common_converters</run_depend>
 
   <test_depend>roslaunch</test_depend>
   <test_depend>rostest</test_depend>
