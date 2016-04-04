@@ -38,5 +38,5 @@
             <remap from="~start_cartesian_motion" to="/mcr_manipulation/cartesian_motion/event_in"/>
             <remap from="~monitor_feedback" to="/mcr_manipulation/component_wise_pose_error_monitor/feedback"/>
         </node>
-    <group>
+    </group>
 </launch>
