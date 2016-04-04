@@ -88,6 +88,8 @@ void TopicMux::onInit()
     selected_subscription_ = subscriptions_.begin();
 
     sub_select_topic_ = private_nh_.subscribe("select", 1, &TopicMux::selectTopicCallback, this);
+    sub_event_in_ = private_nh_.subscribe("event_in", 1, &TopicMux::eventInCallback, this);
+    pub_event_out_ = private_nh_.advertise<std_msgs::String>("event_out", 1);
 }
 
 void TopicMux::connectionCallback()
@@ -114,11 +116,13 @@ void TopicMux::selectTopicCallback(const std_msgs::String::Ptr &topic_name)
         selected_subscription_->subscriber.reset();
     }
 
+    bool found_topic = false;
     // if we don't want to subscribe to anything
     if (topic_name->data == "__none")
     {
         NODELET_INFO("Subscribed to no topic");
         selected_subscription_ = subscriptions_.end();
+        found_topic = true;
     }
     else
     {
@@ -139,9 +143,20 @@ void TopicMux::selectTopicCallback(const std_msgs::String::Ptr &topic_name)
                                                                 boost::bind(&TopicMux::inputTopicCallback, this, _1,
                                                                 selected_subscription_->message))));
                 }
+                found_topic = true;
             }
         }
     }
+    std_msgs::String event_out;
+    if (found_topic)
+    {
+        event_out.data = "e_done";
+    }
+    else
+    {
+        event_out.data = "e_failed";
+    }
+    pub_event_out_.publish(event_out);
 }
 
 void TopicMux::inputTopicCallback(const topic_tools::ShapeShifter::ConstPtr &msg, topic_tools::ShapeShifter::Ptr s)
@@ -186,5 +201,26 @@ void TopicMux::inputTopicCallback(const topic_tools::ShapeShifter::ConstPtr &msg
     else
     {
         publisher_.publish(msg);
+    }
+}
+
+void TopicMux::eventInCallback(const std_msgs::String::Ptr &msg)
+{
+    std_msgs::String::Ptr topic_name(new std_msgs::String);
+    if (msg->data == "e_trigger")
+    {
+        std::vector<SubscriberInfo>::iterator it = selected_subscription_;
+        // select next topic
+        it++;
+        // cycle back to front of list if we've reached the end
+        if (it == subscriptions_.end())
+        {
+            topic_name->data = subscriptions_.begin()->topic;
+        }
+        else
+        {
+            topic_name->data = it->topic;
+        }
+        selectTopicCallback(topic_name);
     }
 }
