@@ -7,7 +7,6 @@ before_script:
 
 stages:
   - build
-  - catkinlint
   - cleanup
 
 build:
@@ -26,16 +25,11 @@ build:
     - catkin_make
     - source $CI_PROJECT_DIR/devel/setup.bash
     - catkin_make tests
+    - catkin_lint --strict --ignore LINK_DIRECTORY .
     - catkin_make run_tests
     - catkin_test_results
     - catkin_make roslint
     - catkin_make install
-    
-catkinlint:
-  stage: catkinlint
-  when: always
-  script:
-    - catkin_lint --strict --ignore LINK_DIRECTORY .
     
 cleanup:
   stage: cleanup
