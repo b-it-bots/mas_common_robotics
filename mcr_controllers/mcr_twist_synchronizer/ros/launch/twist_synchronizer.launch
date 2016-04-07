@@ -3,16 +3,9 @@
 <launch>
   <arg name="angular_synchronization" default="True"/>
 
-  <node pkg="mcr_twist_synchronizer" type="twist_synchronizer_node"
-        name="twist_synchronizer" output="screen" ns="mcr_controllers">
-
-    <!-- Node cycle rate (in hz) -->
-    <param name="loop_rate" type="double" value="10.0"/>
-
-    <!-- If True, it also synchronizes the angular and linear velocities -->
-    <param name="angular_synchronization" type="bool"
-           value="$(arg angular_synchronization)"/>
-  </node>
+  <include file="$(find mcr_twist_synchronizer)/ros/launch/twist_stamped_synchronizer.launch">
+    <arg name="angular_synchronization" value="$(arg angular_synchronization)" />
+  </include>
 
   <!-- To extract twist from stamped twist and repulish on different topic -->
   <node pkg="topic_tools" type="transform" name="twist_transformer" output="screen"
