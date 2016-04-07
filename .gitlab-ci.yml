@@ -10,8 +10,6 @@ before_script:
 
 stages:
   - build
-  - postcleanup
-
 
 build:
   stage: build
@@ -34,9 +32,3 @@ build:
     - catkin_make install
     - catkin_make run_tests
     - catkin_test_results
-    
-postcleanup:
-  stage: postcleanup
-  when: always
-  script:
-    - rm -rf $CI_PROJECT_DIR/*
