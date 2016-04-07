@@ -3,19 +3,15 @@ variables:
   REPOSITORY_NAME: mas_common_robotics
 
 before_script:
+  - rm -rf build devel install
+  - rm -rf $CI_PROJECT_DIR/../src
+  - rm -rf $CI_PROJECT_DIR/../*.tmp
   - source /opt/ros/$ROS_RELEASE/setup.bash
 
 stages:
-  - precleanup
   - build
   - postcleanup
 
-precleanup:
-  stage: precleanup
-  when: always
-  script:
-    - rm -rf $CI_PROJECT_DIR/../src
-    - rm -rf $CI_PROJECT_DIR/../*.tmp
 
 build:
   stage: build
