@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!-- Note: example launch file. Do not modify! -->
+<launch>
+  <arg name="angular_synchronization" default="True"/>
+
+  <node pkg="mcr_twist_synchronizer" type="twist_synchronizer_node"
+        name="twist_synchronizer" output="screen" ns="mcr_controllers">
+
+    <!-- Node cycle rate (in hz) -->
+    <param name="loop_rate" type="double" value="10.0"/>
+
+    <!-- If True, it also synchronizes the angular and linear velocities -->
+    <param name="angular_synchronization" type="bool"
+           value="$(arg angular_synchronization)"/>
+  </node>
+
+  <!-- To extract twist from stamped twist and repulish on different topic -->
+  <node pkg="topic_tools" type="transform" name="twist_transformer" output="screen"
+        args="/mcr_controllers/twist_synchronizer/synchronized_twist /mcr_controllers/twist_synchronizer/twist geometry_msgs/Twist 'm.twist'" />
+</launch>
