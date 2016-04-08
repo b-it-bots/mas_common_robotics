@@ -18,6 +18,7 @@
   <run_depend>std_msgs</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>mcr_manipulation_msgs</run_depend>
+  <run_depend>topic_tools</run_depend>
 
   <test_depend>roslaunch</test_depend>
   <test_depend>rostest</test_depend>
