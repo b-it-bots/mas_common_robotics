@@ -3,6 +3,9 @@ variables:
   REPOSITORY_NAME: mas_common_robotics
 
 before_script:
+  - rm -rf build devel install
+  - rm -rf $CI_PROJECT_DIR/../src
+  - rm -rf $CI_PROJECT_DIR/../*.tmp
   - source /opt/ros/$ROS_RELEASE/setup.bash
 
 stages:
@@ -12,7 +15,6 @@ build:
   stage: build
   script:
     - git pull gitgate@mas.b-it-center.de:mas-group/$REPOSITORY_NAME.git $ROS_RELEASE
-    - rm -rf src build devel install
     - mkdir -p $CI_PROJECT_DIR/../src
     - cd $CI_PROJECT_DIR/..
     - cp -r $REPOSITORY_NAME src
@@ -25,9 +27,8 @@ build:
     - catkin_make
     - source $CI_PROJECT_DIR/devel/setup.bash
     - catkin_make tests
+    - catkin_lint --strict --ignore LINK_DIRECTORY .
+    - catkin_make roslint
+    - catkin_make install
     - catkin_make run_tests
     - catkin_test_results
-    - catkin_make roslint
-    - catkin_lint --strict --ignore LINK_DIRECTORY src/
-    - catkin_make install
-    - rm -rf src build devel install
