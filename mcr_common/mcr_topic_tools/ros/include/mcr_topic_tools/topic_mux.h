@@ -30,13 +30,15 @@
 //          publisher/subcriber to select input topic.
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef TOPIC_MUX_H_
-#define TOPIC_MUX_H_
+#ifndef MCR_TOPIC_TOOLS_TOPIC_MUX_H_
+#define MCR_TOPIC_TOOLS_TOPIC_MUX_H_
 
 #include <nodelet/nodelet.h>
 #include <pluginlib/class_list_macros.h>
 #include <ros/ros.h>
 #include <std_msgs/String.h>
+#include <string>
+#include <vector>
 
 #include <topic_tools/shape_shifter.h>
 #include <topic_tools/parse.h>
@@ -50,9 +52,11 @@
  * Subscribes:
  *      various input topics specified as arguments to the nodelet
  *      ~/select : topic on which to specify which input topic to pipe to the output
+ *      ~/event_in: switches to next topic if e_trigger is published on this topic
  *
  * Publishes:
  *      output topic specified as an argument to the nodelet
+ *      ~/event_out: e_done if switch is successful, e_failed if topic is not found
  *
  */
 namespace mcr_topic_tools
@@ -89,6 +93,13 @@ private:
      *      that we're subscribed to multiple input topics at once (in non-lazy mode)
      */
     void inputTopicCallback(const topic_tools::ShapeShifter::ConstPtr &msg, topic_tools::ShapeShifter::Ptr s);
+    /**
+     * Callback for event_in topic
+     * If e_trigger is published to event_in, the next topic in subscriptions_ is chosen as the 
+     * selected_subscription_ (loops back to the beginning of the list)
+     */
+    void eventInCallback(const std_msgs::String::Ptr &msg);
+
 
 
 private:
@@ -128,8 +139,11 @@ private:
     ros::NodeHandle nh_;
     ros::Publisher publisher_;
     ros::Subscriber sub_select_topic_;
-};
 
+    ros::Subscriber sub_event_in_;
+    ros::Publisher pub_event_out_;
+};
 PLUGINLIB_DECLARE_CLASS(mcr_topic_tools, TopicMux, mcr_topic_tools::TopicMux, nodelet::Nodelet);
-}
-#endif
+} /* namespace mcr_topic_tools */
+
+#endif  // MCR_TOPIC_TOOLS_TOPIC_MUX_H_

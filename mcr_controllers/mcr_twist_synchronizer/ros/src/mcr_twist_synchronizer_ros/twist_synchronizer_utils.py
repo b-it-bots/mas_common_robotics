@@ -1,9 +1,9 @@
 #!/usr/bin/env python
+# -*- encoding: utf-8 -*-
 """
 This module contains functions used by the twist_synchronizer node.
 
 """
-#-*- encoding: utf-8 -*-
 
 
 def calculate_max_time(error, velocity, angular_synchronization=False, zero=0.001):
@@ -31,7 +31,9 @@ def calculate_max_time(error, velocity, angular_synchronization=False, zero=0.00
     else:
         assert len(error) == len(velocity) == 3
 
-    calculate_duration = lambda distance, speed: abs(float(distance) / speed)
+    # calculate_duration = lambda distance, speed: abs(float(distance) / speed)
+    def calculate_duration(distance, speed):
+        return abs(float(distance) / speed)
 
     durations = [
         calculate_duration(ee, vv) if (abs(vv) >= zero) else 0.0
@@ -78,7 +80,9 @@ def calculate_sync_velocity(error, velocity, max_time, angular_synchronization=F
 
     # A velocity is computed to cover a distance (dist) in a given time (max_time),
     # where max_time is the same for all distances.
-    synchronize_velocity = lambda dist, vel: abs(float(dist) / max_time) * cmp(vel, 0)
+    # synchronize_velocity = lambda dist, vel: abs(float(dist) / max_time) * cmp(vel, 0)
+    def synchronize_velocity(dist, vel):
+        return abs(float(dist) / max_time) * cmp(vel, 0)
 
     return [
         synchronize_velocity(ee, vv) if (max_time and vv) else 0.0

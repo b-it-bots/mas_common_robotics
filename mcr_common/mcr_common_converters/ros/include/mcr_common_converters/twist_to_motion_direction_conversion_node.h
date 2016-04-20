@@ -1,12 +1,13 @@
 /*
+ * Copyright [2015] <Bonn-Rhein-Sieg University>
  * twist_to_motion_direction_conversion_node.h
  *
  *  Created on: Mar 28, 2015
  *      Author: fred
  */
 
-#ifndef TWIST_TO_MOTION_DIRECTION_CONVERSION_NODE_H_
-#define TWIST_TO_MOTION_DIRECTION_CONVERSION_NODE_H_
+#ifndef MCR_COMMON_CONVERTERS_TWIST_TO_MOTION_DIRECTION_CONVERSION_NODE_H_
+#define MCR_COMMON_CONVERTERS_TWIST_TO_MOTION_DIRECTION_CONVERSION_NODE_H_
 
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
@@ -14,6 +15,7 @@
 #include <geometry_msgs/PointStamped.h>
 #include <std_msgs/String.h>
 #include <tf/transform_datatypes.h>
+#include <string>
 
 #include <mcr_common_converters/motion_direction_calculation.h>
 
@@ -53,4 +55,4 @@ private:
     State current_state_;
 };
 
-#endif /* TWIST_TO_MOTION_DIRECTION_CONVERSION_NODE_H_ */
+#endif /* MCR_COMMON_CONVERTERS_TWIST_TO_MOTION_DIRECTION_CONVERSION_NODE_H_ */

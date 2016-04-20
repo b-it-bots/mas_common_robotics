@@ -5,7 +5,6 @@ find_package(catkin REQUIRED
   COMPONENTS
     geometry_msgs
     mcr_perception_msgs
-    mcr_tabletop_segmentation
     roscpp
     sensor_msgs
     std_srvs
@@ -28,7 +27,6 @@ catkin_package(
   CATKIN_DEPENDS
     geometry_msgs
     mcr_perception_msgs
-    mcr_tabletop_segmentation
     sensor_msgs
     std_srvs
     visualization_msgs
@@ -36,6 +34,7 @@ catkin_package(
 
 include_directories(
   common/include/${PROJECT_NAME}
+  ros/include/${PROJECT_NAME}
   ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
   ${PCL_INCLUDE_DIRS}
@@ -140,6 +139,7 @@ add_library(object_geometric_service
   common/src/prob_neural_network/p_neural_network.cpp
   common/src/prob_neural_network/knn_classifier.cpp  
   common/src/prob_neural_network/hp_neural_network.cpp
+  ros/src/toolbox_ros.cpp
 )
 target_link_libraries(object_geometric_service
   object_decomposition
@@ -147,6 +147,7 @@ target_link_libraries(object_geometric_service
   rtp_neural_network_ensemble
   johnson_apsp
   ${LOG4CPP_LIBRARY}
+  ${PCL_LIBRARIES}
 )
 
 add_library(rtp_neural_network_ensemble 

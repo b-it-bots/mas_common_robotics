@@ -1,4 +1,5 @@
 /*
+ * Copyright [2015] <Bonn-Rhein-Sieg University>
  * twist_to_motion_direction_conversion_node.cpp
  *
  *  Created on: Mar 28, 2015
@@ -7,7 +8,10 @@
 
 #include <mcr_common_converters/twist_to_motion_direction_conversion_node.h>
 
-TwistToMotionDirectionConversionNode::TwistToMotionDirectionConversionNode() : twist_msg_received_(false), event_msg_received_(false), current_state_(INIT)
+#include <string>
+
+TwistToMotionDirectionConversionNode::TwistToMotionDirectionConversionNode() :
+    twist_msg_received_(false), event_msg_received_(false), current_state_(INIT)
 {
     ros::NodeHandle nh("~");
 

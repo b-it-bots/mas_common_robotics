@@ -25,6 +25,7 @@ find_package(catkin REQUIRED
 catkin_package(
   CATKIN_DEPENDS
     moveit_core
+    trajectory_msgs
   LIBRARIES
     moveit_interpolation_planner_plugin
 )
@@ -34,11 +35,6 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
   ${orocos_kdl_INCLUDE_DIRS}
-)
-
-link_directories(
-  ${catkin_LIBRARY_DIRS}
-  ${Boost_LIBRARY_DIRS}
 )
 
 add_library(moveit_interpolation_planner_plugin

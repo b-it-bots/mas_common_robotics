@@ -1,4 +1,9 @@
 #!/bin/bash
+if [ $# == 0 ]; then
+    INSTALL_PACKAGES=true
+else
+    INSTALL_PACKAGES=$1
+fi
 
 # create list of packages to install
 packagelist=(
@@ -17,10 +22,14 @@ packagelist=(
   ros-indigo-diagnostic-analysis
   ros-indigo-diagnostic-msgs
   ros-indigo-dynamic-reconfigure
+  ros-indigo-global-planner
   ros-indigo-image-transport
   ros-indigo-joint-trajectory-controller
   ros-indigo-kdl-parser
   ros-indigo-laser-filters
+  ros-indigo-moveit-core
+  ros-indigo-moveit-msgs
+  ros-indigo-moveit-ros-planning
   ros-indigo-nav-msgs
   ros-indigo-pcl-ros
   ros-indigo-robot-state-publisher
@@ -40,14 +49,17 @@ packagelist=(
 )
 
 ### Install debian packages listed in array above
-sudo apt-get install -y ${packagelist[@]}
+if [ $INSTALL_PACKAGES != false ]; then
+    sudo apt-get install -y ${packagelist[@]}
+fi
 
 ### install further repositories
 rosinstall .. /opt/ros/indigo repository.rosinstall
 
 ### install dependencies of BRSU repositories
-dependent_repositories=('mas_third_party_software')
+dependent_repositories=$(grep -r "local-name:" repository.rosinstall  | cut -d":" -f 2 | sed -r 's/\s+//g')
 for i in $dependent_repositories
 do
-    ../$i/repository.debs
+    cd ../$i
+    if [ -f repository.debs ]; then ./repository.debs $INSTALL_PACKAGES; fi
 done

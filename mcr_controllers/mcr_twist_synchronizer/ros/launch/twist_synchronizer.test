@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <include file="$(find mcr_twist_synchronizer)/ros/launch/twist_synchronizer_example.launch">
+  <include file="$(find mcr_twist_synchronizer)/ros/launch/twist_stamped_synchronizer.launch">
     <arg name="angular_synchronization" default="True"/>
   </include>
 

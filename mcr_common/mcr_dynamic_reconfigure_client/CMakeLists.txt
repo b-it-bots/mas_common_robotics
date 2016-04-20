@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(mcr_dynamic_reconfigure_client)
 
-find_package(catkin
+find_package(catkin REQUIRED
   COMPONENTS
     dynamic_reconfigure
     std_msgs

@@ -14,6 +14,7 @@ catkin_package(
     std_msgs
     geometry_msgs
     mcr_manipulation_msgs
+    topic_tools
 )
 
 install(PROGRAMS

@@ -1,15 +1,12 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="workspace_finder_config_file" default="$(find mcr_scene_segmentation)/ros/config/workspace_constraints.yaml" />
   <arg name="input_pointcloud_topic" default="/arm_cam3d/depth_registered/points" />
   <arg name="camera_frame" default="arm_cam3d_rgb_optical_frame" />
  
-
-  <!-- This launch file brings up the complete scene segmentation pipeline with reasonable (for @Work) parameters. -->
-
-  <arg name="workspace_finder_config_file" default="PASS THE CONFIGFILE NAME AS ARGUMENT" />
-
   <include file="$(find mcr_scene_segmentation)/ros/launch/workspace_finder.launch">
     <arg name="input_pointcloud_topic" value="$(arg input_pointcloud_topic)" />
+    <arg name="workspace_finder_config_file" value="$(arg workspace_finder_config_file)" />
   </include>
 
   <group ns="mcr_perception">
@@ -18,6 +15,7 @@
       <remap from="~input/polygon" to="/mcr_perception/convex_hull/output_polygon" />
       <remap from="~input/coefficients" to="/mcr_perception/planar_segmentation/model" />
       <remap from="~workspace_polygon" to="/visualization_marker" />
+      <param name="message_age_threshold" value="1.0" type="double"/>
     </node>
 
     <node pkg="mcr_scene_segmentation" type="tabletop_cloud_accumulator" name="tabletop_cloud_accumulator" output="screen">

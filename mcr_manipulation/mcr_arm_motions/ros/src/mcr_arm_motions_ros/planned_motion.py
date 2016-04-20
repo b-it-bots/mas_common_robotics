@@ -1,15 +1,27 @@
 #!/usr/bin/env python
 """
-This component moves a robotic arm, in a planned manner,
-using MoveIt!
+This component moves a robotic manipulator, in a planned manner, to a specified
+joint configuration using MoveIt!.
+
+**Input(s):**
+  * `target_configuration`: The joint configuration to which the manipulator will
+  be moved.
+
+**Parameter(s):**
+  * `move_group`: MoveIt! interface.
+  * `arm`: Name of the group to move.
+  * `loop_rate`: Node cycle rate (in hz).
 
 """
 #-*- encoding: utf-8 -*-
 
 import rospy
+import actionlib
 import moveit_commander
 import std_msgs.msg
+import moveit_msgs.msg
 import brics_actuator.msg
+import mcr_arm_motions_ros.planned_motion_utils as utils
 
 
 class PlannedMotion(object):
@@ -18,24 +30,37 @@ class PlannedMotion(object):
 
     """
     def __init__(self):
-        # params
+        # Params
         self.event = None
         self.target_configuration = None
 
-        # the name of the group to move
-        arm = rospy.get_param('~arm', None)
-        assert arm is not None
+        # MoveIt! interface
+        move_group = rospy.get_param('~move_group', None)
+        assert move_group is not None, "Move group must be specified."
 
-        # set up MoveIt!
+        # Wait for MoveIt!
+        client = actionlib.SimpleActionClient(move_group, moveit_msgs.msg.MoveGroupAction)
+        rospy.loginfo("Waiting for '{0}' server".format(move_group))
+        client.wait_for_server()
+        rospy.loginfo("Found server '{0}'".format(move_group))
+
+        # Name of the group to move
+        arm = rospy.get_param('~arm', None)
+        assert arm is not None, "The group to be moved must be specified (e.g. arm)."
+
+        # Set up MoveIt!
         self.arm = moveit_commander.MoveGroupCommander(arm)
 
-        # node cycle rate (in hz)
+        # Whether MoveIt! should wait for the arm to be stopped.
+        self.wait_for_motion = rospy.get_param('~wait_for_motion', True)
+
+        # Node cycle rate (in hz)
         self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
-        # publishers
+        # Publishers
         self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String)
 
-        # subscribers
+        # Subscribers
         rospy.Subscriber("~event_in", std_msgs.msg.String, self.event_in_cb)
         rospy.Subscriber(
             "~target_configuration", brics_actuator.msg.JointPositions,
@@ -84,7 +109,7 @@ class PlannedMotion(object):
         :rtype: str
 
         """
-        if self.target_configuration:
+        if self.event == 'e_start':
             return 'IDLE'
         else:
             return 'INIT'
@@ -97,11 +122,13 @@ class PlannedMotion(object):
         :rtype: str
 
         """
-        if self.event == 'e_start':
-            return 'RUNNING'
-        elif self.event == 'e_stop':
-            self.target_configuration = None
+
+        if self.event == 'e_stop':
+            self.reset_component_data()
+            self.event_out.publish('e_stopped')
             return 'INIT'
+        elif self.target_configuration:
+            return 'RUNNING'
         else:
             return 'IDLE'
 
@@ -115,16 +142,19 @@ class PlannedMotion(object):
         """
         if self.event == 'e_stop':
             self.arm.stop()
-            self.target_configuration = None
+            self.reset_component_data()
+            self.event_out.publish('e_stopped')
             return 'INIT'
         else:
-            move_status = self.move_arm(self.target_configuration)
+            move_status = self.move_arm(self.target_configuration, self.wait_for_motion)
 
             if move_status:
                 self.event_out.publish('e_success')
+            else:
+                self.event_out.publish('e_failure')
 
-            self.target_configuration = None
-            return 'INIT'
+        self.reset_component_data()
+        return 'INIT'
 
     def move_arm(self, joint_configuration, wait=True):
         """
@@ -140,26 +170,19 @@ class PlannedMotion(object):
         :rtype: bool
 
         """
-        joint_list = brics_joint_positions_to_list(joint_configuration)
+        joint_list = utils.brics_joint_positions_to_list(joint_configuration)
         self.arm.set_joint_value_target(joint_list)
         status = self.arm.go(wait=wait)
 
         return status
 
+    def reset_component_data(self):
+        """
+        Clears the data of the component.
 
-def brics_joint_positions_to_list(joint_configuration):
-    """
-    Converts a BRICS message of joint positions into a list of real values.
-
-    :param joint_configuration: Joint configuration as a BRICS message.
-    :type joint_configuration: brics_actuator.msg.JointPositions
-
-    :return: A list of real values representing the joints as specified
-             by the BRICS message.
-    :rtype: list
-
-    """
-    return [joint.value for joint in joint_configuration.positions]
+        """
+        self.event = None
+        self.target_configuration = None
 
 
 def main():
