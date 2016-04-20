@@ -27,8 +27,8 @@ function show_help_and_exit(){
     echo '3 argument = path to mercury_planner binaries    (path to seq-sat-mercury code)'
     echo '4 argument = timeout'
     echo '5 argument = type of search, select between single search (false) and parametrized search (true)'
-    echo '6 argument = cost type (only for single search, suggested 1 or 2)'
-    echo '7 argument = weigth (only for single search, suggested 1-5)'
+    echo '6 argument (not required if arg 5 is set to true) = cost type (suggested 1 or 2)'
+    echo '7 argument (not required if arg 5 is set to true) = weigth (suggested 1-5)'
     printf '\nEXAMPLE (single search) :\n'
     echo './mercury'
     echo '/home/user/indigo/src/mas_common_robotics/mcr_task_planning/mcr_knowledge/common/pddl/example_domain/domain.pddl'
@@ -53,23 +53,23 @@ function show_help_and_exit(){
 #-----------INITIAL CHECKS--------
 # --help shows script usage and exits
 if [ "${1}" == '--h' ] || [ "${1}" == '--help' ] ; then
-    log_mercury "User requested help to be displayed"
+    log_mercury "A request from user was received to show help options"
     show_help_and_exit
 fi
 
 # check if number of received arguments is ok, if not then prints USAGE instructions and exit
 if [[ $# < 5 ]]; then
-    log_mercury "Received less than 5 arguments"
+    log_mercury "Error - Less than 5 arguments were received"
     show_help_and_exit
 fi
 
 if [[ $# > 7 ]]; then
-    log_mercury "Received more than 7 arguments"
+    log_mercury "Error - More than 7 arguments were received"
     show_help_and_exit
 fi
 
 if [ ${5} != 'true' ] && [ ${5} != 'false' ] ; then
-    log_mercury "Argument 5 must be either true or false, received :" ${5}
+    log_mercury "Error - Argument 5 must be either true or false, received :" ${5}
     show_help_and_exit
 fi
 
