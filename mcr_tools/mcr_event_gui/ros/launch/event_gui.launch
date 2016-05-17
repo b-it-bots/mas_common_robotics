@@ -3,7 +3,7 @@
 <launch>
   <arg name="config_file" default="$(find mcr_event_gui)/ros/config/sample.yaml" />
   <node pkg="mcr_event_gui" type="event_gui_node"
-        name="event_gui" ns="mcr_tools" output="screen">
+        name="$(anon event_gui)" ns="mcr_tools" output="screen">
     <param name="config_file" type="str" value="$(arg config_file)"/>
   </node>
 </launch>
