@@ -12,6 +12,9 @@
         <!-- target frame required to transform input pose -->
         <param name="target_frame" type="str" value="odom"/>
 
+        <!-- flag to enable trigger mode of the node-->
+        <param name="trigger_node" type="bool" value="false"/>
+
         <remap from="~event_in" to="/mcr_navigation/direct_base_controller/coordinator/event_in" />
     </node>
 </launch>
