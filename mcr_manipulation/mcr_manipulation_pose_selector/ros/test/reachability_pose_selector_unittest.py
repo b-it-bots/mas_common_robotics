@@ -4,7 +4,7 @@ Test unit for the functions in the reachability_pose_selector_utils.py module.
 
 """
 
-PKG = 'mcr_pose_selection'
+PKG = 'mcr_manipulation_pose_selector'
 
 import genpy
 import copy
@@ -13,7 +13,7 @@ import rosunit
 import std_msgs.msg
 import geometry_msgs.msg
 import brics_actuator.msg
-import mcr_pose_selection_ros.reachability_pose_selector_utils as pose_selector_utils
+import mcr_manipulation_pose_selector_ros.reachability_pose_selector_utils as pose_selector_utils
 
 
 class TestReachabilityPoseSelector(unittest.TestCase):

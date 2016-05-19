@@ -14,7 +14,7 @@ import moveit_msgs.msg
 import brics_actuator.msg
 import moveit_commander
 import mcr_manipulation_utils_ros.kinematics as kinematics
-import mcr_pose_selection_ros.reachability_pose_selector_utils as pose_selector_utils
+import mcr_manipulation_pose_selector_ros.reachability_pose_selector_utils as pose_selector_utils
 
 
 class PoseSelector(object):
