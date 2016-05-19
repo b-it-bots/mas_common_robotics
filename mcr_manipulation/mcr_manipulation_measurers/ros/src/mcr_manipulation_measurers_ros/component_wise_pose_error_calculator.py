@@ -147,8 +147,7 @@ class ComponentWisePoseErrorCalculator(object):
             else:
                 self.event_out.publish('e_failure')
 
-            self.reset_component_data()
-            return 'IDLE'
+            return 'RUNNING'
 
     def transform_pose(self, reference_pose, target_pose):
         """
