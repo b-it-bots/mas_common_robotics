@@ -28,6 +28,9 @@ class PoseTransformer(object):
         # target frame to transform pose
         self.target_frame = rospy.get_param('~target_frame', 'odom')
 
+        # behavior selection of the component
+        self.trigger = rospy.get_param('~trigger', 'false')
+
         # publishers
         self.transform_pose_pub = rospy.Publisher(
             '~transformed_pose',  geometry_msgs.msg.PoseStamped, queue_size=1
@@ -54,8 +57,6 @@ class PoseTransformer(object):
                 state = self.idle_state()
             elif state == 'RUNNING':
                 state = self.running_state()
-            elif state == 'PROCESSING':
-                state = self.processing_state()
 
             rospy.logdebug("State: {0}".format(state))
             self.loop_rate.sleep()
@@ -119,25 +120,18 @@ class PoseTransformer(object):
         else:
             self.transformed_pose = self.transform_pose(self.pose_in, self.target_frame)
             if self.transformed_pose:
+                self.transform_pose_pub.publish(self.transformed_pose)
                 self.event_out.publish('e_success')
-                return 'PROCESSING'
             else:
                 self.event_out.publish('e_failure')
+
+            if self.trigger:
+                return 'RUNNING'
+            else:
                 self.reset_component_data()
                 return 'INIT'
 
-    def processing_state(self):
-        if self.monitor_event == 'e_stop':
-            self.reset_component_data()
-            self.event_out.publish('e_stopped')
-            return 'INIT'
-        else:
-            if self.transformed_pose:
-                self.transform_pose_pub.publish(self.transformed_pose)
-            else:
-                return 'INIT'
-
-            return 'PROCESSING'
+            return 'RUNNING'
 
     def transform_pose(self, reference_pose, target_frame):
         """
@@ -179,6 +173,7 @@ class PoseTransformer(object):
         Clears the data of the component.
 
         """
+        self.trigger = None
         self.monitor_event = None
         self.pose_in = None
         self.transformed_pose = None
