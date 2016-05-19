@@ -207,7 +207,7 @@ class send_event(smach.State):
         self.event_publisher_list = []
         self.expected_return_values_ = []
         self.event_names_ = []
-        self.possible_event_values = ['e_start', 'e_stop', 'e_trigger']
+        self.possible_event_values = ['e_start', 'e_stop', 'e_trigger', 'e_forget']
         for event in event_list:
             if len(event) != 2:
                 rospy.logerr('The event list is malformed!!')
@@ -246,6 +246,9 @@ class wait_for_single_event(smach.State):
 
     def event_cb(self, callback_msg):
         self.callback_msg_ = callback_msg
+
+    def reset(self):
+        self.callback_msg_ = None
 
     def getResult(self):
         if self.callback_msg_ is None:
@@ -317,8 +320,8 @@ class wait_for_events(smach.State):
 
         for event in event_list:
             if len(event) != 3:
-                rospy.logerr('[wait for events] Each specified event must contain topic name,
-                             expected message and desired behavior.')
+                rospy.logerr('[wait for events] Each specified event must contain topic name,' \
+                             'expected message and desired behavior.')
                 return False
             else:
                 self.events_.append(wait_for_single_event(event))
