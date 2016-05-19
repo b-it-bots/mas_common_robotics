@@ -320,7 +320,7 @@ class wait_for_events(smach.State):
 
         for event in event_list:
             if len(event) != 3:
-                rospy.logerr('[wait for events] Each specified event must contain topic name,' \
+                rospy.logerr('[wait for events] Each specified event must contain topic name,'
                              'expected message and desired behavior.')
                 return False
             else:
