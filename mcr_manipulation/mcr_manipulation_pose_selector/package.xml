@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>mcr_pose_selection</name>
+  <name>mcr_manipulation_pose_selector</name>
   <version>0.1.0</version>
   <description>
     This package contains node "reachability_pose_selector" for selecting a reachable goal pose from set of goal poses.
