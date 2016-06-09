@@ -40,9 +40,9 @@ class TwistLimiter(object):
 
         # publishers
         self.limited_twist = rospy.Publisher(
-            '~limited_twist', geometry_msgs.msg.TwistStamped
+            '~limited_twist', geometry_msgs.msg.TwistStamped, queue_size=5
         )
-        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
+        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String, queue_size=5)
 
         # subscribers
         rospy.Subscriber('~event_in', std_msgs.msg.String, self.event_in_cb)

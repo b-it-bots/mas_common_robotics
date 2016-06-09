@@ -42,9 +42,9 @@ class ComponentWisePoseErrorCalculator(object):
 
         # publishers
         self.pose_error = rospy.Publisher(
-            '~pose_error', mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference
+            '~pose_error', mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference, queue_size=5
         )
-        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
+        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String, queue_size=5)
 
         # subscribers
         rospy.Subscriber('~event_in', std_msgs.msg.String, self.event_in_cb)
