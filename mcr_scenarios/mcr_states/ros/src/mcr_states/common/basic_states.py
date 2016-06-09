@@ -80,7 +80,7 @@ class send_and_wait_events_combined(smach.State):
             event_in_name = event_in[0]
             self.event_in_names_.append(event_in_name)
             self.event_in_msgs_.append(event_in[1].lower())
-            self.event_in_publishers_list.append(rospy.Publisher(event_in_name, std_msgs.msg.String))
+            self.event_in_publishers_list.append(rospy.Publisher(event_in_name, std_msgs.msg.String, queue_size=1))
 
         return True
 

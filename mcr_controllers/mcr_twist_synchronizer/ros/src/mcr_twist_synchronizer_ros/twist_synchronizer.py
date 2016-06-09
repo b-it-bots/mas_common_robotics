@@ -49,9 +49,9 @@ class TwistSynchronizer(object):
         self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
         # Publishers
-        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String)
+        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String, queue_size=5)
         self.synchronized_twist = rospy.Publisher(
-            '~synchronized_twist', geometry_msgs.msg.TwistStamped
+            '~synchronized_twist', geometry_msgs.msg.TwistStamped, queue_size=5
         )
 
         # Subscribers
