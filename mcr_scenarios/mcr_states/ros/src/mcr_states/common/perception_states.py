@@ -143,3 +143,54 @@ class accumulate_recognized_objects_list(smach.State):
             return 'complete'
         else:
             return 'merged'
+
+
+class find_cavities(smach.State):
+
+    CAVITY_EVENT_IN_TOPIC = '/mcr_perception/cavity_finder/input/event_in'
+    CAVITY_EVENT_OUT_TOPIC = '/mcr_perception/cavity_finder/output/event_out'
+
+    def __init__(self, retries=5):
+        smach.State.__init__(self,
+                             outcomes=['cavities_found',
+                                       'no_cavities_found'],
+                             input_keys=['found_cavities'],
+                             output_keys=['found_cavities'])
+        self.event_out_sub = rospy.Subscriber(self.CAVITY_EVENT_OUT_TOPIC, std_msgs.msg.String, self.event_out_cb)
+        self.event_in_pub = rospy.Publisher(self.CAVITY_EVENT_IN_TOPIC, std_msgs.msg.String)
+        self.retries = retries
+
+
+    def event_out_cb(self, event):
+        self.event_msg = event.data
+
+    def execute(self, userdata):
+        userdata.found_objects = None
+        for i in range(self.retries):
+            self.event_msg = ""
+
+            rospy.loginfo('Looking for cavities (attempt %i/%i)' % (i + 1, self.retries))
+            self.event_in_pub.publish("e_trigger")
+
+            timeout = rospy.Duration.from_sec(5.0)  # wait max of 5.0 seconds
+            start_time = rospy.Time.now()
+
+            while(True):
+                if self.event_msg == "e_done":
+                    break
+                elif self.event_msg == "e_failed":
+                    rospy.loginfo('Found no cavities')
+                    break
+                elif (rospy.Time.now() - start_time) > timeout:
+                    rospy.logerr('Timeout of %f seconds exceeded waiting for cavity_detector' % float(timeout.to_sec()))
+                    break
+                rospy.sleep(0.01)
+
+            if self.event_msg == "e_done":
+                break
+
+        return 'objects_found'
+        if self.event_msg == "e_done":
+            return 'cavities_found'
+        else:
+            return 'no_cavities_found'
