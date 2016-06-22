@@ -154,8 +154,8 @@ class find_cavities(smach.State):
         smach.State.__init__(self,
                              outcomes=['cavities_found',
                                        'no_cavities_found'],
-                             input_keys=['found_cavities'],
-                             output_keys=['found_cavities'])
+                             input_keys=[],
+                             output_keys=[])
         self.event_out_sub = rospy.Subscriber(self.CAVITY_EVENT_OUT_TOPIC, std_msgs.msg.String, self.event_out_cb)
         self.event_in_pub = rospy.Publisher(self.CAVITY_EVENT_IN_TOPIC, std_msgs.msg.String)
         self.retries = retries
@@ -165,14 +165,13 @@ class find_cavities(smach.State):
         self.event_msg = event.data
 
     def execute(self, userdata):
-        userdata.found_objects = None
         for i in range(self.retries):
             self.event_msg = ""
 
             rospy.loginfo('Looking for cavities (attempt %i/%i)' % (i + 1, self.retries))
             self.event_in_pub.publish("e_trigger")
 
-            timeout = rospy.Duration.from_sec(5.0)  # wait max of 5.0 seconds
+            timeout = rospy.Duration.from_sec(10.0)  # wait max of 5.0 seconds
             start_time = rospy.Time.now()
 
             while(True):
@@ -186,10 +185,10 @@ class find_cavities(smach.State):
                     break
                 rospy.sleep(0.01)
 
+            #Break from the for loop
             if self.event_msg == "e_done":
                 break
 
-        return 'objects_found'
         if self.event_msg == "e_done":
             return 'cavities_found'
         else:
