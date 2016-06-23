@@ -160,7 +160,6 @@ class find_cavities(smach.State):
         self.event_in_pub = rospy.Publisher(self.CAVITY_EVENT_IN_TOPIC, std_msgs.msg.String)
         self.retries = retries
 
-
     def event_out_cb(self, event):
         self.event_msg = event.data
 
@@ -185,7 +184,7 @@ class find_cavities(smach.State):
                     break
                 rospy.sleep(0.01)
 
-            #Break from the for loop
+            # Break from the for loop
             if self.event_msg == "e_done":
                 break
 
