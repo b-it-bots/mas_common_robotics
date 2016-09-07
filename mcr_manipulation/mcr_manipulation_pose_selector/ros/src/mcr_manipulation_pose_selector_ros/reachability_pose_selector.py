@@ -29,6 +29,25 @@ class PoseSelector(object):
         self.goal_pose = None
         self.goal_pose_array = None
         
+        # node cycle rate (in hz)
+        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10.0))
+
+        # publishers
+        self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String, queue_size=1)
+        self.selected_pose = rospy.Publisher(
+            "~selected_pose", geometry_msgs.msg.PoseStamped, queue_size=1
+        )
+        self.joint_configuration = rospy.Publisher(
+            "~joint_configuration", brics_actuator.msg.JointPositions, queue_size=1
+        )
+
+        # subscribers
+        rospy.Subscriber("~event_in", std_msgs.msg.String, self.event_in_cb)
+        rospy.Subscriber("~goal_pose", geometry_msgs.msg.PoseStamped, self.goal_pose_cb)
+        rospy.Subscriber(
+            "~goal_pose_array", geometry_msgs.msg.PoseArray, self.goal_pose_array_cb
+        )
+
         # wait for MoveIt!
         move_group = rospy.get_param('~move_group', None)
         assert move_group is not None, "Move group must be specified."
@@ -57,24 +76,6 @@ class PoseSelector(object):
         # Time allowed for the IK solver to find a solution (in seconds).
         self.ik_timeout = rospy.get_param('~ik_timeout', 0.5)
 
-        # node cycle rate (in hz)
-        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10.0))
-
-        # publishers
-        self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String, queue_size=1)
-        self.selected_pose = rospy.Publisher(
-            "~selected_pose", geometry_msgs.msg.PoseStamped, queue_size=1
-        )
-        self.joint_configuration = rospy.Publisher(
-            "~joint_configuration", brics_actuator.msg.JointPositions, queue_size=1
-        )
-
-        # subscribers
-        rospy.Subscriber("~event_in", std_msgs.msg.String, self.event_in_cb)
-        rospy.Subscriber("~goal_pose", geometry_msgs.msg.PoseStamped, self.goal_pose_cb)
-        rospy.Subscriber(
-            "~goal_pose_array", geometry_msgs.msg.PoseArray, self.goal_pose_array_cb
-        )
 
     def goal_pose_cb(self, msg):
         """
