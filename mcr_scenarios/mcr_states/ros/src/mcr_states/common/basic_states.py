@@ -68,13 +68,9 @@ class send_and_wait_events_combined(smach.State):
 
         self.event_in_msgs_ = []
         self.event_in_names_ = []
-        self.possible_event_in_values = ['e_start', 'e_stop', 'e_trigger']
         for event_in in event_in_list:
             if len(event_in) != 2:
                 rospy.logerr('The event list is malformed!!')
-                return False
-            elif event_in[1].lower() not in self.possible_event_in_values:
-                rospy.logerr('Improper event value!!')
                 return False
 
             event_in_name = event_in[0]
@@ -207,13 +203,9 @@ class send_event(smach.State):
         self.event_publisher_list = []
         self.expected_return_values_ = []
         self.event_names_ = []
-        self.possible_event_values = ['e_start', 'e_stop', 'e_trigger', 'e_forget']
         for event in event_list:
             if len(event) != 2:
                 rospy.logerr('The event list is malformed!!')
-                exit()
-            elif event[1].lower() not in self.possible_event_values:
-                rospy.logerr('Improper event value!!')
                 exit()
 
             event_name = event[0]
