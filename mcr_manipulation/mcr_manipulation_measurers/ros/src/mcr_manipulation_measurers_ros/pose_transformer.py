@@ -31,6 +31,8 @@ class PoseTransformer(object):
         # behavior selection of the component
         self.trigger = rospy.get_param('~trigger', 'false')
 
+        self.transform_tries = rospy.get_param('~transform_tries', 5)
+
         # publishers
         self.transform_pose_pub = rospy.Publisher(
             '~transformed_pose',  geometry_msgs.msg.PoseStamped, queue_size=1
@@ -118,7 +120,11 @@ class PoseTransformer(object):
             self.event_out.publish('e_stopped')
             return 'INIT'
         else:
-            self.transformed_pose = self.transform_pose(self.pose_in, self.target_frame)
+            for i in range(0, self.transform_tries):
+                self.transformed_pose = self.transform_pose(self.pose_in, self.target_frame)
+                if self.transformed_pose:
+                    break
+
             if self.transformed_pose:
                 self.transform_pose_pub.publish(self.transformed_pose)
                 self.event_out.publish('e_success')
