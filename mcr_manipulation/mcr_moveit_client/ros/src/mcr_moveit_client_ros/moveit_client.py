@@ -97,7 +97,7 @@ class MoveitClient(object):
         Obtains the joint configuration where the arm will be moved.
 
         """
-        rospy.loginfo("Received target_configuration")
+        rospy.logdebug("Received target_configuration")
         self.target_configuration = msg
 
     def target_string_pose_cb(self, msg):
@@ -105,7 +105,7 @@ class MoveitClient(object):
         Obtains the string where the arm will be moved.
 
         """
-        rospy.loginfo("Received target_string_pose: {0} ".format(msg.data))
+        rospy.logdebug("Received target_string_pose: {0} ".format(msg.data))
         self.target_string_pose = msg
 
     def target_pose_cb(self, msg):
@@ -113,7 +113,7 @@ class MoveitClient(object):
         Obtains the pose where the arm will be moved.
 
         """
-        rospy.loginfo("Received target pose")
+        rospy.logdebug("Received target pose")
         self.target_pose = msg
 
     def event_in_cb(self, msg):
@@ -121,7 +121,7 @@ class MoveitClient(object):
         Starts a planned motion based on the specified arm position.
 
         """
-        rospy.loginfo("Received event: {0} ".format(msg.data))
+        rospy.logdebug("Received event: {0} ".format(msg.data))
         self.event = msg.data
 
     def start(self):
