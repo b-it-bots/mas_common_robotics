@@ -211,7 +211,7 @@ class send_event(smach.State):
             event_name = event[0]
             self.event_names_.append(event_name)
             self.expected_return_values_.append(event[1].lower())
-            self.event_publisher_list.append(rospy.Publisher(event_name, std_msgs.msg.String))
+            self.event_publisher_list.append(rospy.Publisher(event_name, std_msgs.msg.String, queue_size=1))
 
     def execute(self, userdata):
         for index in range(len(self.event_publisher_list)):
@@ -357,8 +357,9 @@ class set_named_config(smach.State):
         smach.State.__init__(self, outcomes=['success', 'failure', 'timeout'])
         self.named_config = named_config
         self.config_name_pub = rospy.Publisher("/mcr_common/dynamic_reconfigure_client/configuration_name",
-                                               std_msgs.msg.String)
-        self.event_in_pub = rospy.Publisher("/mcr_common/dynamic_reconfigure_client/event_in", std_msgs.msg.String)
+                                               std_msgs.msg.String, queue_size=1)
+        self.event_in_pub = rospy.Publisher("/mcr_common/dynamic_reconfigure_client/event_in",
+                                            std_msgs.msg.String, queue_size=1)
         self.event_out_sub = rospy.Subscriber("/mcr_common/dynamic_reconfigure_client/event_out",
                                               std_msgs.msg.String, self.event_cb)
         self.event = None
