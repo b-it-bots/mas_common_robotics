@@ -23,7 +23,7 @@ class find_objects(smach.State):
         self.object_list_sub = rospy.Subscriber(self.OBJECT_LIST_TOPIC, mcr_perception_msgs.msg.ObjectList,
                                                 self.object_list_cb)
         self.event_out_sub = rospy.Subscriber(self.EVENT_OUT_TOPIC, std_msgs.msg.String, self.event_out_cb)
-        self.event_in_pub = rospy.Publisher(self.EVENT_IN_TOPIC, std_msgs.msg.String)
+        self.event_in_pub = rospy.Publisher(self.EVENT_IN_TOPIC, std_msgs.msg.String, queue_size=1)
         self.retries = retries
 
     def object_list_cb(self, event):
@@ -157,7 +157,7 @@ class find_cavities(smach.State):
                              input_keys=[],
                              output_keys=[])
         self.event_out_sub = rospy.Subscriber(self.CAVITY_EVENT_OUT_TOPIC, std_msgs.msg.String, self.event_out_cb)
-        self.event_in_pub = rospy.Publisher(self.CAVITY_EVENT_IN_TOPIC, std_msgs.msg.String)
+        self.event_in_pub = rospy.Publisher(self.CAVITY_EVENT_IN_TOPIC, std_msgs.msg.String, queue_size=1)
         self.retries = retries
 
     def event_out_cb(self, event):
