@@ -17,6 +17,7 @@ add_message_files(
     JointDistance.msg
     SphericalSamplerParameters.msg
     GripperCommand.msg
+    JointSpaceWayPointsList.msg
 )
 
 generate_messages(
