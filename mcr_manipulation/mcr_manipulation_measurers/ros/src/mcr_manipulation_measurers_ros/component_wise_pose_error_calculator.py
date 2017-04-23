@@ -12,7 +12,7 @@ import std_msgs.msg
 import geometry_msgs.msg
 import mcr_manipulation_msgs.msg
 import tf
-
+from math import sin, cos, atan2
 
 class ComponentWisePoseErrorCalculator(object):
     """
