@@ -12,7 +12,7 @@ import std_msgs.msg
 import geometry_msgs.msg
 import mcr_manipulation_msgs.msg
 import tf
-
+from math import sin, cos, atan2
 
 class ComponentWisePoseErrorCalculator(object):
     """
@@ -235,9 +235,9 @@ def calculate_component_wise_pose_error(current_pose, target_pose, offset=None):
     target_angles = tf.transformations.euler_from_quaternion(target_quaternion)
 
     # calculate angular distances
-    error.angular.x = target_angles[0] - current_angles[0]
-    error.angular.y = target_angles[1] - current_angles[1]
-    error.angular.z = target_angles[2] - current_angles[2]
+    error.angular.x = getShortestAngle(target_angles[0], current_angles[0])
+    error.angular.y = getShortestAngle(target_angles[1],  current_angles[1])
+    error.angular.z = getShortestAngle(target_angles[2], current_angles[2])
 
     if offset is not None:
         offset = tuple(offset)
@@ -247,6 +247,8 @@ def calculate_component_wise_pose_error(current_pose, target_pose, offset=None):
 
     return error
 
+def getShortestAngle(angle1, angle2):
+   return atan2(sin(angle1 - angle2), cos(angle1 - angle2));
 
 def main():
     rospy.init_node('component_wise_pose_error_calculator_node', anonymous=True)
