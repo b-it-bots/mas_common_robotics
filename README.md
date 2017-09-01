@@ -51,8 +51,8 @@ In order to understand at least the different core components of ROS, you have t
     mkdir -p ~/indigo/src; cd ~/indigo/src
     catkin_init_workspace
     cd ..
-    catkin_make
-    
+    catkin build
+
 ## Clone and compile the MAS common robotics software
 First of all you have to clone the repository.
 
@@ -71,7 +71,7 @@ The last command should be added to the ~/.bashrc file so that they do not need 
 
 And finally compile the repository:
 
-    catkin_make
-    
     cd ~/indigo
+    catkin build
+
 If no errors appear everything is ready to use. Great job!
