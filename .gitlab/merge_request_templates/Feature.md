@@ -1,6 +1,6 @@
 <!--- Provide a general summary of your changes in the Title above -->
 
-## Description
+# Description
 <!--- Describe your changes in detail -->
 
 ## Motivation and Context
@@ -12,19 +12,28 @@
 <!--- Include details of your testing environment, and the tests you ran to -->
 <!--- see how your change affects other areas of the code, etc. -->
 
-## Screenshots (if appropriate):
 
+# Functionalities
+<!-- Mark with an x the changes that need to be made for your new feature to work -->
+- [ ] Robot independent (mcr_package)
+- [ ] @Home related (mdr_package)
+- [ ] @Work related (mir_package)
+
+### Related merge requests
+<!-- If you are providing @Home or @Work features that are affected/required by this merge request, link them in the list below -->
+* [@Home merge request](mdr_package)
+* [@Work merge request](mir_package)
 
 ## Types of changes
 <!--- What types of changes does your code introduce? Put an `x` in all the boxes that apply: -->
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (fix or feature that would cause existing functionality to change)
 
-## Functionalities included
-- [ ] Robot independent (mcr_package)
-- [ ] atHome specific (mdr_package)
 
-## Checklist:
+# Screenshots (if appropriate):
+
+
+# Checklist:
 <!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
 <!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
 - [ ] I have updated the documentation accordingly.
