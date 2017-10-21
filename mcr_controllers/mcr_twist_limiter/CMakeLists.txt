@@ -17,6 +17,7 @@ catkin_package(
 
 install(PROGRAMS
   ros/scripts/twist_limiter_node
+  ros/scripts/simulated_twist_gui_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

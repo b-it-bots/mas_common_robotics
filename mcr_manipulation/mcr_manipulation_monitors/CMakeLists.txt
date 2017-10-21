@@ -38,3 +38,10 @@ if(CATKIN_ENABLE_TESTING)
   catkin_add_nosetests(ros/test/joint_position_monitors_unittest.py)
   catkin_add_nosetests(ros/test/cartesian_distance_monitor_unittest.py)
 endif()
+
+install(PROGRAMS
+  ros/scripts/cartesian_distance_monitor_node
+  ros/scripts/joint_position_monitors_node
+  ros/scripts/pose_mock_up_gui_node
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}/ros/scripts
+)

@@ -102,3 +102,13 @@ install(DIRECTORY ros/launch
 install(DIRECTORY ros/config
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/config
 )
+
+install(PROGRAMS
+  ros/scripts/pose_shifter_node
+  ros/scripts/pose_shifter_pipeline_node
+  ros/scripts/pose_to_transform_converter_node
+  ros/scripts/relative_displacement_calculator_node
+  ros/scripts/static_transform_publisher_node
+  ros/scripts/transform_to_pose_converter_node
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}/ros/scripts
+)
