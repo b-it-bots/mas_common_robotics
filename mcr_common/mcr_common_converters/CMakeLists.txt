@@ -99,7 +99,8 @@ install(DIRECTORY ros/launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
 )
 
-install(DIRECTORY ros/config
+install(PROGRAMS
+  ros/config/LinearOffset.cfg
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/config
 )
 

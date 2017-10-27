@@ -43,3 +43,8 @@ install(PROGRAMS
   ros/scripts/dynamic_reconfigure_client_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+install(PROGRAMS
+  ros/config/TestNode.cfg
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
