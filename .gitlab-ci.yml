@@ -27,7 +27,7 @@ build:
     - catkin_make
     - source $CI_PROJECT_DIR/devel/setup.bash
     - catkin_make tests
-    - catkin_lint --strict --ignore LINK_DIRECTORY .
+    - catkin_lint --strict --ignore LINK_DIRECTORY src/$REPOSITORY_NAME
     - catkin_make roslint
     - catkin_make install
     - catkin_make run_tests

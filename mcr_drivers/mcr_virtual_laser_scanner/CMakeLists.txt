@@ -60,3 +60,8 @@ install(TARGETS virtual_laser_scanner_node
 install(DIRECTORY ros/launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
 )
+
+install(PROGRAMS
+  ros/config/VirtualLaserScanner.cfg
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)

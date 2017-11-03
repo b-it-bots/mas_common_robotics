@@ -58,3 +58,8 @@ install(PROGRAMS
   ros/scripts/trajectory_executor_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+install(PROGRAMS
+  ros/config/TaskSpaceParams.cfg
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)

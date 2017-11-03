@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_geometric_relation_monitors)
 
-find_package(catkin REQUIRED 
+find_package(catkin REQUIRED
   COMPONENTS
     roscpp
     std_msgs
@@ -17,7 +17,7 @@ generate_dynamic_reconfigure_options(
 catkin_package(
   INCLUDE_DIRS
     ros/include
-  CATKIN_DEPENDS 
+  CATKIN_DEPENDS
     std_msgs
     dynamic_reconfigure
     mcr_manipulation_msgs
@@ -43,7 +43,7 @@ target_link_libraries(component_wise_pose_error_monitor_node
 )
 
 install(
-  TARGETS 
+  TARGETS
     component_wise_pose_error_monitor_node
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -51,7 +51,7 @@ install(
 )
 
 install(
-  DIRECTORY 
+  DIRECTORY
     ros/include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   FILES_MATCHING PATTERN "*.h"
@@ -61,7 +61,8 @@ install(DIRECTORY ros/launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
 )
 
-install(DIRECTORY ros/config
+install(PROGRAMS
+  ros/config/ComponentWisePoseErrorMonitor.cfg
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/config
 )
 

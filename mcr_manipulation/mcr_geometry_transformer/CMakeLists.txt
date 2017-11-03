@@ -65,3 +65,8 @@ install(DIRECTORY ros/include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   FILES_MATCHING PATTERN "*.h"
 )
+
+install(PROGRAMS
+  ros/scripts/wrench_transform_mockup_gui
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}/ros/scripts
+)
