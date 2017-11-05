@@ -17,6 +17,7 @@ catkin_package(
     geometry_msgs
     mcr_manipulation_msgs
     tf
+    message_runtime
 )
 
 ### TESTS
