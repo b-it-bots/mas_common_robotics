@@ -14,11 +14,7 @@ set(env_list
 if(CATKIN_ENABLE_TESTING)
   find_package(roslaunch REQUIRED)
 
-  #roslaunch_add_file_check(upload_param.launch robot_env:=brsu-c025)
-
-  foreach(env ${env_list})
-    roslaunch_add_file_check(${env}/upload_param_${env}.launch)
-  endforeach()
+  roslaunch_add_file_check(upload_param.launch robot_env:=brsu-c025)
 
 endif()
 
