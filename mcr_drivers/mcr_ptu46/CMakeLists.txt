@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_ptu46)
 
-find_package(catkin REQUIRED 
+find_package(catkin REQUIRED
   COMPONENTS
-    roscpp 
-    rospy 
+    roscpp
+    rospy
     sensor_msgs
     message_generation
     actionlib
@@ -16,9 +16,9 @@ add_action_files(
   DIRECTORY
     action
   FILES
-    PtuGotoPosition.action  
-    PtuGotoPositionByName.action  
-    PtuReset.action  
+    PtuGotoPosition.action
+    PtuGotoPositionByName.action
+    PtuReset.action
     PtuSetVel.action
 )
 
@@ -40,11 +40,11 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(ptu46 
+add_library(ptu46
 	common/src/ptu46_driver.cc
 )
 
-add_executable(ptu46_node 
+add_executable(ptu46_node
   ros/src/ptu46_node.cc
 )
 target_link_libraries(ptu46_node
@@ -68,4 +68,10 @@ install(TARGETS ptu46_node
 
 install(TARGETS ptu46
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+install(PROGRAMS
+  ros/scripts/ptu_action_server.py
+  ros/scripts/ptu_action_test.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}/ros/scripts
 )

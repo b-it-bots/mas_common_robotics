@@ -1,5 +1,0 @@
-string understood_phrase
-string keyword
-float32 confidence
-string[] keyword_list
-float32[] confidence_list
