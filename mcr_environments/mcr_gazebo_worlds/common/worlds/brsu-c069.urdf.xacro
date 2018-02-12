@@ -21,13 +21,13 @@
 		<visual>
 			<origin xyz="0 0 0" />
 			<geometry>
-				<box size="0.00 0.00 0.00" />
+				<box size="0.01 0.01 0.01" />
 			</geometry>
 		</visual>
 		<collision>
 			<origin xyz="0 0 0" />
 			<geometry>
-				<box size="0.00 0.00 0.00" />
+				<box size="0.01 0.01 0.01" />
 			</geometry>
 		</collision>
 	</link>
@@ -55,7 +55,7 @@
 			</geometry>
 		</collision>
 	</link>
-	
+
 	<joint name="joint_north_wall" type="fixed">
 		<origin xyz="-0.25 4.06 1.30" rpy="0 0 0" />
 		<parent link="dummy_link" />
@@ -82,7 +82,7 @@
 			</geometry>
 		</collision>
 	</link>
-	
+
 	<joint name="joint_east_wall" type="fixed">
 		<origin xyz="7.40 0.59 1.30" rpy="0 0 0" />
 		<parent link="dummy_link" />
@@ -109,7 +109,7 @@
 			</geometry>
 		</collision>
 	</link>
-	
+
 	<joint name="joint_south_wall" type="fixed">
 		<origin xyz="-0.25 -2.88 1.30" rpy="0 0 0" />
 		<parent link="dummy_link" />
@@ -136,7 +136,7 @@
 			</geometry>
 		</collision>
 	</link>
-	
+
 	<joint name="joint_west_wall" type="fixed">
 		<origin xyz="-7.90 0.59 1.30" rpy="0 0 0" />
 		<parent link="dummy_link" />
