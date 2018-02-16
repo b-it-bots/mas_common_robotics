@@ -18,7 +18,8 @@ int main(int argc, char** argv)
     cv::WImageBuffer1_b image(cvLoadImage(argv[1], CV_LOAD_IMAGE_GRAYSCALE));
 
     cv_bridge::CvImage out_msg;
-    out_msg.image = image.Ipl();
+    out_msg.image = cv::cvarrToMat(image.Ipl(),true);
+    out_msg.encoding = "mono8";
 
     ros::Rate loop_rate(10);
     while (nh.ok())
