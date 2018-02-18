@@ -13,7 +13,6 @@
 
 #include <moveit/planning_interface/planning_interface.h>
 #include <moveit/robot_state/conversions.h>
-#include <boost/thread/mutex.hpp>
 #include <moveit/constraint_samplers/constraint_sampler_manager.h>
 #include <trajectory_msgs/JointTrajectory.h>
 #include <trajectory_msgs/JointTrajectoryPoint.h>
