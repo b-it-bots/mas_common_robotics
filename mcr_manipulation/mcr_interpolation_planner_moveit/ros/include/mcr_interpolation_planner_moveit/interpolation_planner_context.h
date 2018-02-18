@@ -273,6 +273,6 @@ protected:
     */
     std::vector<boost::shared_ptr<KDL::VelocityProfile> > vp_;
 };
-typedef boost::shared_ptr<InterpolationPlannerContext> InterpolationPlannerContextPtr;
+typedef std::shared_ptr<InterpolationPlannerContext> InterpolationPlannerContextPtr;
 }  // namespace interpolation_planner_interface
 #endif  // MCR_INTERPOLATION_PLANNER_MOVEIT_INTERPOLATION_PLANNER_CONTEXT_H
