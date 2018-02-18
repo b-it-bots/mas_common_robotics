@@ -19,6 +19,7 @@
 #include <moveit/profiler/profiler.h>
 #include <class_loader/class_loader.h>
 #include <boost/thread/mutex.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <moveit_msgs/DisplayRobotState.h>
 #include <moveit_msgs/DisplayTrajectory.h>
 #include <string>
