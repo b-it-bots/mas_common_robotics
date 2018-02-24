@@ -1,10 +1,10 @@
 
-[![pipeline status](https://mas.b-it-center.de/gitgate/mas-group/mas_common_robotics/badges/indigo/pipeline.svg)](https://mas.b-it-center.de/gitgate/mas-group/mas_common_robotics/commits/indigo)
+[![pipeline status](https://mas.b-it-center.de/gitgate/mas-group/mas_common_robotics/badges/kinetic/pipeline.svg)](https://mas.b-it-center.de/gitgate/mas-group/mas_common_robotics/commits/kinetic)
 
 ## Install Ubuntu
 The repository and its related components have been tested under the following Ubuntu distributions:
 
-- ROS Indigo: Ubuntu 14.04
+- ROS Kinetic: Ubuntu 16.04
 
 If you do not have a Ubuntu distribution on your computer you can download it here
 
@@ -36,7 +36,7 @@ If you have never worked with git before, we recommend to go through the followi
 ### Install ROS
 The repository has been tested successfully with the following ROS distributions. Use the link behind a ROS distribution to get to the particular ROS installation instructions.
 
-- ROS Indigo - http://wiki.ros.org/indigo/Installation/Ubuntu
+- ROS Kinetic - http://wiki.ros.org/kinetic/Installation/Ubuntu
 
 NOTE: Do not forget to update your .bashrc!
 
@@ -50,8 +50,8 @@ In order to understand at least the different core components of ROS, you have t
 
 ## Set up a catkin workspace
 
-    source /opt/ros/indigo/setup.bash
-    mkdir -p ~/indigo/src; cd ~/indigo/src
+    source /opt/ros/kinetic/setup.bash
+    mkdir -p ~/kinetic/src; cd ~/kinetic/src
     catkin_init_workspace
     cd ..
     catkin build
@@ -59,22 +59,22 @@ In order to understand at least the different core components of ROS, you have t
 ## Clone and compile the MAS common robotics software
 First of all you have to clone the repository.
 
-    cd ~/indigo/src;
+    cd ~/kinetic/src;
     git clone gitgate@mas.b-it-center.de:mas-group/mas_common_robotics.git
 
 Then go on with installing further external dependencies:
 
-    cd ~/indigo/src/mas_common_robotics
+    cd ~/kinetic/src/mas_common_robotics
     ./repository.debs
 
-    source ~/indigo/devel/setup.bash
+    source ~/kinetic/devel/setup.bash
 
 The last command should be added to the ~/.bashrc file so that they do not need to be executed everytime you open a new terminal.
 
 
 And finally compile the repository:
 
-    cd ~/indigo
+    cd ~/kinetic
     catkin build
 
 If no errors appear everything is ready to use. Great job!
