@@ -7,7 +7,7 @@
 		        <type>transmission_interface/SimpleTransmission</type>
 			<actuator name="${name}_pan_motor">
 			  <mechanicalReduction>1</mechanicalReduction>
-			  <hardwareInterface>EffortJointInterface</hardwareInterface>
+			  <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
 			</actuator>
                         <joint name="${name}_pan_joint"/>	
 		</transmission>
@@ -16,7 +16,7 @@
 		        <type>transmission_interface/SimpleTransmission</type>
 			<actuator name="${name}_tilt_motor">
 			  <mechanicalReduction>1</mechanicalReduction>
-			  <hardwareInterface>EffortJointInterface</hardwareInterface>
+			  <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
 			</actuator>
 			<joint name="${name}_tilt_joint"/>
 
