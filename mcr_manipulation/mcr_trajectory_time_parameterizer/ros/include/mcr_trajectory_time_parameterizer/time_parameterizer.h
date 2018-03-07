@@ -13,7 +13,7 @@
 #include <geometry_msgs/Pose.h>
 #include <moveit_msgs/RobotTrajectory.h>
 #include <trajectory_msgs/JointTrajectory.h>
-#include <moveit/move_group_interface/move_group.h>
+#include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/trajectory_processing/iterative_time_parameterization.h>
 
 
@@ -74,7 +74,7 @@ class TimeParameterizer
          * such as inverse kinematics calculations or motion planning, for a
          * specific part of the robot (e.g. the manipualtor).
          */
-        move_group_interface::MoveGroup move_group_;
+        moveit::planning_interface::MoveGroupInterface move_group_;
 
         /**
          * This provides the interface to the MoveIt! trajectory processing
