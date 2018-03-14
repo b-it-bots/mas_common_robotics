@@ -1,6 +1,0 @@
-#!/usr/bin/env python
-
-import mcr_saved_trajectories_ros.trajectory_saver
-
-if __name__ == '__main__':
-    mcr_saved_trajectories_ros.trajectory_saver.main()

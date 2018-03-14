@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(mcr_saved_trajectories)
+project(mcr_trajectory_saver)
 
 find_package(catkin REQUIRED COMPONENTS
   rospy

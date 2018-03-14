@@ -1,12 +1,15 @@
 <?xml version="1.0"?>
 <package>
-  <name>mcr_saved_trajectories</name>
+  <name>mcr_trajectory_saver</name>
   <version>0.0.0</version>
-  <description>The mcr_saved_trajectories package</description>
+  <description>The mcr_trajectory_saver package</description>
 
    <maintainer email="djordje.vukcevic@smail.inf.h-brs.de">Djordje Vukcevic</maintainer>
+   <maintainer email="abhishek.padalkar@smail.inf.h-brs.de">Djordje Vukcevic</maintainer>
+
    <license>MIT</license>
    <author email="djordje.vukcevic@smail.inf.h-brs.de">Djordje Vukcevic</author>
+   <author email="abhishek.padalkar@smail.inf.h-brs.de">Djordje Vukcevic</author>
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>rospy</build_depend>

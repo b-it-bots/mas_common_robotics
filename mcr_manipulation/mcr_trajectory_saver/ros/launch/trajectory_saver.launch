@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="mcr_trajectory_saver" type="trajectory_saver_node"
+            name="trajectory_saver" output="screen">
+
+        <!-- the cycle rate of the node (in Hz) -->
+        <param name="loop_rate" type="double" value="10"/>
+
+        <!-- the name of robot arm used in planning -->
+        <param name="arm" type="string" value="arm_1"/>
+
+        <!-- start and end robot configuration used in planning -->
+        <param name="start_state" type="string" value="folded"/>
+        <param name="goal_state" type="string" value="candle"/>
+    </node>
+</launch>
