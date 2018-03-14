@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 """
-This module contains functions to save trajectories
-which are computed by the MoveIt! planner.
+This module contains function to save trajectory
+that is computed by the MoveIt! planner.
 
 """
 
@@ -12,9 +12,6 @@ __authors__ = 'Djordje Vukcevic, Abhishek Padalkar'
 import rospy
 import os
 import rospkg
-import numpy as np
-import geometry_msgs
-from control_msgs.msg import FollowJointTrajectoryActionGoal
 import yaml
 
 def save_trajectory(trajectory, start_state, goal_state):
@@ -29,7 +26,7 @@ def save_trajectory(trajectory, start_state, goal_state):
     rospack = rospkg.RosPack()
 
     # get the package path for mcr_arm_motions
-    file_path = os.path.join(rospack.get_path('mcr_arm_motions'),'ros/config')
+    file_path = os.path.join(rospack.get_path('mcr_arm_motions'),'common/config')
 
     if not os.path.exists(file_path):
         os.makedirs(file_path)

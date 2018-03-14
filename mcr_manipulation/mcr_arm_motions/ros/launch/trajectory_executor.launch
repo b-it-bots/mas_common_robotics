@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
-    <node pkg="mcr_trajectory_saver" type="trajectory_saver_node"
-            name="trajectory_saver" output="screen">
+    <node pkg="mcr_arm_motions" type="trajectory_executor_node"
+            name="trajectory_executor" output="screen">
 
         <!-- the cycle rate of the node (in Hz) -->
         <param name="loop_rate" type="double" value="10"/>

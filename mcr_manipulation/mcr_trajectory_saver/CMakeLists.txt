@@ -15,7 +15,8 @@ catkin_package(
     rospy
     std_msgs
     geometry_msgs
-    trajectory_msgs
+    moveit_msgs
+    moveit_commander
 )
 
 install(PROGRAMS

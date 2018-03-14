@@ -46,8 +46,6 @@ class TrajectorySaver(object):
         Starts the component.
 
         """
-        rospy.loginfo("Ready to record the trajectory")
-
         '''
         Setting start state in move_group with only name(string) is not possible.
         Thus the workaround is:
