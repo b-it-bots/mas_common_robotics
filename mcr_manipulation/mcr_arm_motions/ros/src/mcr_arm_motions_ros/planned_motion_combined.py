@@ -173,16 +173,17 @@ class PlannedMotion(object):
             return 'INIT'
         else:
             if not self.moving:
-                move_status = self.move_arm(self.target_configuration, self.wait_for_motion)
                 self.moving = True
-                if not move_status:
-                    self.event_out.publish('e_failure')
+                move_status = self.move_arm(self.target_configuration, self.wait_for_motion)
 
             if self.joint_position_monitor.joint_positions_reached(self.current_joint_position):
                 self.moving = False
                 self.event_out.publish('e_success')
                 self.reset_component_data()
                 return 'INIT'
+            else:
+                self.event_out.publish('e_failure')
+                    
             return 'RUNNING'
 
     def move_arm(self, joint_configuration, wait=True):
