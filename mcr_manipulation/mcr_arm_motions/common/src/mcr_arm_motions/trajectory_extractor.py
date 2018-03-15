@@ -14,7 +14,7 @@ import os
 import rospkg
 import yaml
 
-def extract_trajectory(trajectory, start_state, goal_state):
+def extract_trajectory(start_state, goal_state):
 
     file_name = start_state + "-" + goal_state + "_" + 'plan.yaml'
     rospack = rospkg.RosPack()
@@ -23,9 +23,11 @@ def extract_trajectory(trajectory, start_state, goal_state):
     full_path = os.path.join(file_path, file_name)
 
     if not os.path.exists(full_path):
-        return False
+        rospy.logerr('Unable to find requested file path')
 
     with open(full_path, 'r') as file_open:
         trajectory = yaml.load(file_open)
 
-    return True
+    rospy.loginfo("Trajectory extracted!")
+
+    return trajectory

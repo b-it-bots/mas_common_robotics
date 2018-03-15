@@ -46,6 +46,9 @@ class TrajectorySaver(object):
         Starts the component.
 
         """
+
+        self.move_group.clear_pose_targets()
+
         '''
         Setting start state in move_group with only name(string) is not possible.
         Thus the workaround is:
@@ -76,6 +79,8 @@ class TrajectorySaver(object):
 
         #3) Use these joint values to set start state in moveit group.
         self.move_group.set_start_state(moveit_robot_state)
+
+        self.move_group.clear_pose_targets()
 
         #4) Set target configuration with name of true goal state.
         try:

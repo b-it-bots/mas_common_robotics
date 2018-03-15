@@ -42,14 +42,9 @@ class TrajectoryExecutor(object):
         Starts the component.
 
         """
-        trajectory = self.move_group.plan()
-        reading_result = extractor.extract_trajectory(trajectory,
-                                       self.start_state,
-                                       self.goal_state)
-        if reading_result:
-            rospy.loginfo("Trajectory extracted!")
-        else:
-            rospy.logerr('Unable to find requested file path')
+
+        trajectory = extractor.extract_trajectory(self.start_state,
+                                                  self.goal_state)
 
         execution_result = self.move_group.execute(trajectory)
 
