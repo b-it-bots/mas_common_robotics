@@ -58,9 +58,33 @@ class PoseGenerator:
     def set_max_samples(self, max_samples):
         self.max_samples = max_samples
 
+    def set_min_distance_to_object(self, min_distance_to_object):
+        self.min_distance_to_object = min_distance_to_object
+    
+    def set_max_distance_to_object(self, max_distance_to_object):
+        self.max_distance_to_object = max_distance_to_object
+
+    def set_min_azimuth(self, min_azimuth):
+        self.min_azimuth = min_azimuth
+
+    def set_max_azimuth(self, max_azimuth):
+        self.max_azimuth = max_azimuth
+
+    def set_max_zenith(self, max_zenith):
+        self.max_zenith = max_zenith
+
+
+    def set_min_zenith(self, min_zenith):
+        self.min_zenith = min_zenith
+
+    def set_min_roll(self, min_roll):
+        self.min_roll = min_roll
+
+    def set_max_roll(self, max_roll):
+        self.max_roll = max_roll
+
     def set_gripper_config_matrix(self, gripper_config_matrix):
         self.gripper_config_matrix = gripper_config_matrix
-
 
     def calculate_poses_list(self, target_pose, sample_parameters, number_of_fields=5):
         """
@@ -91,26 +115,26 @@ class PoseGenerator:
         object_matrix[0, 3] = target_pose.pose.position.x
         object_matrix[1, 3] = target_pose.pose.position.y
         object_matrix[2, 3] = target_pose.pose.position.z
-
+        
         height_offsets = utils.generate_samples(
             sample_parameters.height.minimum, sample_parameters.height.maximum,
             self.linear_step, (self.max_samples / number_of_fields)
         )
         zeniths = utils.generate_samples(
-            sample_parameters.zenith.minimum, sample_parameters.zenith.maximum,
+            self.min_zenith, self.max_zenith,
             self.angular_step, (self.max_samples / number_of_fields)
         )
         azimuths = utils.generate_samples(
-            sample_parameters.azimuth.minimum, sample_parameters.azimuth.maximum,
+            self.min_azimuth, self.max_azimuth,
             self.angular_step, (self.max_samples / number_of_fields)
         )
         wrist_rolls = utils.generate_samples(
-            sample_parameters.yaw.minimum, sample_parameters.yaw.maximum,
+            self.min_roll, self.max_roll,
             self.angular_step, (self.max_samples / number_of_fields)
         )
         radials = utils.generate_samples(
-            sample_parameters.radial_distance.minimum,
-            sample_parameters.radial_distance.maximum, self.linear_step,
+            self.min_distance_to_object,
+            self.max_distance_to_object, self.linear_step,
             (self.max_samples / number_of_fields)
         )
 
