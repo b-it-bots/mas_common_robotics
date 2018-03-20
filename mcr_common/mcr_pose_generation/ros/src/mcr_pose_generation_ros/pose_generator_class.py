@@ -32,7 +32,6 @@ import std_msgs.msg
 import geometry_msgs.msg
 import mcr_manipulation_msgs.msg
 
-
 class PoseGenerator:
     """
     Generates a list of Cartesian poses, based on the specified spherical sample
@@ -73,9 +72,14 @@ class PoseGenerator:
     def set_max_zenith(self, max_zenith):
         self.max_zenith = max_zenith
 
-
     def set_min_zenith(self, min_zenith):
         self.min_zenith = min_zenith
+
+    def set_min_height(self, min_height):
+        self.min_height = min_height
+
+    def set_max_height(self, max_height):
+        self.max_height = max_height
 
     def set_min_roll(self, min_roll):
         self.min_roll = min_roll
@@ -86,7 +90,7 @@ class PoseGenerator:
     def set_gripper_config_matrix(self, gripper_config_matrix):
         self.gripper_config_matrix = gripper_config_matrix
 
-    def calculate_poses_list(self, target_pose, sample_parameters, number_of_fields=5):
+    def calculate_poses_list(self, target_pose, number_of_fields=5):
         """
         Calculates a list of poses around a target pose based on the spherical sampler parameters.
 
@@ -117,7 +121,7 @@ class PoseGenerator:
         object_matrix[2, 3] = target_pose.pose.position.z
         
         height_offsets = utils.generate_samples(
-            sample_parameters.height.minimum, sample_parameters.height.maximum,
+            self.min_height, self.max_height,
             self.linear_step, (self.max_samples / number_of_fields)
         )
         zeniths = utils.generate_samples(
