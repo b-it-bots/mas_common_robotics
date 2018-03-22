@@ -15,38 +15,38 @@ packagelist=(
   python-setuptools
   python-sklearn
   python-vcstools
-  ros-indigo-angles
-  ros-indigo-bfl
-  ros-indigo-brics-actuator
-  ros-indigo-diagnostic-aggregator
-  ros-indigo-diagnostic-analysis
-  ros-indigo-diagnostic-msgs
-  ros-indigo-dynamic-reconfigure
-  ros-indigo-global-planner
-  ros-indigo-image-transport
-  ros-indigo-joint-trajectory-controller
-  ros-indigo-kdl-parser
-  ros-indigo-laser-filters
-  ros-indigo-moveit-core
-  ros-indigo-moveit-msgs
-  ros-indigo-moveit-ros-planning
-  ros-indigo-moveit-ros-planning-interface
-  ros-indigo-nav-msgs
-  ros-indigo-pcl-ros
-  ros-indigo-robot-state-publisher
-  ros-indigo-ros
-  ros-indigo-ros-control
-  ros-indigo-roscpp
-  ros-indigo-roslint
-  ros-indigo-rviz
-  ros-indigo-srdfdom
-  ros-indigo-std-srvs
-  ros-indigo-tf
-  ros-indigo-tf-conversions
-  ros-indigo-trajectory-msgs
-  ros-indigo-urdf
-  ros-indigo-vision-opencv
-  ros-indigo-visualization-msgs
+  ros-kinetic-angles
+  ros-kinetic-bfl
+  ros-kinetic-brics-actuator
+  ros-kinetic-diagnostic-aggregator
+  ros-kinetic-diagnostic-analysis
+  ros-kinetic-diagnostic-msgs
+  ros-kinetic-dynamic-reconfigure
+  ros-kinetic-global-planner
+  ros-kinetic-image-transport
+  ros-kinetic-joint-trajectory-controller
+  ros-kinetic-kdl-parser
+  ros-kinetic-laser-filters
+  ros-kinetic-moveit-core
+  ros-kinetic-moveit-msgs
+  ros-kinetic-moveit-ros-planning
+  ros-kinetic-moveit-ros-planning-interface
+  ros-kinetic-nav-msgs
+  ros-kinetic-pcl-ros
+  ros-kinetic-robot-state-publisher
+  ros-kinetic-ros
+  ros-kinetic-ros-control
+  ros-kinetic-roscpp
+  ros-kinetic-roslint
+  ros-kinetic-rviz
+  ros-kinetic-srdfdom
+  ros-kinetic-std-srvs
+  ros-kinetic-tf
+  ros-kinetic-tf-conversions
+  ros-kinetic-trajectory-msgs
+  ros-kinetic-urdf
+  ros-kinetic-vision-opencv
+  ros-kinetic-visualization-msgs
 )
 
 ### Install debian packages listed in array above
@@ -55,7 +55,7 @@ if [ $INSTALL_PACKAGES != false ]; then
 fi
 
 ### install further repositories
-rosinstall .. /opt/ros/indigo repository.rosinstall
+rosinstall .. /opt/ros/kinetic repository.rosinstall
 
 ### install dependencies of BRSU repositories
 dependent_repositories=$(grep -r "local-name:" repository.rosinstall  | cut -d":" -f 2 | sed -r 's/\s+//g')

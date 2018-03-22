@@ -35,13 +35,13 @@
     		<visual>
       			<origin xyz="0 0 0" />
       			<geometry>
-					<box size="0 0 0" />
+					<box size="0.01 0.01 0.01" />
       			</geometry>
     		</visual>
 			<collision>
       			<origin xyz="0 0 0"/>
 				<geometry>
-					<box size="0 0 0"/>
+					<box size="0.01 0.01 0.01"/>
 				</geometry>
     		</collision>
   	</link>
@@ -140,14 +140,14 @@
     		<visual>
       			<origin xyz="0 0 0"/>
       			<geometry>
-					<box size="0 0 0" /> <!--Insert 120 wall here for closed arena-->
+					<box size="0.01 0.01 0.01" /> <!--Insert 120 wall here for closed arena-->
 					<!--box size="0.04 1.2 0.3" /--> <!--wall 120, width = 4 cm, lenght = 120 cm, height = 30 cm-->
       			</geometry>
     		</visual>
 			<collision>
       			<origin xyz="0 0 0"/>
 				<geometry>
-					<box size="0 0 0" /> <!--Insert 120 wall here for closed arena-->
+					<box size="0.01 0.01 0.01" /> <!--Insert 120 wall here for closed arena-->
 					<!--box size="0.04 0.8 0.3"/-->
 				</geometry>
     		</collision>
@@ -169,14 +169,14 @@
     		<visual>
       			<origin xyz="0 0 0"/>
       			<geometry>
-					<box size="0 0 0" /> <!--Insert 80 wall here for closed arena-->
+					<box size="0.01 0.01 0.01" /> <!--Insert 80 wall here for closed arena-->
 					<!--box size="0.04 0.8 0.3" /--> <!--wall 80, width = 4 cm, lenght = 80 cm, height = 30 cm-->
       			</geometry>
     		</visual>
 			<collision>
       			<origin xyz="0 0 0"/>
 				<geometry>
-					<box size="0 0 0" /> <!--Insert 80 wall here for closed arena-->
+					<box size="0.01 0.01 0.01" /> <!--Insert 80 wall here for closed arena-->
 					<!--box size="0.04 0.8 0.3"/-->
 				</geometry>
     		</collision>
@@ -328,14 +328,14 @@
     		<visual>
       			<origin xyz="0 0 0"/>
       			<geometry>
-					<box size="0 0 0" /> <!--Insert 120 wall here for closed arena-->
+					<box size="0.01 0.01 0.01" /> <!--Insert 120 wall here for closed arena-->
 					<!--box size="0.04 1.2 0.3" /--> <!--wall 120, width = 4 cm, lenght = 120 cm, height = 30 cm-->
       			</geometry>
     		</visual>
 			<collision>
       			<origin xyz="0 0 0"/>
 				<geometry>
-					<box size="0 0 0" /> <!--Insert 120 wall here for closed arena-->
+					<box size="0.01 0.01 0.01" /> <!--Insert 120 wall here for closed arena-->
 					<!--box size="0.04 0.8 0.3"/-->
 				</geometry>
     		</collision>
@@ -357,14 +357,14 @@
     		<visual>
       			<origin xyz="0 0 0"/>
       			<geometry>
-					<box size="0 0 0" /> <!--Insert 80 wall here for closed arena-->
+					<box size="0.01 0.01 0.01" /> <!--Insert 80 wall here for closed arena-->
 					<!--box size="0.04 0.8 0.3" /--> <!--wall 80, width = 4 cm, lenght = 80 cm, height = 30 cm-->
       			</geometry>
     		</visual>
 			<collision>
       			<origin xyz="0 0 0"/>
 				<geometry>
-					<box size="0 0 0" /> <!--Insert 80 wall here for closed arena-->
+					<box size="0.01 0.01 0.01" /> <!--Insert 80 wall here for closed arena-->
 					<!--box size="0.04 0.8 0.3"/-->
 				</geometry>
     		</collision>

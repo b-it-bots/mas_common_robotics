@@ -18,6 +18,7 @@ catkin_package(
 
 install(PROGRAMS
   ros/scripts/twist_controller_node
+  ros/scripts/pose_error_mock_up_gui_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

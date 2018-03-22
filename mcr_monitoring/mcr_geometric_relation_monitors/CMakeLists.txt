@@ -31,6 +31,27 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+add_executable(component_wise_pose_error_monitor_node
+  ros/src/component_wise_pose_error_monitor_node.cpp
+)
+
+add_dependencies(component_wise_pose_error_monitor_node
+  ${catkin_EXPORTED_TARGETS}
+  ${PROJECT_NAME}_gencfg
+)
+
+target_link_libraries(component_wise_pose_error_monitor_node
+  ${catkin_LIBRARIES}
+)
+
+install(
+  TARGETS
+    component_wise_pose_error_monitor_node
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
 install(
   DIRECTORY
     ros/include/${PROJECT_NAME}/
@@ -42,7 +63,8 @@ install(DIRECTORY ros/launch
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/launch
 )
 
-install(DIRECTORY ros/config
+install(PROGRAMS
+  ros/config/ComponentWisePoseErrorMonitor.cfg
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/ros/config
 )
 

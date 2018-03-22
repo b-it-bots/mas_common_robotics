@@ -30,10 +30,12 @@ class loop_for(smach.State):
 
 class send_and_wait_events_combined(smach.State):
     """
-    Send events to nodes (on event_in topic) and wait for responses from the nodes (on event_out topic)
+    Send events to nodes (on event_in topic) and wait for responses from the
+    nodes (on event_out topic)
     Sample usage:
 
-    smach.StateMachine.add('START_DIRECT_BASE_CONTROLLER', gbs.send_and_wait_events_combined(
+    smach.StateMachine.add('START_DIRECT_BASE_CONTROLLER',
+                           gbs.send_and_wait_events_combined(
                 event_in_list=[('/mcr_navigation/direct_base_controller/event_in','e_start')],
                 event_out_list=[
                         # if this happens it has succeeded
@@ -46,7 +48,8 @@ class send_and_wait_events_combined(smach.State):
                              'failure':'SET_ACTION_LIB_FAILURE'})
 
     """
-    def __init__(self, event_in_list=[], event_out_list=[], timeout_duration=20):
+    def __init__(self, event_in_list=[], event_out_list=[],
+                 timeout_duration=20):
         smach.State.__init__(self, outcomes=['success', 'failure', 'timeout'])
 
         if not(self.send_event_init(event_in_list)):
@@ -84,10 +87,12 @@ class send_and_wait_events_combined(smach.State):
         '''
 
         This method will take a list of event as input and then split them
-        into positive events and negative events based on the desired action to take.
+        into positive events and negative events based on the desired action
+        to take.
         Postive events return success when the corresponing component
         return succeeds whereas Negative events have define opposite
-        behavior i.e. return failure when corresponding component returns success.
+        behavior i.e. return failure when corresponding component returns
+        success.
 
         Events specification:
            [(topic name, expected message, desired behavior),
@@ -107,7 +112,8 @@ class send_and_wait_events_combined(smach.State):
                    if any of the positive event get failure. or
                    if any of the negative event get success.       or
            retrurns timeout:
-                   if all of the positive events or any of the negative event do not respond
+                   if all of the positive events or any of the negative event
+                   do not respond
                    with in the specified timeout for the state.
         '''
         self.event_out_subscribers_list_ = []
@@ -194,7 +200,8 @@ class send_and_wait_events_combined(smach.State):
 
 class send_event(smach.State):
     '''
-    This state will take a list of event as input. Which are pair of name and value to publish.
+    This state will take a list of event as input. Which are pair of name and
+    value to publish.
     Output of this node is to publish the value in the provided topic name.
     '''
 
@@ -227,7 +234,8 @@ class wait_for_single_event(smach.State):
     be published.
     '''
     def __init__(self, single_event):
-        smach.State.__init__(self, outcomes=['success', 'failure', 'no_response'])
+        smach.State.__init__(self, outcomes=['success', 'failure',
+                                             'no_response'])
         self.event_name_ = single_event[0]
         self.expected_message_ = single_event[1]
         self.event_behavior = single_event[2]
@@ -269,10 +277,11 @@ class wait_for_single_event(smach.State):
 class wait_for_events(smach.State):
     '''
 
-    This state will take a list of event as input and then split them into positive events and negative events
-    based on the desired action to take.
-    Postive events return success when the corresponing component return succeeds whereas Negative events have
-    define opposite behavior i.e. return failure when corresponding component returns success.
+    This state will take a list of event as input and then split them into
+    positive events and negative events based on the desired action to take.
+    Postive events return success when the corresponing component return
+    succeeds whereas Negative events have define opposite behavior i.e. return
+    failure when corresponding component returns success.
 
     Events specification:
        [(topic name, expected message, desired behavior),
@@ -292,7 +301,8 @@ class wait_for_events(smach.State):
                if any of the positive event get failure. or
                if any of the negative event get success.       or
        retrurns timeout:
-               if all of the positive events or any of the negative event do not respond
+               if all of the positive events or any of the negative event do
+               not respond
                with in the specified timeout for the state.
     '''
     def __init__(self, event_list, timeout_duration=20):

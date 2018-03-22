@@ -13,7 +13,6 @@
 
 #include <moveit/planning_interface/planning_interface.h>
 #include <moveit/robot_state/conversions.h>
-#include <boost/thread/mutex.hpp>
 #include <moveit/constraint_samplers/constraint_sampler_manager.h>
 #include <trajectory_msgs/JointTrajectory.h>
 #include <trajectory_msgs/JointTrajectoryPoint.h>
@@ -273,6 +272,6 @@ protected:
     */
     std::vector<boost::shared_ptr<KDL::VelocityProfile> > vp_;
 };
-typedef boost::shared_ptr<InterpolationPlannerContext> InterpolationPlannerContextPtr;
+typedef std::shared_ptr<InterpolationPlannerContext> InterpolationPlannerContextPtr;
 }  // namespace interpolation_planner_interface
 #endif  // MCR_INTERPOLATION_PLANNER_MOVEIT_INTERPOLATION_PLANNER_CONTEXT_H

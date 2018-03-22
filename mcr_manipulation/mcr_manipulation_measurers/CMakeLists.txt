@@ -17,6 +17,7 @@ catkin_package(
     geometry_msgs
     mcr_manipulation_msgs
     tf
+    message_runtime
 )
 
 ### TESTS
@@ -40,6 +41,8 @@ endif()
 
 install(PROGRAMS
   ros/scripts/component_wise_pose_error_calculator_node
+  ros/scripts/component_wise_pose_error_calculator_trigger_node
+  ros/scripts/joint_distance_measurer_node
   ros/scripts/pose_transformer_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

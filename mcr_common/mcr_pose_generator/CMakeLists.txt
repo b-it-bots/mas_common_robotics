@@ -38,5 +38,6 @@ endif()
 install(PROGRAMS
   ros/scripts/pose_generator_node
   ros/scripts/pose_publisher_node
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  ros/scripts/sampling_parameter_gui_node
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}/ros/scripts
 )
