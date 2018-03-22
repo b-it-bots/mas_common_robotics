@@ -57,7 +57,7 @@ class PoseSelector(object):
         self.ik_timeout = 0.5
 
         # node cycle rate (in hz)
-        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10.0))
+        self.loop_rate = 10.0
 
     def get_reachable_pose_and_configuration(self, goal_pose_array, linear_offset):
         """
