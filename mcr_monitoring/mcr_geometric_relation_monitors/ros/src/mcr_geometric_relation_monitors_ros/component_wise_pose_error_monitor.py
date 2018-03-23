@@ -11,8 +11,7 @@ import rospy
 import std_msgs.msg
 import mcr_manipulation_msgs.msg
 import mcr_monitoring_msgs.msg
-#import dynamic_reconfigure.server
-# import mcr_geometric_relation_monitors.cfg.ComponentWisePoseErrorMonitorConfig as ComponentWisePoseErrorMonitorConfig
+
 
 class ComponentWisePoseErrorMonitor(object):
     """

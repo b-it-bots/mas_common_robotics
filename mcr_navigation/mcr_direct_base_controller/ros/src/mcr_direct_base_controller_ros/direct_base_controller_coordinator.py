@@ -22,7 +22,6 @@ from mcr_twist_controller_ros.twist_controller import TwistController
 from mcr_twist_limiter_ros.twist_limiter import TwistLimiter
 from mcr_twist_synchronizer_ros.twist_synchronizer import TwistSynchronizer
 import mcr_direct_base_controller.cfg.DirectBaseControllerConfig as DynamicBaseControllerConfig
-# import mcr_geometric_relation_monitors.cfg.ComponentWisePoseErrorMonitorConfig as ComponentWisePoseErrorMonitorConfig
 
 
 class DirectBaseControllerCoordinator(object):
@@ -72,7 +71,6 @@ class DirectBaseControllerCoordinator(object):
                          self.pose_monitor_feedback_cb)
         rospy.Subscriber('~pose_2', geometry_msgs.msg.PoseStamped, self.pose_2_cb)
 
-        rospy.Subscriber('~pose_error', mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference, self.pose_error_cb)
     def event_in_cb(self, msg):
         """
         Obtains an event for the component.
@@ -80,18 +78,12 @@ class DirectBaseControllerCoordinator(object):
         """
         self.event = msg.data
 
-# callbacks for component_wise_pose_error_calculator node----
     def pose_2_cb(self, msg):
         """
         Obtains the second pose.
 
         """
         self.pose_2 = msg
-
-    def pose_error_cb(self, msg):
-        self.pose_error = msg
-        self.has_pose_error_data = True
-#-------------------------------------------------------------
 
     def pose_monitor_feedback_cb(self, msg):
         """
@@ -129,7 +121,6 @@ class DirectBaseControllerCoordinator(object):
         """
         if self.event == 'e_start':
             self.event = None
-            self.event_out.publish('e_started')
             return 'RUNNING'
         else:
             return 'INIT'

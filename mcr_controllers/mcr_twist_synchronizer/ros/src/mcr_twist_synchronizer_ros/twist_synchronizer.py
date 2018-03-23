@@ -24,7 +24,7 @@ import rospy
 import std_msgs.msg
 import geometry_msgs.msg
 import mcr_manipulation_msgs.msg
-import twist_synchronizer_utils as utils
+import mcr_twist_synchronizer_ros.twist_synchronizer_utils as utils
 
 
 class TwistSynchronizer(object):
@@ -39,7 +39,7 @@ class TwistSynchronizer(object):
 
         # If True, it also synchronizes the angular and linear velocities.
         # By default, it only synchronizes the linear velocities.
-        self.angular_synchronization = rospy.get_param('~angular_synchronization', "true")
+        self.angular_synchronization = rospy.get_param('~angular_synchronization', True)
 
         # A value to prevent division by near-zero values.
         self.near_zero = rospy.get_param('~near_zero', 0.001)
@@ -55,12 +55,11 @@ class TwistSynchronizer(object):
         :rtype: geometry_msgs.msg.TwistStamped
 
         """
-        self.twist = twist
         self.pose_error = pose_error
 
         synchronized_twist = geometry_msgs.msg.TwistStamped()
-        synchronized_twist.header.frame_id = self.twist.header.frame_id
-        synchronized_twist.header.stamp = self.twist.header.stamp
+        synchronized_twist.header.frame_id = twist.header.frame_id
+        synchronized_twist.header.stamp = twist.header.stamp
 
         if self.angular_synchronization:
             error = [
@@ -70,9 +69,9 @@ class TwistSynchronizer(object):
             ]
 
             velocity = [
-                self.twist.twist.linear.x, self.twist.twist.linear.y,
-                self.twist.twist.linear.z, self.twist.twist.angular.x,
-                self.twist.twist.angular.y, self.twist.twist.angular.z
+                twist.twist.linear.x, twist.twist.linear.y,
+                twist.twist.linear.z, twist.twist.angular.x,
+                twist.twist.angular.y, twist.twist.angular.z
             ]
         else:
             error = [
@@ -81,8 +80,8 @@ class TwistSynchronizer(object):
             ]
 
             velocity = [
-                self.twist.twist.linear.x, self.twist.twist.linear.y,
-                self.twist.twist.linear.z
+                twist.twist.linear.x, twist.twist.linear.y,
+                twist.twist.linear.z
             ]
 
         # Calculate maximum time to reach the goal.
