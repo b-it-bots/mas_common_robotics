@@ -4,7 +4,7 @@ transform:
     filter_limit_min: -0.1
     filter_limit_max: 2.0
     output_frame: /base_link
-scene_segmentation_node:
+scene_segmentation:
     voxel_leaf_size: 0.02
     voxel_filter_field_name: z
     voxel_filter_limit_min: -0.15
