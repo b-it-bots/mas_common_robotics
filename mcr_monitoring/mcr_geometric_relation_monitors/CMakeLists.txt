@@ -10,6 +10,8 @@ find_package(catkin REQUIRED
     mcr_monitoring_msgs
 )
 
+catkin_python_setup()
+
 generate_dynamic_reconfigure_options(
   ros/config/ComponentWisePoseErrorMonitor.cfg
 )
