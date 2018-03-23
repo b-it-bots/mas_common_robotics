@@ -47,6 +47,19 @@ class JointPositionMonitor(object):
         rospy.Subscriber("~joint_states", sensor_msgs.msg.JointState,
                          self.read_joint_positions_cb)
 
+    def set_target_joint_names(self, target_joint_names):
+        """
+        set target_joint_names
+        """
+        self.target_joint_names = target_joint_names
+
+
+    def set_epsilon(self, epsilon):
+        """
+        Set epsilon
+        """
+        self.epsilon = epsilon
+
     def event_in_cb(self, msg):
         """
         Obtains an event for the joint position monitor.
