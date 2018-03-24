@@ -78,6 +78,7 @@ add_library(mcr_controller
 install(DIRECTORY common/include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   FILES_MATCHING PATTERN "*.h"
+  PATTERN "*.hpp"
 )
 
 install(
