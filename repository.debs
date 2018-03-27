@@ -9,58 +9,31 @@ fi
 packagelist=(
   liblog4cpp5-dev
   libsvm-dev
-  python-catkin-lint
-  python-rosinstall
-  python-scipy
-  python-setuptools
-  python-sklearn
-  python-vcstools
-  ros-kinetic-angles
   ros-kinetic-bfl
   ros-kinetic-brics-actuator
   ros-kinetic-diagnostic-aggregator
   ros-kinetic-diagnostic-analysis
-  ros-kinetic-diagnostic-msgs
-  ros-kinetic-dynamic-reconfigure
   ros-kinetic-global-planner
-  ros-kinetic-image-transport
-  ros-kinetic-joint-trajectory-controller
   ros-kinetic-kdl-parser
   ros-kinetic-laser-filters
   ros-kinetic-moveit-core
-  ros-kinetic-moveit-msgs
   ros-kinetic-moveit-ros-planning
   ros-kinetic-moveit-ros-planning-interface
-  ros-kinetic-nav-msgs
   ros-kinetic-pcl-ros
-  ros-kinetic-robot-state-publisher
-  ros-kinetic-ros
+  ros-kinetic-rqt-gui-py
   ros-kinetic-ros-control
-  ros-kinetic-roscpp
   ros-kinetic-roslint
-  ros-kinetic-rviz
-  ros-kinetic-srdfdom
-  ros-kinetic-std-srvs
   ros-kinetic-tf
   ros-kinetic-tf-conversions
-  ros-kinetic-trajectory-msgs
   ros-kinetic-urdf
   ros-kinetic-vision-opencv
-  ros-kinetic-visualization-msgs
 )
 
 ### Install debian packages listed in array above
 if [ $INSTALL_PACKAGES != false ]; then
-    sudo apt-get install -y ${packagelist[@]}
+    sudo apt install -y ${packagelist[@]}
 fi
 
 ### install further repositories
-rosinstall .. /opt/ros/kinetic repository.rosinstall
+rosinstall .. /opt/ros/indigo repository.rosinstall
 
-### install dependencies of BRSU repositories
-dependent_repositories=$(grep -r "local-name:" repository.rosinstall  | cut -d":" -f 2 | sed -r 's/\s+//g')
-for i in $dependent_repositories
-do
-    cd ../$i
-    if [ -f repository.debs ]; then ./repository.debs $INSTALL_PACKAGES; fi
-done
