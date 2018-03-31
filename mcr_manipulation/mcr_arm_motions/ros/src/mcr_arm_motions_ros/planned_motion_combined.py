@@ -23,7 +23,7 @@ import std_msgs.msg
 import moveit_msgs.msg
 import brics_actuator.msg
 import mcr_arm_motions_ros.planned_motion_utils as utils
-import mcr_manipulation_monitors_ros.joint_position_monitors
+import mcr_manipulation_monitors_ros.joint_position_monitors_class
 import mcr_topic_tools_ros.transformer_utils as topic_utils
 
 
@@ -63,7 +63,7 @@ class PlannedMotion(object):
         self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
 
         self.joint_position_monitor = \
-                mcr_manipulation_monitors_ros.joint_position_monitors.JointPositionMonitor()
+                mcr_manipulation_monitors_ros.joint_position_monitors_class.JointPositionMonitor()
 
         epsilon = rospy.get_param('~epsilon')
         target_joint_names = rospy.get_param('~target_joint_names')
