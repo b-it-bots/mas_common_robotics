@@ -12,10 +12,6 @@ find_package(catkin REQUIRED
 
 catkin_python_setup()
 
-generate_dynamic_reconfigure_options(
-  ros/config/ComponentWisePoseErrorMonitor.cfg
-)
-
 catkin_package(
   INCLUDE_DIRS
     ros/include
