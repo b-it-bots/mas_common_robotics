@@ -81,7 +81,7 @@ class PoseSelector(object):
                 configuration = pose_selector_utils.list_to_brics_joints(
                     joint_values, self.joint_uris, unit=self.units
                 )
-            return pose, configuration
+            return pose, configuration, solution[1]
         else:
             return None, None
 
