@@ -50,6 +50,8 @@ class DirectBaseControllerCoordinator(object):
         self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 100.0))
         self.near_zero = rospy.get_param('~near_zero', 0.001)
 
+        self.base_frame = rospy.get_param('~base_frame', 'base_link')
+
         # publishers
         self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String, queue_size=1)
 
@@ -146,29 +148,32 @@ class DirectBaseControllerCoordinator(object):
             return 'INIT'
 
         # Get converted pose and calculate the pose error and publish
-        converted_pose = self.transform_to_pose_converter.get_converted_pose()
-        if(converted_pose != None):
-            pose_error = self.component_wise_pose_error_calculator.get_component_wise_pose_error(converted_pose, self.pose_2)
-            if self.component_wise_pose_error_monitor.isComponentWisePoseErrorWithinThreshold(pose_error):
-                self.event_out.publish('e_success')
-                self.event = None
-                self.pose_monitor_feedback = None
-                self.started_components = False
-                self.publish_zero_velocities()
-                return 'INIT'
-            else:
-                cartesian_velocity = self.twist_controller.get_cartesian_velocity(pose_error)
-                # rospy.loginfo(cartesian_velocity)
-                if cartesian_velocity:
-                    limited_twist = self.twist_limiter.get_limited_twist(cartesian_velocity)
-                    # rospy.loginfo(limited_twist)
-                    if (limited_twist != None):
-                        synchronized_twist = self.twist_synchronizer.synchronize_twist(limited_twist, pose_error)
-                        if (synchronized_twist != None):
-                            self.base_twist.publish(synchronized_twist.twist)
-                        else:
-                            self.event_out.publish('e_failure')
-                        self.twist_synchronizer.reset_component_data()
+#        converted_pose = self.transform_to_pose_converter.get_converted_pose()
+        origin_pose = geometry_msgs.msg.PoseStamped()
+        origin_pose.header.frame_id = self.base_frame
+        origin_pose.pose.orientation.w = 1.0
+
+        pose_error = self.component_wise_pose_error_calculator.get_component_wise_pose_error(origin_pose, self.pose_2)
+        if self.component_wise_pose_error_monitor.isComponentWisePoseErrorWithinThreshold(pose_error):
+            self.event_out.publish('e_success')
+            self.event = None
+            self.pose_monitor_feedback = None
+            self.started_components = False
+            self.publish_zero_velocities()
+            return 'INIT'
+        else:
+            cartesian_velocity = self.twist_controller.get_cartesian_velocity(pose_error)
+            # rospy.loginfo(cartesian_velocity)
+            if cartesian_velocity:
+                limited_twist = self.twist_limiter.get_limited_twist(cartesian_velocity)
+                # rospy.loginfo(limited_twist)
+                if (limited_twist != None):
+                    synchronized_twist = self.twist_synchronizer.synchronize_twist(limited_twist, pose_error)
+                    if (synchronized_twist != None):
+                        self.base_twist.publish(synchronized_twist.twist)
+                    else:
+                        self.event_out.publish('e_failure')
+                    self.twist_synchronizer.reset_component_data()
 
         return 'RUNNING'
 

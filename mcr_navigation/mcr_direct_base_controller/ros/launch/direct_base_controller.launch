@@ -21,10 +21,7 @@
             <!-- Maximum linear velocities in the axes X, Y and Z (in meters/second) -->
             <param name="angular_synchronization" type="bool" value="true"/>
 
-            <!-- ############# Parameters for transform_to_pose_converter_node ########### -->
-            <param name="wait_for_transform" type="double" value="0.1"/>
-            <param name="reference_frame" type="str" value="odom"/>
-            <param name="target_frame" type="str" value="base_link"/>
+            <param name="base_frame" type="str" value="base_link"/>
             <!-- ############# Parameters for transform_to_pose_converter_node ########### -->
 
             <!-- ############# Parameters for twist_controller ########### -->
