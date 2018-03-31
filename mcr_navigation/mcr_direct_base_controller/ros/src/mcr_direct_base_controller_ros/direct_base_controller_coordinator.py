@@ -148,7 +148,6 @@ class DirectBaseControllerCoordinator(object):
             return 'INIT'
 
         # Get converted pose and calculate the pose error and publish
-#        converted_pose = self.transform_to_pose_converter.get_converted_pose()
         origin_pose = geometry_msgs.msg.PoseStamped()
         origin_pose.header.frame_id = self.base_frame
         origin_pose.pose.orientation.w = 1.0
@@ -163,10 +162,8 @@ class DirectBaseControllerCoordinator(object):
             return 'INIT'
         else:
             cartesian_velocity = self.twist_controller.get_cartesian_velocity(pose_error)
-            # rospy.loginfo(cartesian_velocity)
             if cartesian_velocity:
                 limited_twist = self.twist_limiter.get_limited_twist(cartesian_velocity)
-                # rospy.loginfo(limited_twist)
                 if (limited_twist != None):
                     synchronized_twist = self.twist_synchronizer.synchronize_twist(limited_twist, pose_error)
                     if (synchronized_twist != None):
