@@ -35,5 +35,5 @@ if [ $INSTALL_PACKAGES != false ]; then
 fi
 
 ### install further repositories
-rosinstall .. /opt/ros/indigo repository.rosinstall
+rosinstall .. /opt/ros/kinetic repository.rosinstall
 
