@@ -83,7 +83,7 @@ class PoseSelector(object):
                 )
             return pose, configuration, solution[1]
         else:
-            return None, None, None
+            return None, None
 
     def group_goal_poses(self, goal_pose_array):
         """
