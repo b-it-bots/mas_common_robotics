@@ -14,7 +14,7 @@ import os
 import rospkg
 import yaml
 
-def save_trajectory(trajectory, start_state, goal_state):
+def save_trajectory(trajectory, start_state, goal_state, file_path):
     """
     MoveIt! plan will be saved in mcr_arm_motions package, under ros/config folder.
     From aforementioned package, saved trajectory should extracted and extecuted.
@@ -23,10 +23,6 @@ def save_trajectory(trajectory, start_state, goal_state):
     """
 
     file_name = start_state + "-" + goal_state + "_" + 'plan.yaml'
-    rospack = rospkg.RosPack()
-
-    # get the package path for mcr_arm_motions
-    file_path = os.path.join(rospack.get_path('mcr_arm_motions'),'common/config')
 
     if not os.path.exists(file_path):
         os.makedirs(file_path)

@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <launch>
+    <arg name="trajectory_saving_file_path" default="$(find mcr_moveit_client)/ros/config/saved_trajectories" />
+
     <node pkg="mcr_trajectory_saver" type="trajectory_saver_node"
             name="trajectory_saver" output="screen">
 
@@ -12,5 +14,9 @@
         <!-- start and end robot configuration used in planning -->
         <param name="start_state" type="string" value="folded"/>
         <param name="goal_state" type="string" value="look_at_workspace"/>
+
+        <!-- path under which trajectory will be saved -->
+        <param name="file_path" value="$(arg trajectory_saving_file_path)" />
+
     </node>
 </launch>

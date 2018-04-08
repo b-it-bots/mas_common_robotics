@@ -5,11 +5,11 @@
   <description>The mcr_trajectory_saver package</description>
 
    <maintainer email="djordje.vukcevic@smail.inf.h-brs.de">Djordje Vukcevic</maintainer>
-   <maintainer email="abhishek.padalkar@smail.inf.h-brs.de">Djordje Vukcevic</maintainer>
+   <maintainer email="abhishek.padalkar@smail.inf.h-brs.de">Abhishek Padalkar</maintainer>
 
    <license>MIT</license>
    <author email="djordje.vukcevic@smail.inf.h-brs.de">Djordje Vukcevic</author>
-   <author email="abhishek.padalkar@smail.inf.h-brs.de">Djordje Vukcevic</author>
+   <author email="abhishek.padalkar@smail.inf.h-brs.de">Abhishek Padalkar</author>
 
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>rospy</build_depend>

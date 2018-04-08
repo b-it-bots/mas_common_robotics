@@ -40,6 +40,8 @@ class TrajectorySaver(object):
         # Set up MoveIt!
         self.move_group = moveit_commander.MoveGroupCommander(arm)
 
+        self.file_path = rospy.get_param('~file_path')
+
 
     def start(self):
         """
@@ -91,7 +93,8 @@ class TrajectorySaver(object):
         #Save trajectory in yaml file
         result = saver.save_trajectory(self.move_group.plan(),
                                        self.start_state,
-                                       self.goal_state)
+                                       self.goal_state,
+                                       self.file_path)
         if result:
             rospy.loginfo("Trajectory saved!")
 
