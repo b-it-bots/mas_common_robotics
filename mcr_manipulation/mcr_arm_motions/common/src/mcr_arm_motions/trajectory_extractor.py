@@ -14,12 +14,10 @@ import os
 import rospkg
 import yaml
 
-def extract_trajectory(start_state, goal_state):
+def extract_trajectory(start_state, goal_state, file_path):
 
     file_name = start_state + "-" + goal_state + "_" + 'plan.yaml'
-    rospack = rospkg.RosPack()
 
-    file_path = os.path.join(rospack.get_path('mcr_arm_motions'),'common/config')
     full_path = os.path.join(file_path, file_name)
 
     if not os.path.exists(full_path):

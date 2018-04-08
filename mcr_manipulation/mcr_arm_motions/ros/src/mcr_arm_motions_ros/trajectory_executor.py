@@ -36,6 +36,9 @@ class TrajectoryExecutor(object):
         # Set up MoveIt!
         self.move_group = moveit_commander.MoveGroupCommander(arm)
 
+        #Get path where trajectory is saved
+        self.file_path = rospy.get_param('~file_path')
+
 
     def start(self):
         """
@@ -44,7 +47,8 @@ class TrajectoryExecutor(object):
         """
 
         trajectory = extractor.extract_trajectory(self.start_state,
-                                                  self.goal_state)
+                                                  self.goal_state,
+                                                  self.file_path)
 
         execution_result = self.move_group.execute(trajectory)
 
