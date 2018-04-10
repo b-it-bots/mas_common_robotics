@@ -226,6 +226,7 @@ void SceneSegmentationNode::eventCallback(const std_msgs::String::ConstPtr &msg)
     else if(msg->data == "e_segment")
     {
         segment();
+        cloud_accumulation_->reset();
         event_out.data = "e_done";
     }
     else if (msg->data == "e_reset")
@@ -236,6 +237,7 @@ void SceneSegmentationNode::eventCallback(const std_msgs::String::ConstPtr &msg)
     else if(msg->data == "e_stop")
     {
 		sub_cloud_.shutdown();
+        cloud_accumulation_->reset();
 		event_out.data = "e_stopped";
 	}
     else
