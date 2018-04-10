@@ -7,10 +7,10 @@
   <group ns="mcr_perception">
     <rosparam file="$(arg scene_segmentation_config_file)" command="load"/>
     <node pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager"/>
-    <node pkg="nodelet" type="nodelet" name="transform"
+    <!--node pkg="nodelet" type="nodelet" name="transform"
           args="load pcl/PassThrough $(arg manager)">
        <remap from="~input" to="$(arg input_pointcloud_topic)" />
-    </node>
+    </node-->
 
     <node pkg="mcr_scene_segmentation" type="scene_segmentation_node" name="scene_segmentation" output="screen">
       <remap from="~input" to="/mcr_perception/transform/output" />
