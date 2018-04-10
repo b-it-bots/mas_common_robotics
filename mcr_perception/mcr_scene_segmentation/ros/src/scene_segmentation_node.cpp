@@ -4,6 +4,7 @@
 #include <pcl/point_types.h>
 #include <pcl/PCLPointCloud2.h>
 #include <pcl/common/centroid.h>
+#include "pcl_ros/transforms.h"
 
 #include <mcr_perception_msgs/BoundingBox.h>
 #include <mcr_perception_msgs/BoundingBoxList.h>
@@ -45,13 +46,28 @@ SceneSegmentationNode::~SceneSegmentationNode()
 }
 
 
-void SceneSegmentationNode::pointcloudCallback(const sensor_msgs::PointCloud2::ConstPtr &msg)
+void SceneSegmentationNode::pointcloudCallback(const sensor_msgs::PointCloud2::Ptr &msg)
 {
     if (add_to_octree_)
     {
+        //Transform pcl to base_link
+        sensor_msgs::PointCloud2 msg_transformed;
+        msg_transformed.header.frame_id = "base_link";
+        try
+        {
+            transform_listener_.waitForTransform("base_link", msg->header.frame_id, ros::Time(0), ros::Duration(1.0));
+            pcl_ros::transformPointCloud("base_link", *msg, msg_transformed, transform_listener_);
+        }
+        catch (tf::TransformException &ex)
+        {
+            ROS_WARN("%s", ex.what());
+            ros::Duration(1.0).sleep();
+        } 
+
+
         PointCloud::Ptr cloud(new PointCloud);
         pcl::PCLPointCloud2 pc2;
-        pcl_conversions::toPCL(*msg, pc2);
+        pcl_conversions::toPCL(msg_transformed, pc2);
         pcl::fromPCLPointCloud2(pc2, *cloud);
 
         cloud_accumulation_->addCloud(cloud);
