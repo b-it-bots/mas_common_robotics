@@ -51,14 +51,16 @@ void SceneSegmentationNode::pointcloudCallback(const sensor_msgs::PointCloud2::P
 {
     if (add_to_octree_)
     {
+        std::string target_frame_id;
+        //Default frame_id is base_link
+        nh_.param<std::string>("target_frame_id", target_frame_id, "base_link");
         sensor_msgs::PointCloud2 msg_transformed;
-        msg_transformed.header.frame_id = "base_link";
-
+        msg_transformed.header.frame_id = target_frame_id;
         try
         {
             ros::Time now = ros::Time(0);
-            transform_listener_.waitForTransform("base_link", msg->header.frame_id, now, ros::Duration(1.0));
-            pcl_ros::transformPointCloud("base_link", *msg, msg_transformed, transform_listener_);
+            transform_listener_.waitForTransform(target_frame_id, msg->header.frame_id, now, ros::Duration(1.0));
+            pcl_ros::transformPointCloud(target_frame_id, *msg, msg_transformed, transform_listener_);
         }
         catch (tf::TransformException &ex)
         {
