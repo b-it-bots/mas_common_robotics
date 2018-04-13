@@ -4,6 +4,7 @@
 #include <pcl/point_types.h>
 #include <pcl/PCLPointCloud2.h>
 #include <pcl/common/centroid.h>
+#include "pcl_ros/transforms.h"
 
 #include <mcr_perception_msgs/BoundingBox.h>
 #include <mcr_perception_msgs/BoundingBoxList.h>
@@ -50,7 +51,6 @@ void SceneSegmentationNode::pointcloudCallback(const sensor_msgs::PointCloud2::P
 {
     if (add_to_octree_)
     {
-
         sensor_msgs::PointCloud2 msg_transformed;
         msg_transformed.header.frame_id = "base_link";
 
@@ -62,7 +62,7 @@ void SceneSegmentationNode::pointcloudCallback(const sensor_msgs::PointCloud2::P
         }
         catch (tf::TransformException &ex)
         {
-            ROS_WARN("Transform error: %s", ex.what());
+            ROS_WARN("PCL transform error: %s", ex.what());
             ros::Duration(1.0).sleep();
             return;
         } 
@@ -209,12 +209,13 @@ geometry_msgs::PoseStamped SceneSegmentationNode::getPose(const BoundingBox &box
     Eigen::Quaternion<float> q(m);
     q.normalize();
 
+    double workspace_height = (vertices[0](2) + vertices[1](2) + vertices[2](2) + vertices[3](2)) / 4.0;
 
     Eigen::Vector3f centroid = box.getCenter();
     geometry_msgs::PoseStamped pose;
     pose.pose.position.x = centroid(0);
     pose.pose.position.y = centroid(1);
-    pose.pose.position.z = object_height_above_workspace_;
+    pose.pose.position.z = workspace_height + object_height_above_workspace_;
     pose.pose.orientation.x = q.x();
     pose.pose.orientation.y = q.y();
     pose.pose.orientation.z = q.z();
