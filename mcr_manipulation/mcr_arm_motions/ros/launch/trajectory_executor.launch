@@ -13,7 +13,7 @@
 
         <!-- start and end robot configuration used in planning -->
         <param name="start_state" type="string" value="folded"/>
-        <param name="goal_state" type="string" value="look_at_workspace"/>
+        <param name="goal_state" type="string" value="candle"/>
 
         <!-- path under which trajectory will be saved -->
         <param name="file_path" value="$(arg saved_trajectory_file_path)" />
