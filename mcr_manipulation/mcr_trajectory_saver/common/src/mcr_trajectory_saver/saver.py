@@ -23,11 +23,14 @@ def save_trajectory(trajectory, start_state, goal_state, file_path):
     """
 
     file_name = start_state + "-" + goal_state + "_" + 'plan.yaml'
+    head, tail = os.path.split(file_name)
 
-    if not os.path.exists(file_path):
-        os.makedirs(file_path)
+    full_path = os.path.join(file_path,head)
 
-    with open(os.path.join(file_path, file_name), "w") as save_file:
+    if not os.path.exists(full_path):
+        os.makedirs(full_path)
+
+    with open(os.path.join(full_path, tail), "w") as save_file:
         yaml.dump(trajectory, save_file, default_flow_style=True)
 
     return True
