@@ -36,6 +36,7 @@ class DirectBaseControllerCoordinator(object):
         self.pose_monitor_feedback = None
         self.pose_2 = None
         self.has_pose_error_data = False
+        self.collision_filter_feedback = None
 
         self.transform_to_pose_converter = TransformToPoseConverter();
         self.component_wise_pose_error_calculator = ComponentWisePoseErrorCalculator();
@@ -51,6 +52,9 @@ class DirectBaseControllerCoordinator(object):
         self.near_zero = rospy.get_param('~near_zero', 0.001)
 
         self.base_frame = rospy.get_param('~base_frame', 'base_link')
+
+        self.use_collision_avoidance = rospy.get_param('~use_collision_avoidance', True)
+
 
         # publishers
         self.event_out = rospy.Publisher("~event_out", std_msgs.msg.String, queue_size=1)
@@ -73,6 +77,10 @@ class DirectBaseControllerCoordinator(object):
                          self.pose_monitor_feedback_cb)
         rospy.Subscriber('~pose_2', geometry_msgs.msg.PoseStamped, self.pose_2_cb)
 
+        if self.use_collision_avoidance:
+            rospy.Subscriber("/mcr_navigation/collision_velocity_filter/event_out", std_msgs.msg.String,
+                          self.collision_filter_cb)
+
     def event_in_cb(self, msg):
         """
         Obtains an event for the component.
@@ -93,6 +101,12 @@ class DirectBaseControllerCoordinator(object):
 
         """
         self.pose_monitor_feedback = msg
+
+    def collision_filter_cb(self, msg):
+         """
+         Obtains collision velocity filter feedback.
+         """
+         self.collision_filter_feedback  = msg.data
 
     def start(self):
         """
@@ -153,6 +167,14 @@ class DirectBaseControllerCoordinator(object):
         origin_pose.pose.orientation.w = 1.0
 
         pose_error = self.component_wise_pose_error_calculator.get_component_wise_pose_error(origin_pose, self.pose_2)
+        if not pose_error:
+            self.event_out.publish('e_success')
+            self.event = None
+            self.pose_monitor_feedback = None
+            self.started_components = False
+            self.publish_zero_velocities()
+            return 'INIT'
+
         if self.component_wise_pose_error_monitor.isComponentWisePoseErrorWithinThreshold(pose_error):
             self.event_out.publish('e_success')
             self.event = None
@@ -161,6 +183,13 @@ class DirectBaseControllerCoordinator(object):
             self.publish_zero_velocities()
             return 'INIT'
         else:
+            if self.use_collision_avoidance and \
+                        (self.collision_filter_feedback == "e_reduced_velocities_forwarded" or \
+                        self.collision_filter_feedback == "e_zero_velocities_forwarded"):
+                if (pose_error.linear.y > 0.02):
+                    pose_error.linear.x = -0.02
+                self.collision_filter_feedback = None
+
             cartesian_velocity = self.twist_controller.get_cartesian_velocity(pose_error)
             if cartesian_velocity:
                 limited_twist = self.twist_limiter.get_limited_twist(cartesian_velocity)

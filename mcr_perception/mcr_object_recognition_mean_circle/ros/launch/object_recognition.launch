@@ -15,15 +15,19 @@
        The "labels" argument should contain the name of the saved label encoder for the classifer.
        Both sets of files should be under common/config -->
 
-  <include file="$(find mcr_object_detection)/ros/launch/object_detection.launch" >
+  <!--include file="$(find mcr_object_detection)/ros/launch/object_detection.launch" >
     <arg name="workspace_finder_config_file" value="$(arg workspace_finder_config_file)" />
     <arg name="object_constraints_config_file" value="$(arg object_constraints_config_file)" />
     <arg name="input_pointcloud_topic" value="$(arg input_pointcloud_topic)" />
     <arg name="use_cloud_accumulator" value="$(arg use_cloud_accumulator)" />
     <arg name="camera_frame" default="$(arg camera_frame)" />
     <arg name="target_frame" default="$(arg target_frame)" />
-  </include>
+  </include-->
 
+  <include file="$(find mcr_scene_segmentation)/ros/launch/scene_segmentation.launch" >
+    <arg name="input_pointcloud_topic" value="$(arg input_pointcloud_topic)" />
+    <arg name="target_frame" default="$(arg target_frame)" />
+  </include>
   <node pkg="mcr_object_recognition_mean_circle" type="object_recognizer" name="object_recognizer"
           output="screen" ns="mcr_perception">
     <param name="classifier" value="$(arg classifier)" type="str" />
