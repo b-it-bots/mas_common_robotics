@@ -58,8 +58,11 @@ void SceneSegmentationNode::pointcloudCallback(const sensor_msgs::PointCloud2::P
         msg_transformed.header.frame_id = target_frame_id;
         try
         {
-            ros::Time now = ros::Time(0);
-            transform_listener_.waitForTransform(target_frame_id, msg->header.frame_id, now, ros::Duration(1.0));
+
+            ros::Time common_time;
+            transform_listener_.getLatestCommonTime(target_frame_id, msg->header.frame_id, common_time, NULL);
+            msg->header.stamp = common_time;
+            transform_listener_.waitForTransform(target_frame_id, msg->header.frame_id, ros::Time::now(), ros::Duration(1.0));
             pcl_ros::transformPointCloud(target_frame_id, *msg, msg_transformed, transform_listener_);
         }
         catch (tf::TransformException &ex)
@@ -216,7 +219,7 @@ geometry_msgs::PoseStamped SceneSegmentationNode::getPose(const BoundingBox &box
     Eigen::Vector3f centroid = box.getCenter();
     geometry_msgs::PoseStamped pose;
     pose.pose.position.x = centroid(0);
-    pose.pose.position.y = centroid(1);
+    pose.pose.position.y = centroid(1) ;
     pose.pose.position.z = workspace_height + object_height_above_workspace_;
     pose.pose.orientation.x = q.x();
     pose.pose.orientation.y = q.y();
