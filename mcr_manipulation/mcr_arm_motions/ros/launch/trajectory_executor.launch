@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <arg name="saved_trajectory_file_path" default="$(find mcr_moveit_client)/ros/config/saved_trajectories" />
+    <arg name="saved_trajectory_file_path" default="$(find mir_moveit_client)/ros/config/saved_trajectories" />
 
     <node pkg="mcr_arm_motions" type="trajectory_executor_node"
             name="trajectory_executor" output="screen">
