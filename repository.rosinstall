@@ -3,3 +3,12 @@
     uri: https://github.com/mas-group/dmp.git
     version: master
 
+- git:
+    local-name: mas_perception
+    uri: https://github.com/b-it-bots/mas_perception.git
+    version: kinetic
+
+- git:
+    local-name: mas_navigation
+    uri: https://github.com/b-it-bots/mas_navigation.git
+    version: kinetic
