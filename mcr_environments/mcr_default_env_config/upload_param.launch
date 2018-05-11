@@ -7,6 +7,9 @@
   <group ns="/script_server">
     <!-- send ROBOT parameters to parameter server -->
     <rosparam command="load" ns="base" file="$(find mcr_default_env_config)/$(arg robot_env)/navigation_goals.yaml"/>
+    <group unless="$(arg domestic_domain)"> 
+        <rosparam command="load" ns="base_orientations" file="$(find mcr_default_env_config)/$(arg robot_env)/navigation_orientations.yaml"/>
+    </group>
     <group if="$(arg domestic_domain)">
       <!-- send NAMES parameters to parameter server -->
       <rosparam command="load" file="$(find mcr_default_env_config)/$(arg robot_env)/speech_names.yaml"/>
