@@ -27,6 +27,7 @@ class SceneSegmentationNode
         ros::Publisher pub_boxes_;
         ros::Publisher pub_object_list_;
         ros::Publisher pub_event_out_;
+        ros::Publisher pub_workspace_height_;
 
         ros::Subscriber sub_cloud_;
         ros::Subscriber sub_event_in_;

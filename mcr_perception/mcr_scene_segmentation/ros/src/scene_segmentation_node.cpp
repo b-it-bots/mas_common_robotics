@@ -18,6 +18,8 @@
 #include "pcl_ros/point_cloud.h"
 #include <pcl_ros/transforms.h>
 
+#include <std_msgs/Float64.h>
+
 SceneSegmentationNode::SceneSegmentationNode(): nh_("~"), bounding_box_visualizer_("bounding_boxes", Color(Color::SEA_GREEN)),
                                                           cluster_visualizer_("tabletop_clusters"), label_visualizer_("labels", mcr::visualization::Color(mcr::visualization::Color::TEAL)),
                                                           add_to_octree_(false), object_id_(0)
@@ -26,6 +28,7 @@ SceneSegmentationNode::SceneSegmentationNode(): nh_("~"), bounding_box_visualize
     pub_object_list_ = nh_.advertise<mcr_perception_msgs::ObjectList>("object_list", 1);
     sub_event_in_ = nh_.subscribe("event_in", 1, &SceneSegmentationNode::eventCallback, this);
     pub_event_out_ = nh_.advertise<std_msgs::String>("event_out", 1);
+    pub_workspace_height_ = nh_.advertise<std_msgs::Float64>("workspace_height", 1);
 
     dynamic_reconfigure::Server<mcr_scene_segmentation::SceneSegmentationConfig>::CallbackType f =
                             boost::bind(&SceneSegmentationNode::config_callback, this, _1, _2);
@@ -97,7 +100,11 @@ void SceneSegmentationNode::segment()
 
     std::vector<PointCloud::Ptr> clusters;
     std::vector<BoundingBox> boxes;
-    PointCloud::Ptr debug = scene_segmentation_.segment_scene(cloud, clusters, boxes);
+    double workspace_height;
+    PointCloud::Ptr debug = scene_segmentation_.segment_scene(cloud, clusters, boxes, workspace_height);
+    std_msgs::Float64 workspace_height_msg;
+    workspace_height_msg.data = workspace_height;
+    pub_workspace_height_.publish(workspace_height_msg);
     pub_debug_.publish(*debug);
 
     mcr_perception_msgs::BoundingBoxList bounding_boxes;
