@@ -37,6 +37,7 @@ if(CATKIN_ENABLE_TESTING)
 endif()
 
 install(PROGRAMS
+  ros/scripts/trajectory_executor_node
   ros/scripts/cartesian_motion_node
   ros/scripts/planned_motion_node
   ros/scripts/planned_motion_with_feedback_node

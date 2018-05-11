@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="trajectory_saving_file_path" default="$(find mir_moveit_client)/ros/config/saved_trajectories" />
+
+    <node pkg="mcr_trajectory_saver" type="trajectory_saver_node"
+            name="trajectory_saver" output="screen">
+
+        <!-- the cycle rate of the node (in Hz) -->
+        <param name="loop_rate" type="double" value="10"/>
+
+        <!-- the name of robot arm used in planning -->
+        <param name="arm" type="string" value="arm_1"/>
+
+        <!-- start and end robot configuration used in planning -->
+        <param name="start_state" type="string" value="folded"/>
+        <param name="goal_state" type="string" value="candle"/>
+
+        <!-- path under which trajectory will be saved -->
+        <param name="file_path" value="$(arg trajectory_saving_file_path)" />
+
+    </node>
+</launch>
