@@ -12,7 +12,6 @@ import std_msgs.msg
 import geometry_msgs.msg
 import tf
 import mcr_manipulation_msgs.msg
-import dynamic_reconfigure.server
 from math import sin, cos, atan2
 
 class ComponentWisePoseErrorCalculator(object):
@@ -23,9 +22,7 @@ class ComponentWisePoseErrorCalculator(object):
     """
     def __init__(self):
         # params
-        self.pose_1 = None
-        self.pose_2 = None
-        self.listener = tf.TransformListener()
+        self.tf_listener = tf.TransformListener()
 
         # linear offset applied to the result (a three-element list)
         self.linear_offset = rospy.get_param('~linear_offset', None)
@@ -41,17 +38,14 @@ class ComponentWisePoseErrorCalculator(object):
         """
         Helper method for dynamic reconfiguration
         """
-        # self.linear_offset = linear_offset
         self.wait_for_transform = wait_for_transform
 
     def get_component_wise_pose_error(self, pose_1, pose_2):
-        self.pose_1 = pose_1
-        self.pose_2 = pose_2
-        if self.pose_1 and self.pose_2:
-            transformed_pose = self.transform_pose(self.pose_1, self.pose_2)
+        if pose_1 and pose_2:
+            transformed_pose = self.transform_pose(pose_1, pose_2)
             if transformed_pose:
                 pose_error = self.calculate_component_wise_pose_error(
-                    self.pose_1, transformed_pose, self.linear_offset
+                    pose_1, transformed_pose, self.linear_offset
                 )
                 return pose_error
 
@@ -76,16 +70,16 @@ class ComponentWisePoseErrorCalculator(object):
 
         """
         try:
-            target_pose.header.stamp = self.listener.getLatestCommonTime(
+            target_pose.header.stamp = self.tf_listener.getLatestCommonTime(
                 target_pose.header.frame_id, reference_pose.header.frame_id
             )
 
-            self.listener.waitForTransform(
+            self.tf_listener.waitForTransform(
                 target_pose.header.frame_id, reference_pose.header.frame_id,
                 target_pose.header.stamp, rospy.Duration(self.wait_for_transform)
             )
 
-            transformed_pose = self.listener.transformPose(
+            transformed_pose = self.tf_listener.transformPose(
                 reference_pose.header.frame_id, target_pose,
             )
 
