@@ -154,4 +154,3 @@ def main():
     rospy.init_node('transform_to_pose_converter', anonymous=True)
     transform_to_pose_converter = TransformToPoseConverter()
     transform_to_pose_converter.start_transform_to_pose_converter()
-
