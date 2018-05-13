@@ -16,7 +16,6 @@ geometry_msgs/TwistStamped message), such that each component of a Cartesian err
   * `angular_synchronization`: If True, it also synchronizes the angular and linear
   velocities. By default, it only synchronizes the linear velocities (bool).
   * `near_zero`: A value to prevent division by near-zero values.
-  * `loop_rate`: Node cycle rate (in hz).
 
 """
 
@@ -33,10 +32,6 @@ class TwistSynchronizer(object):
 
     """
     def __init__(self):
-        # Params
-        self.twist = None
-        self.pose_error = None
-
         # If True, it also synchronizes the angular and linear velocities.
         # By default, it only synchronizes the linear velocities.
         self.angular_synchronization = rospy.get_param('~angular_synchronization', True)
@@ -44,8 +39,12 @@ class TwistSynchronizer(object):
         # A value to prevent division by near-zero values.
         self.near_zero = rospy.get_param('~near_zero', 0.001)
 
-        # Node cycle rate (in hz)
-        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
+    def set_angular_synchronization(self, angular_synchronization):
+        """
+        sets the angular_synchronization parameter
+        If set to True, both angular and linear velocities are synchronized
+        """
+        self.angular_synchronization = angular_synchronization
 
     def synchronize_twist(self, twist, pose_error):
         """
@@ -55,17 +54,15 @@ class TwistSynchronizer(object):
         :rtype: geometry_msgs.msg.TwistStamped
 
         """
-        self.pose_error = pose_error
-
         synchronized_twist = geometry_msgs.msg.TwistStamped()
         synchronized_twist.header.frame_id = twist.header.frame_id
         synchronized_twist.header.stamp = twist.header.stamp
 
         if self.angular_synchronization:
             error = [
-                self.pose_error.linear.x, self.pose_error.linear.y,
-                self.pose_error.linear.z, self.pose_error.angular.x,
-                self.pose_error.angular.y, self.pose_error.angular.z
+                pose_error.linear.x, pose_error.linear.y,
+                pose_error.linear.z, pose_error.angular.x,
+                pose_error.angular.y, pose_error.angular.z
             ]
 
             velocity = [
@@ -75,8 +72,8 @@ class TwistSynchronizer(object):
             ]
         else:
             error = [
-                self.pose_error.linear.x, self.pose_error.linear.y,
-                self.pose_error.linear.z
+                pose_error.linear.x, pose_error.linear.y,
+                pose_error.linear.z
             ]
 
             velocity = [
@@ -103,11 +100,3 @@ class TwistSynchronizer(object):
             synchronized_twist.twist.angular.z = sync_velocities[5]
 
         return synchronized_twist
-
-    def reset_component_data(self):
-        """
-        Clears the data of the component.
-
-        """
-        self.twist = None
-        self.pose_error = None
