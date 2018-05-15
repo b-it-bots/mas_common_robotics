@@ -3,6 +3,7 @@ project(mcr_twist_controller)
 
 find_package(catkin REQUIRED
   COMPONENTS
+    roslint
     rospy
 )
 
@@ -22,6 +23,7 @@ install(PROGRAMS
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+roslint_python()
 ### TESTS
 if(CATKIN_ENABLE_TESTING)
   find_package(roslaunch REQUIRED)

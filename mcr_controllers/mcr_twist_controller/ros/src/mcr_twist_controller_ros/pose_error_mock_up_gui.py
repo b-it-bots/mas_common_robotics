@@ -4,12 +4,13 @@ This module contains a component that publishes a mock-up
 pose error.
 
 """
-#-*- encoding: utf-8 -*-
-__author__ = 'jsanch'
 
 import rospy
 import mcr_manipulation_msgs.msg
 import Tkinter
+
+# -*- encoding: utf-8 -*-
+__author__ = 'jsanch'
 
 RESOLUTION = 0.005  # in meters
 MAX_ERROR = 0.1     # in meters
@@ -21,7 +22,7 @@ pose_error = mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference()
 
 def create_window():
     master = Tkinter.Tk()
-    
+
     label = Tkinter.Label(master, text="Pose Error")
     label.pack(side=Tkinter.TOP)
 
