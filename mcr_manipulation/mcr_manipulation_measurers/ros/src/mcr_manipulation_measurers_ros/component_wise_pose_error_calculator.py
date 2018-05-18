@@ -44,7 +44,7 @@ class ComponentWisePoseErrorCalculator(object):
         if pose_1 and pose_2:
             transformed_pose = self.transform_pose(pose_1, pose_2)
             if transformed_pose:
-                pose_error = self.calculate_component_wise_pose_error(
+                pose_error = calculate_component_wise_pose_error(
                     pose_1, transformed_pose, self.linear_offset
                 )
                 return pose_error
@@ -98,59 +98,59 @@ class ComponentWisePoseErrorCalculator(object):
         self.pose_2 = None
 
 
-    def calculate_component_wise_pose_error(self, current_pose, target_pose, offset=None):
-        """
-        Calculates the component-wise error between two 'PoseStamped' objects.
-        It assumes that both poses are specified with respect of the same
-        reference frame.
+def calculate_component_wise_pose_error(current_pose, target_pose, offset=None):
+    """
+    Calculates the component-wise error between two 'PoseStamped' objects.
+    It assumes that both poses are specified with respect of the same
+    reference frame.
 
-        :param current_pose: The current pose.
-        :type current_pose: geometry_msgs.msg.PoseStamped
+    :param current_pose: The current pose.
+    :type current_pose: geometry_msgs.msg.PoseStamped
 
-        :param target_pose: The target pose.
-        :type target_pose: geometry_msgs.msg.PoseStamped
+    :param target_pose: The target pose.
+    :type target_pose: geometry_msgs.msg.PoseStamped
 
-        :param offset: A linear offset in X, Y, Z.
-        :type offset: list
+    :param offset: A linear offset in X, Y, Z.
+    :type offset: list
 
-        :return: The difference in the six components
-        (three linear and three angular).
-        :rtype: mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference
+    :return: The difference in the six components
+    (three linear and three angular).
+    :rtype: mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference
 
-        """
-        error = mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference()
-        error.header.frame_id = current_pose.header.frame_id
+    """
+    error = mcr_manipulation_msgs.msg.ComponentWiseCartesianDifference()
+    error.header.frame_id = current_pose.header.frame_id
 
-        # calculate linear distances
-        error.linear.x = target_pose.pose.position.x - current_pose.pose.position.x
-        error.linear.y = target_pose.pose.position.y - current_pose.pose.position.y
-        error.linear.z = target_pose.pose.position.z - current_pose.pose.position.z
+    # calculate linear distances
+    error.linear.x = target_pose.pose.position.x - current_pose.pose.position.x
+    error.linear.y = target_pose.pose.position.y - current_pose.pose.position.y
+    error.linear.z = target_pose.pose.position.z - current_pose.pose.position.z
 
-        current_quaternion = [
-            current_pose.pose.orientation.x, current_pose.pose.orientation.y,
-            current_pose.pose.orientation.z, current_pose.pose.orientation.w
-        ]
-        target_quaternion = [
-            target_pose.pose.orientation.x, target_pose.pose.orientation.y,
-            target_pose.pose.orientation.z, target_pose.pose.orientation.w
-        ]
+    current_quaternion = [
+        current_pose.pose.orientation.x, current_pose.pose.orientation.y,
+        current_pose.pose.orientation.z, current_pose.pose.orientation.w
+    ]
+    target_quaternion = [
+        target_pose.pose.orientation.x, target_pose.pose.orientation.y,
+        target_pose.pose.orientation.z, target_pose.pose.orientation.w
+    ]
 
-        # convert quaternions into roll, pitch, yaw angles
-        current_angles = tf.transformations.euler_from_quaternion(current_quaternion)
-        target_angles = tf.transformations.euler_from_quaternion(target_quaternion)
+    # convert quaternions into roll, pitch, yaw angles
+    current_angles = tf.transformations.euler_from_quaternion(current_quaternion)
+    target_angles = tf.transformations.euler_from_quaternion(target_quaternion)
 
-        # calculate angular distances
-        error.angular.x = self.getShortestAngle(target_angles[0], current_angles[0])
-        error.angular.y = self.getShortestAngle(target_angles[1],  current_angles[1])
-        error.angular.z = self.getShortestAngle(target_angles[2], current_angles[2])
+    # calculate angular distances
+    error.angular.x = getShortestAngle(target_angles[0], current_angles[0])
+    error.angular.y = getShortestAngle(target_angles[1], current_angles[1])
+    error.angular.z = getShortestAngle(target_angles[2], current_angles[2])
 
-        if offset is not None:
-            offset = tuple(offset)
-            error.linear.x += offset[0]
-            error.linear.y += offset[1]
-            error.linear.z += offset[2]
+    if offset is not None:
+        offset = tuple(offset)
+        error.linear.x += offset[0]
+        error.linear.y += offset[1]
+        error.linear.z += offset[2]
 
-        return error
+    return error
 
-    def getShortestAngle(self, angle1, angle2):
-       return atan2(sin(angle1 - angle2), cos(angle1 - angle2));
+def getShortestAngle(angle1, angle2):
+   return atan2(sin(angle1 - angle2), cos(angle1 - angle2));
