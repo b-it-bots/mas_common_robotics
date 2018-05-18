@@ -32,7 +32,6 @@ import std_msgs.msg
 import geometry_msgs.msg
 import mcr_manipulation_msgs.msg
 
-
 class PoseGenerator:
     """
     Generates a list of Cartesian poses, based on the specified spherical sample
@@ -40,139 +39,58 @@ class PoseGenerator:
 
     """
     def __init__(self):
-        # Params
-        self.event = None
-        self.target_pose = None
-        self.sampling_parameters = None
+        # the sampling step for linear variables (in meters)
+        self.linear_step = 0.01
+        # the sampling step for angular variables (in radians)
+        self.angular_step =  math.pi/12
+        # the maximum amount of samples to be generated
+        self.max_samples = 50
 
-        # Node cycle rate (in hz)
-        self.loop_rate = rospy.Rate(rospy.get_param('~loop_rate', 10))
-        # Sampling step for linear variables (in meters)
-        self.linear_step = rospy.get_param('~linear_step', 0.01)
-        # Sampling step for angular variables (in degrees)
-        self.angular_step = math.radians(rospy.get_param('~angular_step', 15))
-        # Maximum amount of samples to be generated (int)
-        self.max_samples = rospy.get_param('~max_samples', 50)
-        # Configuration matrix of the gripper to be used (as a string)
-        self.gripper = rospy.get_param('~gripper_config_matrix', None)
-        assert self.gripper is not None, "Gripper config matrix must be specified."
+        self.gripper_config_matrix = None
 
-        # Configuration matrix of the gripper to be used (a real 4x4 matrix)
-        self.gripper_config_matrix = rospy.get_param('~' + self.gripper)
+    def set_linear_step(self, linear_step):
+        self.linear_step = linear_step
 
-        # Publishers
-        self.event_out = rospy.Publisher('~event_out', std_msgs.msg.String, queue_size=1)
-        self.poses_list = rospy.Publisher(
-            '~poses_list', geometry_msgs.msg.PoseArray, queue_size=1
-        )
+    def set_angular_step(self, angular_step):
+        self.angular_step = angular_step
 
-        # Subscribers
-        rospy.Subscriber('~event_in', std_msgs.msg.String, self.event_in_cb)
-        rospy.Subscriber(
-            '~target_pose', geometry_msgs.msg.PoseStamped, self.target_pose_cb
-        )
-        rospy.Subscriber(
-            '~sampling_parameters', mcr_manipulation_msgs.msg.SphericalSamplerParameters,
-            self.sampling_parameters_cb
-        )
+    def set_max_samples(self, max_samples):
+        self.max_samples = max_samples
 
-    def event_in_cb(self, msg):
-        """
-        Obtains an event for the component.
+    def set_min_distance_to_object(self, min_distance_to_object):
+        self.min_distance_to_object = min_distance_to_object
+    
+    def set_max_distance_to_object(self, max_distance_to_object):
+        self.max_distance_to_object = max_distance_to_object
 
-        """
-        self.event = msg.data
+    def set_min_azimuth(self, min_azimuth):
+        self.min_azimuth = min_azimuth
 
-    def target_pose_cb(self, msg):
-        """
-        Obtains the target pose.
+    def set_max_azimuth(self, max_azimuth):
+        self.max_azimuth = max_azimuth
 
-        """
-        self.target_pose = msg
+    def set_max_zenith(self, max_zenith):
+        self.max_zenith = max_zenith
 
-    def sampling_parameters_cb(self, msg):
-        """
-        Obtains the spherical sampler parameters.
+    def set_min_zenith(self, min_zenith):
+        self.min_zenith = min_zenith
 
-        """
-        self.sampling_parameters = msg
+    def set_min_height(self, min_height):
+        self.min_height = min_height
 
-    def start(self):
-        """
-        Starts the component.
+    def set_max_height(self, max_height):
+        self.max_height = max_height
 
-        """
-        rospy.loginfo("Ready to start...")
-        state = 'INIT'
+    def set_min_roll(self, min_roll):
+        self.min_roll = min_roll
 
-        while not rospy.is_shutdown():
+    def set_max_roll(self, max_roll):
+        self.max_roll = max_roll
 
-            if state == 'INIT':
-                state = self.init_state()
-            elif state == 'IDLE':
-                state = self.idle_state()
-            elif state == 'RUNNING':
-                state = self.running_state()
+    def set_gripper_config_matrix(self, gripper_config_matrix):
+        self.gripper_config_matrix = gripper_config_matrix
 
-            rospy.logdebug("State: {0}".format(state))
-            self.loop_rate.sleep()
-
-    def init_state(self):
-        """
-        Executes the INIT state of the state machine.
-
-        :return: The updated state.
-        :rtype: str
-
-        """
-        if self.event == 'e_start':
-            return 'IDLE'
-        else:
-            return 'INIT'
-
-    def idle_state(self):
-        """
-        Executes the IDLE state of the state machine.
-
-        :return: The updated state.
-        :rtype: str
-
-        """
-        if self.event == 'e_stop':
-            self.reset_component_data()
-            self.event_out.publish('e_stopped')
-            return 'INIT'
-        elif self.sampling_parameters and self.target_pose:
-            return 'RUNNING'
-        else:
-            return 'IDLE'
-
-    def running_state(self):
-        """
-        Executes the RUNNING state of the state machine.
-
-        :return: The updated state.
-        :rtype: str
-
-        """
-        if self.event == 'e_stop':
-            self.reset_component_data()
-            self.event_out.publish('e_stopped')
-            return 'INIT'
-        else:
-            poses_list = self.calculate_poses_list(
-                self.target_pose, self.sampling_parameters
-            )
-            if poses_list:
-                self.poses_list.publish(poses_list)
-                self.event_out.publish('e_success')
-            else:
-                self.event_out.publish('e_failure')
-
-            self.reset_component_data()
-            return 'IDLE'
-
-    def calculate_poses_list(self, target_pose, sample_parameters, number_of_fields=5):
+    def calculate_poses_list(self, target_pose, number_of_fields=5):
         """
         Calculates a list of poses around a target pose based on the spherical sampler parameters.
 
@@ -201,26 +119,26 @@ class PoseGenerator:
         object_matrix[0, 3] = target_pose.pose.position.x
         object_matrix[1, 3] = target_pose.pose.position.y
         object_matrix[2, 3] = target_pose.pose.position.z
-
+        
         height_offsets = utils.generate_samples(
-            sample_parameters.height.minimum, sample_parameters.height.maximum,
+            self.min_height, self.max_height,
             self.linear_step, (self.max_samples / number_of_fields)
         )
         zeniths = utils.generate_samples(
-            sample_parameters.zenith.minimum, sample_parameters.zenith.maximum,
+            self.min_zenith, self.max_zenith,
             self.angular_step, (self.max_samples / number_of_fields)
         )
         azimuths = utils.generate_samples(
-            sample_parameters.azimuth.minimum, sample_parameters.azimuth.maximum,
+            self.min_azimuth, self.max_azimuth,
             self.angular_step, (self.max_samples / number_of_fields)
         )
         wrist_rolls = utils.generate_samples(
-            sample_parameters.yaw.minimum, sample_parameters.yaw.maximum,
+            self.min_roll, self.max_roll,
             self.angular_step, (self.max_samples / number_of_fields)
         )
         radials = utils.generate_samples(
-            sample_parameters.radial_distance.minimum,
-            sample_parameters.radial_distance.maximum, self.linear_step,
+            self.min_distance_to_object,
+            self.max_distance_to_object, self.linear_step,
             (self.max_samples / number_of_fields)
         )
 
