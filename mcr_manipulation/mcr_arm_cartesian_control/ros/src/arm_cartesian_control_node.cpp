@@ -130,13 +130,13 @@ void init_ik_solver()
     weight_ts.resize(6, 6);
     weight_ts.setIdentity();
 
-    //weight_ts(0, 0) = 1;
-    //weight_ts(1, 1) = 1;
-    //weight_ts(2, 2) = 10;
-    //weight_ts(3, 3) = 0.0001;
-    //weight_ts(4, 4) = 0.0001;
-    //weight_ts(5, 5) = 0.0001;
-    //((KDL::ChainIkSolverVel_wdls*) ik_solver)->setWeightTS(weight_ts);
+    weight_ts(0, 0) = 1;
+    weight_ts(1, 1) = 1;
+    weight_ts(2, 2) = 1;
+    weight_ts(3, 3) = 0.4;
+    weight_ts(4, 4) = 0.4;
+    weight_ts(5, 5) = 0.4;
+    ((KDL::ChainIkSolverVel_wdls*) ik_solver)->setWeightTS(weight_ts);
 
     weight_js = (Eigen::MatrixXd::Identity(arm_chain.getNrOfJoints(),
                                            arm_chain.getNrOfJoints()));
