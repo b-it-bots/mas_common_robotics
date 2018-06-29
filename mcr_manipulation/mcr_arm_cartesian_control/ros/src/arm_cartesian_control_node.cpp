@@ -17,11 +17,17 @@
 #include <brics_actuator/JointVelocities.h>
 #include <tf/transform_listener.h>
 
+#include <std_msgs/MultiArrayLayout.h>
+#include <std_msgs/MultiArrayDimension.h>
+#include <std_msgs/Float32MultiArray.h>
+
 KDL::Chain arm_chain;
 std::vector<boost::shared_ptr<urdf::JointLimits> > joint_limits;
 
 KDL::JntArray joint_positions;
 std::vector<bool> joint_positions_initialized;
+
+Eigen::VectorXd sigma;
 
 KDL::Twist targetVelocity;
 
@@ -30,6 +36,8 @@ Eigen::MatrixXd weight_ts;
 Eigen::MatrixXd weight_js;
 
 ros::Publisher cmd_vel_publisher;
+ros::Publisher sigma_publisher;
+
 tf::TransformListener *tf_listener;
 
 bool active = false;
@@ -252,6 +260,8 @@ int main(int argc, char **argv)
     ROS_INFO("Using %s as tool tip [param: tip_name]", tooltip_name.c_str());
 
 
+
+
     //load URDF model
     ROS_URDF_Loader loader;
     loader.loadModel(node_handle, root_name, tooltip_name, arm_chain, joint_limits);
@@ -260,7 +270,7 @@ int main(int argc, char **argv)
     joint_positions.resize(arm_chain.getNrOfJoints());
 
 
-
+    std_msgs::Float32MultiArray sigma_array;
 
     init_ik_solver();
 
@@ -280,6 +290,10 @@ int main(int argc, char **argv)
                                        1, jointstateCallback);
     ros::Subscriber sub_cc = node_handle.subscribe(cart_control_topic, 1,
                              ccCallback);
+
+    //sigma values publisher 
+    sigma_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
+                            "/sigma_values", 1);
 
 
     arm_cc::Arm_Cartesian_Control control(&arm_chain, ik_solver);
@@ -305,8 +319,20 @@ int main(int argc, char **argv)
 
         if (watchdog())
         {
-            control.process(1 / rate, joint_positions, targetVelocity, cmd_velocities);
+            control.process(1 / rate, joint_positions, targetVelocity, cmd_velocities, sigma);
+            
+            sigma_array.data.clear();
+            if (sigma.size() != 0)
+            {
+                for (int i = 0; i < 5; i++)
+                {
 
+                    sigma_array.data.push_back(sigma[i]);
+                }
+            }
+            
+
+            sigma_publisher.publish(sigma_array);
             publishJointVelocities(cmd_velocities);
         }
 

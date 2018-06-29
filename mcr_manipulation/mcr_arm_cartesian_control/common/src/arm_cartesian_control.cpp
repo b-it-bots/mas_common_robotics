@@ -83,7 +83,7 @@ void Arm_Cartesian_Control::checkLimits(
 void Arm_Cartesian_Control::process(
     double dt,
     KDL::JntArray& joint_positions,
-    KDL::Twist& targetVelocity, KDL::JntArrayVel& out_jnt_velocities)
+    KDL::Twist& targetVelocity, KDL::JntArrayVel& out_jnt_velocities, Eigen::VectorXd& sigma)
 {
 
     out_jnt_velocities.q.data = joint_positions.data;
@@ -120,7 +120,8 @@ void Arm_Cartesian_Control::process(
     KDL::JntArray jntVel(arm_chain->getNrOfJoints());
 
     ik_solver->CartToJnt(joint_positions, targetVelocity, jntVel);
-
+    sigma.resize(5);
+    int error_sigma = ((KDL::ChainIkSolverVel_wdls*) ik_solver)->getSigma(sigma);
 
     // limit joint velocitied
     if (jntVel.data.norm() > 0.01)
