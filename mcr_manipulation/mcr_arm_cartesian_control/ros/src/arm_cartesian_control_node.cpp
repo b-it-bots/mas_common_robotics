@@ -240,6 +240,8 @@ int main(int argc, char **argv)
 
     //TODO: read from param
     std::string velocity_command_topic = "joint_velocity_command";
+    std::string sigma_values_topic = "sigma_values";
+
     std::string joint_state_topic = "/joint_states";
     std::string cart_control_topic = "cartesian_velocity_command";
 
@@ -293,7 +295,7 @@ int main(int argc, char **argv)
 
     //sigma values publisher 
     sigma_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
-                            "/sigma_values", 1);
+                            sigma_values_topic, 1);
 
 
     arm_cc::Arm_Cartesian_Control control(&arm_chain, ik_solver);
