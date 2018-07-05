@@ -88,6 +88,10 @@ public:
 
     void publishJointVelocities(KDL::JntArrayVel& joint_velocities);
 
+    void wtsCallback(std_msgs::Float32MultiArray weights);
+
+    void wjsCallback(std_msgs::Float32MultiArray weights);
+
     void stopMotion();
     bool watchdog();
 };
