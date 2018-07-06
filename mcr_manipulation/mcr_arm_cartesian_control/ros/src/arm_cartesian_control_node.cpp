@@ -17,11 +17,17 @@
 #include <brics_actuator/JointVelocities.h>
 #include <tf/transform_listener.h>
 
+#include <std_msgs/MultiArrayLayout.h>
+#include <std_msgs/MultiArrayDimension.h>
+#include <std_msgs/Float32MultiArray.h>
+
 KDL::Chain arm_chain;
 std::vector<boost::shared_ptr<urdf::JointLimits> > joint_limits;
 
 KDL::JntArray joint_positions;
 std::vector<bool> joint_positions_initialized;
+
+Eigen::VectorXd sigma;
 
 KDL::Twist targetVelocity;
 
@@ -30,6 +36,8 @@ Eigen::MatrixXd weight_ts;
 Eigen::MatrixXd weight_js;
 
 ros::Publisher cmd_vel_publisher;
+ros::Publisher sigma_publisher;
+
 tf::TransformListener *tf_listener;
 
 bool active = false;
@@ -38,6 +46,7 @@ ros::Time t_last_command;
 brics_actuator::JointVelocities jointMsg;
 
 std::string root_name = "DEFAULT_CHAIN_ROOT";
+int nrOfJoints;
 
 
 void jointstateCallback(sensor_msgs::JointStateConstPtr joints)
@@ -60,6 +69,30 @@ void jointstateCallback(sensor_msgs::JointStateConstPtr joints)
             }
         }
     }
+}
+
+void wtsCallback(std_msgs::Float32MultiArray weights)
+{
+    weight_ts.resize(6, 6);
+    weight_ts.setIdentity();
+    weight_ts(0, 0) = weights.data[0];
+    weight_ts(1, 1) = weights.data[1];
+    weight_ts(2, 2) = weights.data[2];
+    weight_ts(3, 3) = weights.data[3];
+    weight_ts(4, 4) = weights.data[4];
+    weight_ts(5, 5) = weights.data[5];
+    ((KDL::ChainIkSolverVel_wdls*) ik_solver)->setWeightTS(weight_ts);
+}
+
+void wjsCallback(std_msgs::Float32MultiArray weights)
+{
+    weight_js.resize(nrOfJoints, nrOfJoints);
+    weight_js.setIdentity();
+    for (int i = 0; i < nrOfJoints; i++)
+    {
+        weight_js(i,i) = weights.data[i];
+    }
+    ((KDL::ChainIkSolverVel_wdls*) ik_solver)->setWeightJS(weight_js);
 }
 
 void ccCallback(geometry_msgs::TwistStampedConstPtr desiredVelocity)
@@ -232,6 +265,9 @@ int main(int argc, char **argv)
 
     //TODO: read from param
     std::string velocity_command_topic = "joint_velocity_command";
+    std::string sigma_values_topic = "sigma_values";
+    std::string weight_ts_topic = "weight_task_space";
+    std::string weight_js_topic = "weight_joint_space";
     std::string joint_state_topic = "/joint_states";
     std::string cart_control_topic = "cartesian_velocity_command";
 
@@ -252,15 +288,17 @@ int main(int argc, char **argv)
     ROS_INFO("Using %s as tool tip [param: tip_name]", tooltip_name.c_str());
 
 
+
+
     //load URDF model
     ROS_URDF_Loader loader;
     loader.loadModel(node_handle, root_name, tooltip_name, arm_chain, joint_limits);
-
+    
     //init
-    joint_positions.resize(arm_chain.getNrOfJoints());
+    nrOfJoints = arm_chain.getNrOfJoints();
+    joint_positions.resize(nrOfJoints);
 
-
-
+    std_msgs::Float32MultiArray sigma_array;
 
     init_ik_solver();
 
@@ -269,7 +307,9 @@ int main(int argc, char **argv)
     //fk_solver = new KDL::ChainFkSolverPos_recursive(arm_chain);
     //jnt2jac = new KDL::ChainJntToJacSolver(arm_chain);
 
-
+    //sigma values publisher 
+    sigma_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
+                            sigma_values_topic, 1);
 
     //register publisher
     cmd_vel_publisher = node_handle.advertise<brics_actuator::JointVelocities>(
@@ -278,9 +318,16 @@ int main(int argc, char **argv)
     //register subscriber
     ros::Subscriber sub_joint_states = node_handle.subscribe(joint_state_topic,
                                        1, jointstateCallback);
+
+    ros::Subscriber sub_wjs = node_handle.subscribe(weight_js_topic, 1,
+                             wjsCallback);
+    
+    ros::Subscriber sub_wts = node_handle.subscribe(weight_ts_topic, 1,
+                             wtsCallback);
+
     ros::Subscriber sub_cc = node_handle.subscribe(cart_control_topic, 1,
                              ccCallback);
-
+    
 
     arm_cc::Arm_Cartesian_Control control(&arm_chain, ik_solver);
     std::vector<double> upper_limits;
@@ -293,7 +340,7 @@ int main(int argc, char **argv)
     }
     control.setJointLimits(lower_limits, upper_limits);
 
-    KDL::JntArrayVel cmd_velocities(arm_chain.getNrOfJoints());
+    KDL::JntArrayVel cmd_velocities(nrOfJoints);
 
     //loop with 50Hz
     ros::Rate loop_rate(rate);
@@ -305,8 +352,18 @@ int main(int argc, char **argv)
 
         if (watchdog())
         {
-            control.process(1 / rate, joint_positions, targetVelocity, cmd_velocities);
-
+            control.process(1 / rate, joint_positions, targetVelocity, cmd_velocities, sigma);
+            
+            sigma_array.data.clear();
+            if (sigma.size() != 0)
+            {
+                for (int i = 0; i < nrOfJoints; i++)
+                {
+                    sigma_array.data.push_back(sigma[i]);
+                }
+            }
+            
+            sigma_publisher.publish(sigma_array);
             publishJointVelocities(cmd_velocities);
         }
 

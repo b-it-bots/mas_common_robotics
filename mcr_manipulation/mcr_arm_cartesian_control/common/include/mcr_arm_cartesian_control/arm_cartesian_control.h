@@ -10,6 +10,7 @@
 
 #include <kdl/kdl.hpp>
 #include <kdl/chainiksolver.hpp>
+#include <kdl/chainiksolvervel_wdls.hpp>
 
 namespace arm_cc
 {
@@ -25,7 +26,6 @@ protected:
     std::vector<double> upper_joint_limits;
     std::vector<double> lower_joint_limits;
 
-
 public:
     Arm_Cartesian_Control(KDL::Chain* arm_chain,
                           KDL::ChainIkSolverVel* ik_solver);
@@ -40,7 +40,7 @@ public:
 
     //void stopMotion();
 
-    void process(double dt, KDL::JntArray& position, KDL::Twist& targetVelocity, KDL::JntArrayVel& out_jnt_velocities);
+    void process(double dt, KDL::JntArray& position, KDL::Twist& targetVelocity, KDL::JntArrayVel& out_jnt_velocities, Eigen::VectorXd& sigma);
 
     void setJointLimits(std::vector<double> lower, std::vector<double> upper);
 
