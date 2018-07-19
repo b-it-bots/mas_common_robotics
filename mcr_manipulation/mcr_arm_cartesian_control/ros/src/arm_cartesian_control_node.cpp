@@ -46,6 +46,7 @@ ros::Time t_last_command;
 brics_actuator::JointVelocities jointMsg;
 
 std::string root_name = "DEFAULT_CHAIN_ROOT";
+bool use_FloatArray_msg = false;
 int nrOfJoints;
 
 
@@ -219,6 +220,29 @@ void publishJointVelocities(KDL::JntArrayVel& joint_velocities)
 }
 
 
+void publishJointVelocities_FA(KDL::JntArrayVel& joint_velocities)
+{
+
+    for (unsigned int i = 0; i < joint_velocities.qdot.rows(); i++)
+    {
+        jointMsg.velocities[i].value = joint_velocities.qdot(i);
+        ROS_DEBUG("%s: %.5f %s", jointMsg.velocities[i].joint_uri.c_str(),
+                  jointMsg.velocities[i].value, jointMsg.velocities[i].unit.c_str());
+        if (isnan(jointMsg.velocities[i].value))
+        {
+            ROS_ERROR("invalid joint velocity: nan");
+            return;
+        }
+        if (fabs(jointMsg.velocities[i].value) > 1.0)
+        {
+            ROS_ERROR("invalid joint velocity: too fast");
+            return;
+        }
+    }
+    cmd_vel_publisher.publish(jointMsg);
+}
+
+
 void stopMotion()
 {
 
@@ -302,7 +326,8 @@ int main(int argc, char **argv)
 
     init_ik_solver();
 
-    init_joint_msgs();
+    if (use_FloatArray_msg == false):
+        init_joint_msgs();
 
     //fk_solver = new KDL::ChainFkSolverPos_recursive(arm_chain);
     //jnt2jac = new KDL::ChainJntToJacSolver(arm_chain);
@@ -311,10 +336,16 @@ int main(int argc, char **argv)
     sigma_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
                             sigma_values_topic, 1);
 
-    //register publisher
-    cmd_vel_publisher = node_handle.advertise<brics_actuator::JointVelocities>(
+    if (use_FloatArray_msg == false){
+        //register publisher with brics actuator message
+        cmd_vel_publisher = node_handle.advertise<brics_actuator::JointVelocities>(
                             velocity_command_topic, 1);
-
+    }
+    else{
+        //register publisher with brics float array      
+        cmd_vel_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
+                            velocity_command_topic, 1);
+    }
     //register subscriber
     ros::Subscriber sub_joint_states = node_handle.subscribe(joint_state_topic,
                                        1, jointstateCallback);
@@ -364,7 +395,12 @@ int main(int argc, char **argv)
             }
             
             sigma_publisher.publish(sigma_array);
-            publishJointVelocities(cmd_velocities);
+            if (use_FloatArray_msg == false){
+                publishJointVelocities(cmd_velocities);
+            }
+            else{
+                publishJointVelocities_FA(cmd_velocities);
+            }
         }
 
 
