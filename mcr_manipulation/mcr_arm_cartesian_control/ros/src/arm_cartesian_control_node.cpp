@@ -332,7 +332,7 @@ int main(int argc, char **argv)
     //init
     nrOfJoints = arm_chain.getNrOfJoints();
     joint_positions.resize(nrOfJoints);
-
+    joint_positions_initialized.resize(nrOfJoints, false);
     std_msgs::Float32MultiArray sigma_array;
 
     init_ik_solver();
