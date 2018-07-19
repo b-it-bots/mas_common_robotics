@@ -244,13 +244,22 @@ void publishJointVelocities_FA(KDL::JntArrayVel& joint_velocities)
 
 void stopMotion()
 {
+    if (use_FloatArray_msg == false){
+        for (unsigned int i = 0; i < jointMsg.velocities.size(); i++)
+        {
+            jointMsg.velocities[i].value = 0.0;
 
-    for (unsigned int i = 0; i < jointMsg.velocities.size(); i++)
-    {
-        jointMsg.velocities[i].value = 0.0;
-
+        }
+        cmd_vel_publisher.publish(jointMsg);
     }
-    cmd_vel_publisher.publish(jointMsg);
+    else{
+        std_msgs::Float32MultiArray joint_velocitiy_array;
+        for (unsigned int i = 0; i < nrOfJoints; i++)
+        {
+            joint_velocitiy_array.data.push_back(0.0);
+        }
+        cmd_vel_publisher.publish(joint_velocitiy_array);
+    }
 }
 
 
