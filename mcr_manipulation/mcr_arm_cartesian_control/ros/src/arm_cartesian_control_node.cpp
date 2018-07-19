@@ -222,24 +222,23 @@ void publishJointVelocities(KDL::JntArrayVel& joint_velocities)
 
 void publishJointVelocities_FA(KDL::JntArrayVel& joint_velocities)
 {
-
+    std_msgs::Float32MultiArray joint_velocitiy_array;
+    joint_velocitiy_array.data.clear();
     for (unsigned int i = 0; i < joint_velocities.qdot.rows(); i++)
     {
-        jointMsg.velocities[i].value = joint_velocities.qdot(i);
-        ROS_DEBUG("%s: %.5f %s", jointMsg.velocities[i].joint_uri.c_str(),
-                  jointMsg.velocities[i].value, jointMsg.velocities[i].unit.c_str());
-        if (isnan(jointMsg.velocities[i].value))
+        joint_velocitiy_array.data.push_back(joint_velocities.qdot(i));
+        if (isnan(joint_velocities.qdot(i)))
         {
             ROS_ERROR("invalid joint velocity: nan");
             return;
         }
-        if (fabs(jointMsg.velocities[i].value) > 1.0)
+        if (fabs(joint_velocities.qdot(i)) > 1.0)
         {
             ROS_ERROR("invalid joint velocity: too fast");
             return;
         }
     }
-    cmd_vel_publisher.publish(jointMsg);
+    cmd_vel_publisher.publish(joint_velocitiy_array);
 }
 
 
@@ -297,6 +296,8 @@ int main(int argc, char **argv)
 
     std::string tooltip_name = "DEFAULT_CHAIN_TIP";
 
+    node_handle.getParam("use_FloatArray_msg", use_FloatArray_msg);
+
     if (!node_handle.getParam("root_name", root_name))
     {
         ROS_ERROR("No parameter for root_name specified");
@@ -326,8 +327,9 @@ int main(int argc, char **argv)
 
     init_ik_solver();
 
-    if (use_FloatArray_msg == false):
+    if (use_FloatArray_msg == false){
         init_joint_msgs();
+    }
 
     //fk_solver = new KDL::ChainFkSolverPos_recursive(arm_chain);
     //jnt2jac = new KDL::ChainJntToJacSolver(arm_chain);
