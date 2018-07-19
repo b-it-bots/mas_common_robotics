@@ -306,6 +306,7 @@ int main(int argc, char **argv)
     std::string tooltip_name = "DEFAULT_CHAIN_TIP";
 
     node_handle.getParam("use_FloatArray_msg", use_FloatArray_msg);
+    node_handle.getParam("joint_state_topic", joint_state_topic);
 
     if (!node_handle.getParam("root_name", root_name))
     {
