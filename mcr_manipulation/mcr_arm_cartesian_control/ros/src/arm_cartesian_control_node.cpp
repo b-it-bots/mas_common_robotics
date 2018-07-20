@@ -46,7 +46,7 @@ ros::Time t_last_command;
 brics_actuator::JointVelocities jointMsg;
 
 std::string root_name = "DEFAULT_CHAIN_ROOT";
-bool use_FloatArray_msg = false;
+bool use_float_array_msg = false;
 int nrOfJoints;
 
 
@@ -244,7 +244,7 @@ void publishJointVelocities_FA(KDL::JntArrayVel& joint_velocities)
 
 void stopMotion()
 {
-    if (use_FloatArray_msg == false){
+    if (use_float_array_msg == false){
         for (unsigned int i = 0; i < jointMsg.velocities.size(); i++)
         {
             jointMsg.velocities[i].value = 0.0;
@@ -305,7 +305,7 @@ int main(int argc, char **argv)
 
     std::string tooltip_name = "DEFAULT_CHAIN_TIP";
 
-    node_handle.getParam("use_FloatArray_msg", use_FloatArray_msg);
+    node_handle.getParam("use_float_array_msg", use_float_array_msg);
     node_handle.getParam("joint_state_topic", joint_state_topic);
 
     if (!node_handle.getParam("root_name", root_name))
@@ -337,7 +337,7 @@ int main(int argc, char **argv)
 
     init_ik_solver();
 
-    if (use_FloatArray_msg == false){
+    if (use_float_array_msg == false){
         init_joint_msgs();
     }
 
@@ -348,7 +348,7 @@ int main(int argc, char **argv)
     sigma_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
                             sigma_values_topic, 1);
 
-    if (use_FloatArray_msg == false){
+    if (use_float_array_msg == false){
         //register publisher with brics actuator message
         cmd_vel_publisher = node_handle.advertise<brics_actuator::JointVelocities>(
                             velocity_command_topic, 1);
@@ -407,7 +407,7 @@ int main(int argc, char **argv)
             }
             
             sigma_publisher.publish(sigma_array);
-            if (use_FloatArray_msg == false){
+            if (use_float_array_msg == false){
                 publishJointVelocities(cmd_velocities);
             }
             else{
