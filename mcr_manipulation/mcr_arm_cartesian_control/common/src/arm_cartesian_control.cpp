@@ -121,7 +121,7 @@ void Arm_Cartesian_Control::process(
 
     ik_solver->CartToJnt(joint_positions, targetVelocity, jntVel);
     sigma.resize(arm_chain->getNrOfJoints());
-    int error_sigma = ((KDL::ChainIkSolverVel_wdls*) ik_solver)->getSigma(sigma);
+    //int error_sigma = ((KDL::ChainIkSolverVel_wdls*) ik_solver)->getSigma(sigma);
 
     // limit joint velocitied
     if (jntVel.data.norm() > 0.01)
