@@ -4,11 +4,6 @@
     version: kinetic
 
 - git:
-    local-name: mas_perception
-    uri: https://github.com/b-it-bots/mas_perception.git
-    version: kinetic
-
-- git:
     local-name: dmp
     uri: https://github.com/b-it-bots/dmp.git
     version: master
