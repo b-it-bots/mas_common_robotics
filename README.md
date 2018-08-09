@@ -1,5 +1,6 @@
+[![Build Status](https://travis-ci.org/b-it-bots/mas_common_robotics.svg?branch=kinetic)](https://travis-ci.org/b-it-bots/mas_common_robotics)
 
-[![pipeline status](https://mas.b-it-center.de/gitgate/mas-group/mas_common_robotics/badges/kinetic/pipeline.svg)](https://mas.b-it-center.de/gitgate/mas-group/mas_common_robotics/commits/kinetic)
+# mas_common_robotics
 
 ## Install Ubuntu
 The repository and its related components have been tested under the following Ubuntu distributions:
