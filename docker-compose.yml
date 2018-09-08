@@ -6,11 +6,11 @@ services:
       context: .
     volumes:
       - ./:/kinetic/src/mas_common_robotics
-    image: argenos/bitbots-travis:common
+    image: bitbots/bitbots-common:latest
     command: ["bash", "-c", "cd /kinetic && catkin build -c --no-status"]
   common:
     build: .
-    image: argenos/bitbots-common
+    image: bitbots/bitbots-common
 
 
 # Build and run tests
