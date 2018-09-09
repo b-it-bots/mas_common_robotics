@@ -4,22 +4,7 @@ services:
     build:
       dockerfile: .travis/Dockerfile
       context: .
-    volumes:
-      - ./:/kinetic/src/mas_common_robotics
-    image: bitbots/bitbots-common:latest
-    command: ["bash", "-c", "cd /kinetic && catkin build -c --no-status"]
+    image: bitbots/bitbots-common:${TRAVIS_COMMIT}
   common:
     build: .
-    image: bitbots/bitbots-common
-
-
-# Build and run tests
-# catkin run_tests
-# catkin test
-# catkin_test_results build/mas_domestic_robotics
-
-# Lint
-# catkin_lint --strict --ignore CRITICAL_VAR_APPEND,LINK_DIRECTORY src/mas_domestic_robotics
-
-# Install
-# catkin config --install
+    image: bitbots/bitbots-common:latest

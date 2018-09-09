@@ -5,6 +5,7 @@ COPY mas-common.rosinstall /kinetic
 
 RUN wstool init --shallow src && \
     wstool merge -t src mas-common.rosinstall && \
+    cd src && wstool remove mas_common_robotics && cd - && \
     wstool update -t src
 
 ADD . /kinetic/src/mas_common_robotics
