@@ -18,4 +18,11 @@ RUN apt-get update -qq && \
 RUN catkin config --init && \
     catkin config --extend /opt/ros/kinetic && \
     catkin config --install --install-space /opt/ros/mas_stable && \
-    catkin build
+    catkin build && \
+    echo "source /opt/ros/mas_stable/setup.bash" >> ~/.bashrc && \
+    rm -rf /kinetic/
+
+WORKDIR /
+COPY ./.docker/ros_entrypoint.sh /
+ENTRYPOINT ["/ros_entrypoint.sh"]
+CMD ["bash"]
