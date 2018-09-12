@@ -1,5 +1,7 @@
 FROM bitbots/bitbots-base:kinetic
 
+LABEL maintainer="Argentina Ortega"
+
 WORKDIR /kinetic
 COPY mas-common.rosinstall /kinetic
 
@@ -8,7 +10,7 @@ RUN wstool init --shallow src && \
     cd src && wstool remove mas_common_robotics && cd - && \
     wstool update -t src
 
-ADD . /kinetic/src/mas_common_robotics
+COPY . /kinetic/src/mas_common_robotics
 
 RUN apt-get update -qq && \
     rosdep update && \
