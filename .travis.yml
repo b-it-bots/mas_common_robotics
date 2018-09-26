@@ -18,6 +18,7 @@ before_install:
 
 script:
   - docker-compose build travis
+  - sonar-scanner
 
 deploy:
   provider: script
