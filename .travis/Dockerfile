@@ -1,10 +1,15 @@
-FROM argenos/bitbots-base
+FROM bitbots/bitbots-common:kinetic
 
-RUN rosdep update
+LABEL maintainer="Argentina Ortega"
 
-ADD ./ /kinetic/src/mas_common_robotics
-WORKDIR /kinetic
+WORKDIR /travis
+COPY ./ /travis/src/mas_common_robotics
 
-RUN wstool init src && wstool merge -t src src/mas_common_robotics/.travis/travis.rosinstall
-RUN wstool update -t src
-RUN rosdep -q install --from-paths src --ignore-src --rosdistro=kinetic -y
+RUN . /opt/ros/mas_stable/setup.sh && \
+    catkin config --init && \
+    catkin config --extend /opt/ros/mas_stable && \
+    apt-get update -qq && \
+    rosdep update -qq && \
+    rosdep -q install --from-paths src --ignore-src --rosdistro=kinetic -y && \
+    rm -rf /var/lib/apt/lists/* && \
+    catkin build --no-status
