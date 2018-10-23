@@ -407,10 +407,12 @@ int main(int argc, char **argv)
             }
             
             sigma_publisher.publish(sigma_array);
-            if (use_float_array_msg == false){
+            if (use_float_array_msg == false)
+            {
                 publishJointVelocities(cmd_velocities);
             }
-            else{
+            else
+            {
                 publishJointVelocities_FA(cmd_velocities);
             }
         }
