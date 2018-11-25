@@ -22,6 +22,7 @@
 #include <string>
 #include <map>
 #include <ros/ros.h>
+#include <ros/console.h>
 #include <vector>
 
 /**
