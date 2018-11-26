@@ -29,7 +29,7 @@ deploy:
     - docker push $CONTAINER_RELEASE_IMAGE
   on:
     all_branches: true
-    condition: $TRAVIS_BRANCH =~ ^kinetic|devel$ OR tag = true
+    condition: $TRAVIS_BRANCH =~ ^melodic|devel$ OR tag = true
 
 
 notifications:
