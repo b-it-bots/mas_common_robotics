@@ -143,7 +143,7 @@ private:
     ros::Subscriber sub_event_in_;
     ros::Publisher pub_event_out_;
 };
-PLUGINLIB_DECLARE_CLASS(mcr_topic_tools, TopicMux, mcr_topic_tools::TopicMux, nodelet::Nodelet);
+PLUGINLIB_EXPORT_CLASS(mcr_topic_tools::TopicMux, nodelet::Nodelet);
 } /* namespace mcr_topic_tools */
 
 #endif  // MCR_TOPIC_TOOLS_TOPIC_MUX_H_
