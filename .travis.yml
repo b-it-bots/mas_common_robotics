@@ -16,20 +16,27 @@ before_install:
   - sudo chmod +x /usr/local/bin/docker-compose
   - docker-compose -v
 
-script:
-  - docker-compose build travis
+jobs:
+  include:
+    - stage: "Build"
+      script:
+        - docker-compose build travis
+    - stage: "Deploy"
+      name: "Docker Hub"
+      skip_cleanup: true
+      script:
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+        - docker build -t $CONTAINER_RELEASE_IMAGE .
+        - docker images
+        - docker push $CONTAINER_RELEASE_IMAGE
+      on:
+        tags: true
+        branches:
+          - devel
+          - indigo
+          - kinetic
+          - melodic
 
-deploy:
-  provider: script
-  skip_cleanup: true
-  script:
-    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-    - docker build -t $CONTAINER_RELEASE_IMAGE .
-    - docker images
-    - docker push $CONTAINER_RELEASE_IMAGE
-  on:
-    all_branches: true
-    condition: $TRAVIS_BRANCH =~ ^kinetic|devel$ OR tag = true
 
 
 notifications:
