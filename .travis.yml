@@ -36,13 +36,12 @@ jobs:
         - docker build -t $CONTAINER_RELEASE_IMAGE .
         - docker images
         - docker push $CONTAINER_RELEASE_IMAGE
-      branches:
-        only:
+      on:
+        branch:
           - devel
           - kinetic
           - indigo
           - melodic
-
 
 notifications:
   slack:
