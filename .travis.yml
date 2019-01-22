@@ -17,6 +17,12 @@ before_install:
   - docker-compose -v
 
 
+stages:
+  - build
+  - test
+  - deploy
+
+
 jobs:
   include:
     - stage: build
