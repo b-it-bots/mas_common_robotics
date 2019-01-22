@@ -16,12 +16,18 @@ before_install:
   - sudo chmod +x /usr/local/bin/docker-compose
   - docker-compose -v
 
+
+stages:
+  - build
+  - name: deploy
+    if: NOT $TRAVIS_PULL_REQUEST AND branch in (devel, indigo, kinetic, melodic)
+
 jobs:
   include:
-    - stage: "Build"
+    - stage: build
       script:
         - docker-compose build travis
-    - stage: "Deploy"
+    - stage: deploy
       name: "Docker Hub"
       skip_cleanup: true
       script:
@@ -29,14 +35,6 @@ jobs:
         - docker build -t $CONTAINER_RELEASE_IMAGE .
         - docker images
         - docker push $CONTAINER_RELEASE_IMAGE
-      on:
-        tags: true
-        branches:
-          - devel
-          - indigo
-          - kinetic
-          - melodic
-
 
 
 notifications:
