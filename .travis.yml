@@ -37,7 +37,8 @@ jobs:
         - docker images
         - docker push $CONTAINER_RELEASE_IMAGE
       on:
-        branch: devel
+        all_branches: true
+        condition:  $TRAVIS_BRANCH =~ ^devel|kinetic$
 
 notifications:
   slack:
