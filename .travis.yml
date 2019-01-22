@@ -21,7 +21,7 @@ stages:
   - build
   - test
   - name: deploy
-    if: branch = devel
+    if: branch IN (devel, indigo, kinetic, melodic) OR tag = true
 
 
 jobs:
