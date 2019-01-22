@@ -23,7 +23,6 @@ jobs:
       script:
         - docker-compose build travis
     - stage: deploy
-      if: (NOT $TRAVIS_PULL_REQUEST AND branch in (devel, indigo, kinetic, melodic)) OR tag IS present
       name: "Docker Hub"
       skip_cleanup: true
       script:
