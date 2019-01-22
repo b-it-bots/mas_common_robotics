@@ -21,6 +21,7 @@ stages:
   - build
   - name: deploy
     if: NOT $TRAVIS_PULL_REQUEST AND branch in (devel, indigo, kinetic, melodic)
+    if: (NOT $TRAVIS_PULL_REQUEST AND branch in (devel, indigo, kinetic, melodic)) OR tag IS present
 
 jobs:
   include:
