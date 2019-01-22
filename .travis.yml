@@ -37,11 +37,7 @@ jobs:
         - docker images
         - docker push $CONTAINER_RELEASE_IMAGE
       on:
-        branch:
-          - devel
-          - kinetic
-          - indigo
-          - melodic
+        branch: devel
 
 notifications:
   slack:
