@@ -20,7 +20,8 @@ before_install:
 stages:
   - build
   - test
-  - deploy
+  - name: deploy
+    if: branch = devel
 
 
 jobs:
@@ -36,9 +37,6 @@ jobs:
         - docker build -t $CONTAINER_RELEASE_IMAGE .
         - docker images
         - docker push $CONTAINER_RELEASE_IMAGE
-      on:
-        all_branches: true
-        condition:  $TRAVIS_BRANCH =~ ^devel|kinetic$
 
 notifications:
   slack:
