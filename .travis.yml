@@ -21,7 +21,7 @@ stages:
   - build
   - test
   - name: deploy
-    if: (branch IN (devel, indigo, kinetic, melodic) AND (env(TRAVIS_PULL_REQUEST) IS false)) OR tag = true
+    if: (branch IN (devel, indigo, kinetic, melodic) AND type != "pull_request") OR tag = true
 
 
 jobs:
