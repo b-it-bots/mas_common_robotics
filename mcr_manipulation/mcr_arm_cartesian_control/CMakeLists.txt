@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_arm_cartesian_control)
-
+add_compile_options(
+	  -O3
+	    )
 find_package(catkin REQUIRED
   COMPONENTS
     cmake_modules
