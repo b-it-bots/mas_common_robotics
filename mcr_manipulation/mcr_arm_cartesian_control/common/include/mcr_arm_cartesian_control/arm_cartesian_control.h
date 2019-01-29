@@ -26,7 +26,7 @@ protected:
     std::vector<double> upper_joint_limits;
     std::vector<double> lower_joint_limits;
 
-    double max_lin_frame_velocitiy = 0.1;  // m/s
+    double max_lin_frame_velocity = 0.1;  // m/s
     double max_joint_vel = 0.25; // radian/s
     double eps_velocity = 0.0001;
 

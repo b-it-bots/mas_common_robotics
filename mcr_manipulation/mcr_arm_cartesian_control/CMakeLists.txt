@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_arm_cartesian_control)
 add_compile_options(
-	  -O3
+    # Code optimization level 3 (-O3). Diable this flag for compiling in debug mode or in case of unexpected crashing. 
+	  -O3 
 	    )
 find_package(catkin REQUIRED
   COMPONENTS

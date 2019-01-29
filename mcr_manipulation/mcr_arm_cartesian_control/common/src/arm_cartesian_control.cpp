@@ -81,7 +81,7 @@ void Arm_Cartesian_Control::checkLimits(
 
 void Arm_Cartesian_Control::setCartVelLimit(double limit)
 {
-    max_lin_frame_velocitiy = limit;
+    max_lin_frame_velocity = limit;
 }
 
 void Arm_Cartesian_Control::setJointVelLimit(double limit)
@@ -113,12 +113,12 @@ void Arm_Cartesian_Control::process(
     }
 
 
-    if (linear_frame_vel > max_lin_frame_velocitiy)
+    if (linear_frame_vel > max_lin_frame_velocity)
     {
         //reduce target velocity to maximum limit
-        targetVelocity.vel.data[0] *= (max_lin_frame_velocitiy / linear_frame_vel) ;
-        targetVelocity.vel.data[1] *= (max_lin_frame_velocitiy / linear_frame_vel) ;
-        targetVelocity.vel.data[2] *= (max_lin_frame_velocitiy / linear_frame_vel) ;
+        targetVelocity.vel.data[0] *= (max_lin_frame_velocity / linear_frame_vel) ;
+        targetVelocity.vel.data[1] *= (max_lin_frame_velocity / linear_frame_vel) ;
+        targetVelocity.vel.data[2] *= (max_lin_frame_velocity / linear_frame_vel) ;
     }
 
 
