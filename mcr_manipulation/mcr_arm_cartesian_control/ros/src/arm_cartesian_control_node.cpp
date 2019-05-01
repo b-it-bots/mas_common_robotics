@@ -276,7 +276,7 @@ bool watchdog()
 
     ros::Duration time = (now - t_last_command);
 
-    if (time > ros::Duration(watchdog_time))
+    if (active && time > ros::Duration(watchdog_time))
     {
         active = false;
         stopMotion();
@@ -328,7 +328,7 @@ int main(int argc, char **argv)
     //load URDF model
     ROS_URDF_Loader loader;
     loader.loadModel(node_handle, root_name, tooltip_name, arm_chain, joint_limits);
-    
+
     //init
     nrOfJoints = arm_chain.getNrOfJoints();
     joint_positions.resize(nrOfJoints);
@@ -344,7 +344,7 @@ int main(int argc, char **argv)
     //fk_solver = new KDL::ChainFkSolverPos_recursive(arm_chain);
     //jnt2jac = new KDL::ChainJntToJacSolver(arm_chain);
 
-    //sigma values publisher 
+    //sigma values publisher
     sigma_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
                             sigma_values_topic, 1);
 
@@ -354,7 +354,7 @@ int main(int argc, char **argv)
                             velocity_command_topic, 1);
     }
     else{
-        //register publisher with brics float array      
+        //register publisher with brics float array
         cmd_vel_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
                             velocity_command_topic, 1);
     }
@@ -364,13 +364,13 @@ int main(int argc, char **argv)
 
     ros::Subscriber sub_wjs = node_handle.subscribe(weight_js_topic, 1,
                              wjsCallback);
-    
+
     ros::Subscriber sub_wts = node_handle.subscribe(weight_ts_topic, 1,
                              wtsCallback);
 
     ros::Subscriber sub_cc = node_handle.subscribe(cart_control_topic, 1,
                              ccCallback);
-    
+
 
     arm_cc::Arm_Cartesian_Control control(&arm_chain, ik_solver);
     std::vector<double> upper_limits;
@@ -396,7 +396,7 @@ int main(int argc, char **argv)
         if (watchdog())
         {
             control.process(1 / rate, joint_positions, targetVelocity, cmd_velocities, sigma);
-            
+
             sigma_array.data.clear();
             if (sigma.size() != 0)
             {
@@ -405,7 +405,7 @@ int main(int argc, char **argv)
                     sigma_array.data.push_back(sigma[i]);
                 }
             }
-            
+
             sigma_publisher.publish(sigma_array);
             if (use_float_array_msg == false){
                 publishJointVelocities(cmd_velocities);
