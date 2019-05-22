@@ -1,3 +1,8 @@
+---
+name: Documentation
+about: Adding or improving documentation
+---
+
 # Description
 <!-- Briefly describe what this MR is about, where the changes occurred-->
 
@@ -13,3 +18,6 @@
 
 # Undocumented
 <!-- List any things that were not covered by your changes and may still need to be documented -->
+
+# Checklist
+- [ ] I have updated the CHANGELOG.rst file

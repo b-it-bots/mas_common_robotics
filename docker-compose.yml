@@ -1,0 +1,10 @@
+version: '2'
+services:
+  travis:
+    build:
+      dockerfile: .travis/Dockerfile
+      context: .
+    image: bitbots/bitbots-common:${TRAVIS_COMMIT}
+  common:
+    build: .
+    image: bitbots/bitbots-common:latest

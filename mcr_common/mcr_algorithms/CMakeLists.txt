@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(mcr_algorithms)
-find_package(catkin REQUIRED COMPONENTS geometry_msgs sensor_msgs mcr_perception_msgs)
+find_package(catkin REQUIRED COMPONENTS geometry_msgs sensor_msgs)
 find_package(PCL 1.6 REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Boost REQUIRED COMPONENTS serialization)
@@ -10,7 +10,6 @@ catkin_python_setup()
 catkin_package(
   CATKIN_DEPENDS
     geometry_msgs
-    mcr_perception_msgs
     message_runtime
     sensor_msgs
   INCLUDE_DIRS
@@ -19,7 +18,6 @@ catkin_package(
     mcr_controller
     mcr_geometry
     mcr_machine_learning
-    mcr_segmentation
 )
 
 include_directories(
@@ -28,13 +26,6 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(mcr_segmentation
-  common/src/segmentation/laserscan_segmentation.cpp
-  common/src/segmentation/pointcloud_segmentation.cpp
-)
-add_dependencies(mcr_segmentation
-  ${catkin_EXPORTED_TARGETS}
-)
 
 add_library(mcr_geometry
   common/src/geometry/conversions.cpp
@@ -84,7 +75,6 @@ install(DIRECTORY common/include/${PROJECT_NAME}/
 install(
 	TARGETS
 		mcr_geometry
-		mcr_segmentation
 		mcr_controller
 		mcr_machine_learning
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

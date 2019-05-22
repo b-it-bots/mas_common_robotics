@@ -294,6 +294,8 @@ int main(int argc, char **argv)
     tf_listener = new tf::TransformListener();
 
     double rate = 50;
+    float max_arm_cartesian_velocity = 0.1; // m/s
+    float max_arm_joint_velocity = 0.25; // rad/s
 
     //TODO: read from param
     std::string velocity_command_topic = "joint_velocity_command";
@@ -307,6 +309,8 @@ int main(int argc, char **argv)
 
     node_handle.getParam("use_float_array_msg", use_float_array_msg);
     node_handle.getParam("joint_state_topic", joint_state_topic);
+    node_handle.getParam("max_arm_cartesian_velocity", max_arm_cartesian_velocity);
+    node_handle.getParam("max_arm_joint_velocity", max_arm_joint_velocity);
 
     if (!node_handle.getParam("root_name", root_name))
     {
@@ -385,6 +389,8 @@ int main(int argc, char **argv)
 
     KDL::JntArrayVel cmd_velocities(nrOfJoints);
 
+    control.setJointVelLimit(max_arm_joint_velocity);
+    control.setCartVelLimit(max_arm_cartesian_velocity);
     //loop with 50Hz
     ros::Rate loop_rate(rate);
 
@@ -407,10 +413,12 @@ int main(int argc, char **argv)
             }
 
             sigma_publisher.publish(sigma_array);
-            if (use_float_array_msg == false){
+            if (use_float_array_msg == false)
+            {
                 publishJointVelocities(cmd_velocities);
             }
-            else{
+            else
+            {
                 publishJointVelocities_FA(cmd_velocities);
             }
         }
