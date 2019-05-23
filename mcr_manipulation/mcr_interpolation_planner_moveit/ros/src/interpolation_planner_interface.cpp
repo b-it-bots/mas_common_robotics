@@ -18,7 +18,7 @@ interpolation_planner_interface::InterpolationPlannerInterface::InterpolationPla
     nh_(nh),
     kmodel_(kmodel)
 {
-    logInform("Initializing Interpolation planner interface using ROS parameters");
+    ROS_INFO("Initializing Interpolation planner interface using ROS parameters");
     loadPlannerConfigurations();
     loadGroupConfigurations();
 }
@@ -59,14 +59,14 @@ interpolation_planner_interface::InterpolationPlannerInterface::getPlanningConte
 {
     if (req.group_name.empty())
     {
-        logError("No kinematic group is supplied in planning request.");
+        ROS_ERROR("No kinematic group is supplied in planning request.");
         error_code.val = moveit_msgs::MoveItErrorCodes::INVALID_GROUP_NAME;
         return InterpolationPlannerContextPtr();
     }
 
     if (req.goal_constraints.size() == 0)
     {
-        logError("No goal constraint is supplied in planning request.");
+        ROS_ERROR("No goal constraint is supplied in planning request.");
         return InterpolationPlannerContextPtr();
     }
 
@@ -74,7 +74,7 @@ interpolation_planner_interface::InterpolationPlannerInterface::getPlanningConte
 
     if (!planning_scene)
     {
-        logError("No planning scene supplied in planning request.");
+        ROS_ERROR("No planning scene supplied in planning request.");
         return InterpolationPlannerContextPtr();
     }
 
@@ -88,7 +88,7 @@ interpolation_planner_interface::InterpolationPlannerInterface::getPlanningConte
         pc = planner_configs_.find(req.group_name);
         if (pc == planner_configs_.end())
         {
-            logError("Cannot find planning configuration for group '%s'", req.group_name.c_str());
+            ROS_ERROR("Cannot find planning configuration for group '%s'", req.group_name.c_str());
             return InterpolationPlannerContextPtr();
         }
     }
@@ -97,7 +97,7 @@ interpolation_planner_interface::InterpolationPlannerInterface::getPlanningConte
 
     if (req.planner_id.empty())
     {
-        logWarn("No planner is specified in request. Using default planner %s", "Trapezoidal");
+        ROS_WARN("No planner is specified in request. Using default planner %s", "Trapezoidal");
         pc_temp.config["selected_planner_id"] = "Trapezoidal";
     }
     else
@@ -114,14 +114,14 @@ interpolation_planner_interface::InterpolationPlannerInterface::getPlanningConte
 
         if (!is_planner_type_exit)
         {
-            logError("Planner type '%s' does not exit in the planner configurations.", req.planner_id.c_str());
+            ROS_ERROR("Planner type '%s' does not exit in the planner configurations.", req.planner_id.c_str());
             return InterpolationPlannerContextPtr();
         }
 
         pc_temp.config["selected_planner_id"] = req.planner_id;
     }
 
-    logInform("selected_planner_id_: %s", pc_temp.config["selected_planner_id"].c_str());
+    ROS_INFO("selected_planner_id_: %s", pc_temp.config["selected_planner_id"].c_str());
 
     interpolation_planner_interface::GroupSpecificationMap::const_iterator gc = group_configs_.end();
 
@@ -130,7 +130,7 @@ interpolation_planner_interface::InterpolationPlannerInterface::getPlanningConte
         gc = group_configs_.find(req.group_name);
         if (gc == group_configs_.end())
         {
-            logError("Cannot find planning configuration for group '%s'", req.group_name.c_str());
+            ROS_ERROR("Cannot find planning configuration for group '%s'", req.group_name.c_str());
             return InterpolationPlannerContextPtr();
         }
     }
@@ -155,7 +155,7 @@ interpolation_planner_interface::InterpolationPlannerInterface::getPlanningConte
 
         if (req.goal_constraints.size() > 1)
         {
-            logDebug("Planning request specified more than one goal constraints."
+            ROS_DEBUG("Planning request specified more than one goal constraints."
                      "Current implementation of the interpolation planner"
                      "plans for only first goal constraint.");
         }
@@ -164,7 +164,7 @@ interpolation_planner_interface::InterpolationPlannerInterface::getPlanningConte
         if (!context->setGoalConstraints(req.goal_constraints[0], &error_code))
             return InterpolationPlannerContextPtr();
 
-        logDebug("%s: New planning context is set.", context->getName().c_str());
+        ROS_DEBUG("%s: New planning context is set.", context->getName().c_str());
         error_code.val = moveit_msgs::MoveItErrorCodes::SUCCESS;
     }
 
@@ -205,13 +205,13 @@ void interpolation_planner_interface::InterpolationPlannerInterface::loadPlanner
                     specific_group_params[KNOWN_GROUP_PARAMS[k]] = boost::lexical_cast<std::string>(value_d);
                 else
                 {
-                    logError("Parameter '%s' should be of type double(for group '%s')",
+                    ROS_ERROR("Parameter '%s' should be of type double(for group '%s')",
                              KNOWN_GROUP_PARAMS[k].c_str(), group_names[i].c_str());
                 }
             }
             else
             {
-                logError("Could not find the parameter '%s' on the param server(for group '%s')",
+                ROS_ERROR("Could not find the parameter '%s' on the param server(for group '%s')",
                          KNOWN_GROUP_PARAMS[k].c_str(), group_names[i].c_str());
             }
         }
@@ -222,14 +222,14 @@ void interpolation_planner_interface::InterpolationPlannerInterface::loadPlanner
         XmlRpc::XmlRpcValue config_names;
         if (!nh_.getParam(group_names[i] + "/planner_configs", config_names))
         {
-            logError("Could not find Planner configurations on parameter server"
+            ROS_ERROR("Could not find Planner configurations on parameter server"
                      " for group '%s'", group_names[i].c_str());
             continue;
         }
 
         if (!(config_names.getType() == XmlRpc::XmlRpcValue::TypeArray))
         {
-            logError("The planner_configs argument of a group configuration "
+            ROS_ERROR("The planner_configs argument of a group configuration "
                      "should be an array of strings (for group '%s')", group_names[i].c_str());
             continue;
         }
@@ -239,7 +239,7 @@ void interpolation_planner_interface::InterpolationPlannerInterface::loadPlanner
             std::string planner_config;
             if (!(config_names[j].getType() == XmlRpc::XmlRpcValue::TypeString))
             {
-                logError("Planner configuration names must be of "
+                ROS_ERROR("Planner configuration names must be of "
                          "type string (for group '%s')", group_names[i].c_str());
                 continue;
             }
@@ -249,14 +249,14 @@ void interpolation_planner_interface::InterpolationPlannerInterface::loadPlanner
             XmlRpc::XmlRpcValue xml_config;
             if (!nh_.getParam("planner_configs/" + planner_config, xml_config))
             {
-                logError("Could not find the planner configuration '%s' "
+                ROS_ERROR("Could not find the planner configuration '%s' "
                          "on the param server", planner_config.c_str());
                 continue;
             }
 
             if (!(xml_config.getType() == XmlRpc::XmlRpcValue::TypeStruct))
             {
-                logError("A planning configuration should be of type XmlRpc "
+                ROS_ERROR("A planning configuration should be of type XmlRpc "
                          "Struct type (for configuration '%s')", planner_config.c_str());
             }
             else
@@ -279,7 +279,7 @@ void interpolation_planner_interface::InterpolationPlannerInterface::loadPlanner
                     }
                     else
                     {
-                        logError("Planner type should be of type XmlRpc String type "
+                        ROS_ERROR("Planner type should be of type XmlRpc String type "
                                  "(for configuration '%s')", planner_config.c_str());
                     }
 
@@ -345,5 +345,5 @@ void interpolation_planner_interface::InterpolationPlannerInterface::loadGroupCo
 
 void interpolation_planner_interface::InterpolationPlannerInterface::printStatus()
 {
-    logInform("Interpolation planner interface is running.");
+    ROS_INFO("Interpolation planner interface is running.");
 }
