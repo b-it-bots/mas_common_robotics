@@ -205,7 +205,7 @@ void publishJointVelocities(KDL::JntArrayVel& joint_velocities)
         jointMsg.velocities[i].value = joint_velocities.qdot(i);
         ROS_DEBUG("%s: %.5f %s", jointMsg.velocities[i].joint_uri.c_str(),
                   jointMsg.velocities[i].value, jointMsg.velocities[i].unit.c_str());
-        if (isnan(jointMsg.velocities[i].value))
+        if (std::isnan(jointMsg.velocities[i].value))
         {
             ROS_ERROR("invalid joint velocity: nan");
             return;
@@ -227,7 +227,7 @@ void publishJointVelocities_FA(KDL::JntArrayVel& joint_velocities)
     for (unsigned int i = 0; i < joint_velocities.qdot.rows(); i++)
     {
         joint_velocitiy_array.data.push_back(joint_velocities.qdot(i));
-        if (isnan(joint_velocities.qdot(i)))
+        if (std::isnan(joint_velocities.qdot(i)))
         {
             ROS_ERROR("invalid joint velocity: nan");
             return;
