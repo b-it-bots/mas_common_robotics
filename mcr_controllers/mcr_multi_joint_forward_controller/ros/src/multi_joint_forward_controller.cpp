@@ -1,6 +1,6 @@
 #include <mcr_multi_joint_forward_controller/multi_joint_forward_controller.h>
 
-#include <pluginlib/class_list_macros.h>
+#include <pluginlib/class_list_macros.hpp>
 
 
 namespace position_controllers

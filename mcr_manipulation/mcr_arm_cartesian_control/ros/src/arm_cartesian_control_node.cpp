@@ -17,11 +17,17 @@
 #include <brics_actuator/JointVelocities.h>
 #include <tf/transform_listener.h>
 
+#include <std_msgs/MultiArrayLayout.h>
+#include <std_msgs/MultiArrayDimension.h>
+#include <std_msgs/Float32MultiArray.h>
+
 KDL::Chain arm_chain;
 std::vector<boost::shared_ptr<urdf::JointLimits> > joint_limits;
 
 KDL::JntArray joint_positions;
 std::vector<bool> joint_positions_initialized;
+
+Eigen::VectorXd sigma;
 
 KDL::Twist targetVelocity;
 
@@ -30,6 +36,8 @@ Eigen::MatrixXd weight_ts;
 Eigen::MatrixXd weight_js;
 
 ros::Publisher cmd_vel_publisher;
+ros::Publisher sigma_publisher;
+
 tf::TransformListener *tf_listener;
 
 bool active = false;
@@ -38,6 +46,8 @@ ros::Time t_last_command;
 brics_actuator::JointVelocities jointMsg;
 
 std::string root_name = "DEFAULT_CHAIN_ROOT";
+bool use_float_array_msg = false;
+int nrOfJoints;
 
 
 void jointstateCallback(sensor_msgs::JointStateConstPtr joints)
@@ -60,6 +70,30 @@ void jointstateCallback(sensor_msgs::JointStateConstPtr joints)
             }
         }
     }
+}
+
+void wtsCallback(std_msgs::Float32MultiArray weights)
+{
+    weight_ts.resize(6, 6);
+    weight_ts.setIdentity();
+    weight_ts(0, 0) = weights.data[0];
+    weight_ts(1, 1) = weights.data[1];
+    weight_ts(2, 2) = weights.data[2];
+    weight_ts(3, 3) = weights.data[3];
+    weight_ts(4, 4) = weights.data[4];
+    weight_ts(5, 5) = weights.data[5];
+    ((KDL::ChainIkSolverVel_wdls*) ik_solver)->setWeightTS(weight_ts);
+}
+
+void wjsCallback(std_msgs::Float32MultiArray weights)
+{
+    weight_js.resize(nrOfJoints, nrOfJoints);
+    weight_js.setIdentity();
+    for (int i = 0; i < nrOfJoints; i++)
+    {
+        weight_js(i,i) = weights.data[i];
+    }
+    ((KDL::ChainIkSolverVel_wdls*) ik_solver)->setWeightJS(weight_js);
 }
 
 void ccCallback(geometry_msgs::TwistStampedConstPtr desiredVelocity)
@@ -130,13 +164,13 @@ void init_ik_solver()
     weight_ts.resize(6, 6);
     weight_ts.setIdentity();
 
-    //weight_ts(0, 0) = 1;
-    //weight_ts(1, 1) = 1;
-    //weight_ts(2, 2) = 10;
-    //weight_ts(3, 3) = 0.0001;
-    //weight_ts(4, 4) = 0.0001;
-    //weight_ts(5, 5) = 0.0001;
-    //((KDL::ChainIkSolverVel_wdls*) ik_solver)->setWeightTS(weight_ts);
+    weight_ts(0, 0) = 1;
+    weight_ts(1, 1) = 1;
+    weight_ts(2, 2) = 1;
+    weight_ts(3, 3) = 0.4;
+    weight_ts(4, 4) = 0.4;
+    weight_ts(5, 5) = 0.4;
+    ((KDL::ChainIkSolverVel_wdls*) ik_solver)->setWeightTS(weight_ts);
 
     weight_js = (Eigen::MatrixXd::Identity(arm_chain.getNrOfJoints(),
                                            arm_chain.getNrOfJoints()));
@@ -171,7 +205,7 @@ void publishJointVelocities(KDL::JntArrayVel& joint_velocities)
         jointMsg.velocities[i].value = joint_velocities.qdot(i);
         ROS_DEBUG("%s: %.5f %s", jointMsg.velocities[i].joint_uri.c_str(),
                   jointMsg.velocities[i].value, jointMsg.velocities[i].unit.c_str());
-        if (isnan(jointMsg.velocities[i].value))
+        if (std::isnan(jointMsg.velocities[i].value))
         {
             ROS_ERROR("invalid joint velocity: nan");
             return;
@@ -186,15 +220,46 @@ void publishJointVelocities(KDL::JntArrayVel& joint_velocities)
 }
 
 
+void publishJointVelocities_FA(KDL::JntArrayVel& joint_velocities)
+{
+    std_msgs::Float32MultiArray joint_velocitiy_array;
+    joint_velocitiy_array.data.clear();
+    for (unsigned int i = 0; i < joint_velocities.qdot.rows(); i++)
+    {
+        joint_velocitiy_array.data.push_back(joint_velocities.qdot(i));
+        if (std::isnan(joint_velocities.qdot(i)))
+        {
+            ROS_ERROR("invalid joint velocity: nan");
+            return;
+        }
+        if (fabs(joint_velocities.qdot(i)) > 1.0)
+        {
+            ROS_ERROR("invalid joint velocity: too fast");
+            return;
+        }
+    }
+    cmd_vel_publisher.publish(joint_velocitiy_array);
+}
+
+
 void stopMotion()
 {
+    if (use_float_array_msg == false){
+        for (unsigned int i = 0; i < jointMsg.velocities.size(); i++)
+        {
+            jointMsg.velocities[i].value = 0.0;
 
-    for (unsigned int i = 0; i < jointMsg.velocities.size(); i++)
-    {
-        jointMsg.velocities[i].value = 0.0;
-
+        }
+        cmd_vel_publisher.publish(jointMsg);
     }
-    cmd_vel_publisher.publish(jointMsg);
+    else{
+        std_msgs::Float32MultiArray joint_velocitiy_array;
+        for (unsigned int i = 0; i < nrOfJoints; i++)
+        {
+            joint_velocitiy_array.data.push_back(0.0);
+        }
+        cmd_vel_publisher.publish(joint_velocitiy_array);
+    }
 }
 
 
@@ -211,7 +276,7 @@ bool watchdog()
 
     ros::Duration time = (now - t_last_command);
 
-    if (time > ros::Duration(watchdog_time))
+    if (active && time > ros::Duration(watchdog_time))
     {
         active = false;
         stopMotion();
@@ -229,13 +294,23 @@ int main(int argc, char **argv)
     tf_listener = new tf::TransformListener();
 
     double rate = 50;
+    float max_arm_cartesian_velocity = 0.1; // m/s
+    float max_arm_joint_velocity = 0.25; // rad/s
 
     //TODO: read from param
     std::string velocity_command_topic = "joint_velocity_command";
+    std::string sigma_values_topic = "sigma_values";
+    std::string weight_ts_topic = "weight_task_space";
+    std::string weight_js_topic = "weight_joint_space";
     std::string joint_state_topic = "/joint_states";
     std::string cart_control_topic = "cartesian_velocity_command";
 
     std::string tooltip_name = "DEFAULT_CHAIN_TIP";
+
+    node_handle.getParam("use_float_array_msg", use_float_array_msg);
+    node_handle.getParam("joint_state_topic", joint_state_topic);
+    node_handle.getParam("max_arm_cartesian_velocity", max_arm_cartesian_velocity);
+    node_handle.getParam("max_arm_joint_velocity", max_arm_joint_velocity);
 
     if (!node_handle.getParam("root_name", root_name))
     {
@@ -252,32 +327,51 @@ int main(int argc, char **argv)
     ROS_INFO("Using %s as tool tip [param: tip_name]", tooltip_name.c_str());
 
 
+
+
     //load URDF model
     ROS_URDF_Loader loader;
     loader.loadModel(node_handle, root_name, tooltip_name, arm_chain, joint_limits);
 
     //init
-    joint_positions.resize(arm_chain.getNrOfJoints());
-
-
-
+    nrOfJoints = arm_chain.getNrOfJoints();
+    joint_positions.resize(nrOfJoints);
+    joint_positions_initialized.resize(nrOfJoints, false);
+    std_msgs::Float32MultiArray sigma_array;
 
     init_ik_solver();
 
-    init_joint_msgs();
+    if (use_float_array_msg == false){
+        init_joint_msgs();
+    }
 
     //fk_solver = new KDL::ChainFkSolverPos_recursive(arm_chain);
     //jnt2jac = new KDL::ChainJntToJacSolver(arm_chain);
 
+    //sigma values publisher
+    sigma_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
+                            sigma_values_topic, 1);
 
-
-    //register publisher
-    cmd_vel_publisher = node_handle.advertise<brics_actuator::JointVelocities>(
+    if (use_float_array_msg == false){
+        //register publisher with brics actuator message
+        cmd_vel_publisher = node_handle.advertise<brics_actuator::JointVelocities>(
                             velocity_command_topic, 1);
-
+    }
+    else{
+        //register publisher with brics float array
+        cmd_vel_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
+                            velocity_command_topic, 1);
+    }
     //register subscriber
     ros::Subscriber sub_joint_states = node_handle.subscribe(joint_state_topic,
                                        1, jointstateCallback);
+
+    ros::Subscriber sub_wjs = node_handle.subscribe(weight_js_topic, 1,
+                             wjsCallback);
+
+    ros::Subscriber sub_wts = node_handle.subscribe(weight_ts_topic, 1,
+                             wtsCallback);
+
     ros::Subscriber sub_cc = node_handle.subscribe(cart_control_topic, 1,
                              ccCallback);
 
@@ -293,8 +387,10 @@ int main(int argc, char **argv)
     }
     control.setJointLimits(lower_limits, upper_limits);
 
-    KDL::JntArrayVel cmd_velocities(arm_chain.getNrOfJoints());
+    KDL::JntArrayVel cmd_velocities(nrOfJoints);
 
+    control.setJointVelLimit(max_arm_joint_velocity);
+    control.setCartVelLimit(max_arm_cartesian_velocity);
     //loop with 50Hz
     ros::Rate loop_rate(rate);
 
@@ -305,9 +401,26 @@ int main(int argc, char **argv)
 
         if (watchdog())
         {
-            control.process(1 / rate, joint_positions, targetVelocity, cmd_velocities);
+            control.process(1 / rate, joint_positions, targetVelocity, cmd_velocities, sigma);
 
-            publishJointVelocities(cmd_velocities);
+            sigma_array.data.clear();
+            if (sigma.size() != 0)
+            {
+                for (int i = 0; i < nrOfJoints; i++)
+                {
+                    sigma_array.data.push_back(sigma[i]);
+                }
+            }
+
+            sigma_publisher.publish(sigma_array);
+            if (use_float_array_msg == false)
+            {
+                publishJointVelocities(cmd_velocities);
+            }
+            else
+            {
+                publishJointVelocities_FA(cmd_velocities);
+            }
         }
 
 

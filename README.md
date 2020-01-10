@@ -1,5 +1,6 @@
+[![Build Status](https://travis-ci.org/b-it-bots/mas_common_robotics.svg?branch=kinetic)](https://travis-ci.org/b-it-bots/mas_common_robotics)
 
-[![pipeline status](https://mas.b-it-center.de/gitgate/mas-group/mas_common_robotics/badges/kinetic/pipeline.svg)](https://mas.b-it-center.de/gitgate/mas-group/mas_common_robotics/commits/kinetic)
+# mas_common_robotics
 
 ## Install Ubuntu
 The repository and its related components have been tested under the following Ubuntu distributions:
@@ -48,33 +49,31 @@ If you have never worked with ROS before, we recommend to go through the beginne
 
 In order to understand at least the different core components of ROS, you have to start from tutorial 1 ("Installing and Configuring Your ROS Environment") till tutorial 7 ("Understanding ROS Services and Parameters").
 
-## Set up a catkin workspace
+## Getting started
 
-    source /opt/ros/kinetic/setup.bash
-    mkdir -p ~/kinetic/src; cd ~/kinetic/src
-    catkin_init_workspace
-    cd ..
-    catkin build
+The following instructions should get you a working system:
 
-## Clone and compile the MAS common robotics software
-First of all you have to clone the repository.
+1. Setup a catkin workspace
 
-    cd ~/kinetic/src;
-    git clone gitgate@mas.b-it-center.de:mas-group/mas_common_robotics.git
+  ```
+  mkdir -p ~/kinetic/src && cd ~/kinetic
+  wstool init src
+  wstool merge -t src https://raw.githubusercontent.com/b-it-bots/mas_common_robotics/kinetic/mas-common.rosinstall
+  ```
 
-Then go on with installing further external dependencies:
+2. Get the code and dependencies
 
-    cd ~/kinetic/src/mas_common_robotics
-    ./repository.debs
+  ```
+    wstool update -t src
+    rosdep install --from-paths src --ignore-src --rosdistro=kinetic -y
 
-    source ~/kinetic/devel/setup.bash
+  ```
 
-The last command should be added to the ~/.bashrc file so that they do not need to be executed everytime you open a new terminal.
+3. Building your code
 
+  ```
+  cd ~/kinetic
+  catkin build
+  ```
 
-And finally compile the repository:
-
-    cd ~/kinetic
-    catkin build
-
-If no errors appear everything is ready to use. Great job!
+  If no errors appear everything is ready to use. Great job!

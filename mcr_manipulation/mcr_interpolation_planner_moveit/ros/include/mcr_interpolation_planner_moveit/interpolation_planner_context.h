@@ -26,7 +26,7 @@
 #include <algorithm>
 #include <vector>
 #include <map>
-
+#include <console_bridge/console.h>
 /**
  * @brief The context for the interpolation based planner.
  */

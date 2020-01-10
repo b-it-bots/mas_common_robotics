@@ -1,3 +1,8 @@
+---
+name: Refactoring
+about: Refactoring packages
+---
+
 # Description
 <!-- Briefly describe what this MR is about, where the changes occurred-->
 
@@ -45,3 +50,6 @@
             └── some_package_node.cpp
 
 ```
+
+# Checklist
+- [ ] I have updated the CHANGELOG.rst file
