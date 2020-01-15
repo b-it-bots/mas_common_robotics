@@ -47,14 +47,14 @@ bool interpolation_planner_interface::InterpolationPlannerContext::solve(plannin
 {
     if (planner_sample_time_ <= 0.0)
     {
-        logWarn("Unable to solve the planning problem. Planner sampling time must be greater then zero.");
+        ROS_WARN("Unable to solve the planning problem. Planner sampling time must be greater then zero.");
         res.error_code_.val = moveit_msgs::MoveItErrorCodes::PLANNING_FAILED;
         return false;
     }
 
     if (!generateTrajectory())
     {
-        logInform("Unable to solve the planning problem");
+        ROS_INFO("Unable to solve the planning problem");
         res.error_code_.val = moveit_msgs::MoveItErrorCodes::PLANNING_FAILED;
         return false;
     }
@@ -66,14 +66,14 @@ bool interpolation_planner_interface::InterpolationPlannerContext::solve(plannin
 
     res.planning_time_ = ptime;
 
-    logInform("planning problem solved");
+    ROS_INFO("planning problem solved");
     return true;
 }
 
 bool interpolation_planner_interface::InterpolationPlannerContext::solve(
     planning_interface::MotionPlanDetailedResponse &res)
 {
-    logInform("Unable to solve the planning problem");
+    ROS_INFO("Unable to solve the planning problem");
     res.error_code_.val = moveit_msgs::MoveItErrorCodes::PLANNING_FAILED;
     return false;
 }
@@ -111,7 +111,7 @@ bool interpolation_planner_interface::InterpolationPlannerContext::setGoalConstr
 {
     if (goal_constraints.joint_constraints.size() == 0)
     {
-        logWarn("%s: No goal constraints specified. There is no planning problem to solve.", name_.c_str());
+        ROS_WARN("%s: No goal constraints specified. There is no planning problem to solve.", name_.c_str());
         if (error)
         {
             error->val = moveit_msgs::MoveItErrorCodes::INVALID_GROUP_NAME;
@@ -198,8 +198,8 @@ bool interpolation_planner_interface::InterpolationPlannerContext::generateTraje
         joint_traj_.joint_names.push_back(planning_req_joint_names_[i]);
     }
 
-    logInform("Total trajectory time: %f", (planned_trajectory_time_));
-    logInform("Interpolated trajectory contains %d points.", (joint_traj_.points.size()));
+    ROS_INFO("Total trajectory time: %f", (planned_trajectory_time_));
+    ROS_INFO("Interpolated trajectory contains %d points.", (joint_traj_.points.size()));
     return true;
 }
 
@@ -264,7 +264,7 @@ bool interpolation_planner_interface::InterpolationPlannerContext::constructGoal
         }
         else
         {
-            logInform("Unable to construct goal state. Joint '%s' is not present"
+            ROS_INFO("Unable to construct goal state. Joint '%s' is not present"
                       "in loaded specification of the group.", joint_constraint.joint_name.c_str());
             return false;
         }
@@ -291,7 +291,7 @@ bool interpolation_planner_interface::InterpolationPlannerContext::configureVelo
     }
     else
     {
-        logError("Implementation fo Planner type '%s' is missing.", selected_planner_id_.c_str());
+        ROS_ERROR("Implementation fo Planner type '%s' is missing.", selected_planner_id_.c_str());
         return false;
     }
     return true;
