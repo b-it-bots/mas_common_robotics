@@ -24,7 +24,7 @@ bool ROS_URDF_Loader::loadModel(ros::NodeHandle& node_handle,
                                 const std::string &root_name,
                                 const std::string &tip_name,
                                 KDL::Chain& out_arm,
-                                std::vector<std::shared_ptr<urdf::JointLimits> >& out_joint_limits)
+                                std::vector<urdf::JointLimitsSharedPtr >& out_joint_limits)
 {
     urdf::Model robot_model;
 
@@ -68,7 +68,7 @@ bool ROS_URDF_Loader::loadModel(ros::NodeHandle& node_handle,
 
         std::string name = out_arm.getSegment(i).getJoint().getName();
 
-        std::shared_ptr<const urdf::Joint> joint = robot_model.getJoint(name);
+        urdf::JointConstSharedPtr joint = robot_model.getJoint(name);
 
         out_joint_limits.push_back(joint->limits);
 

@@ -79,6 +79,15 @@ void Arm_Cartesian_Control::checkLimits(
     }
 }
 
+void Arm_Cartesian_Control::setCartVelLimit(double limit)
+{
+    max_lin_frame_velocity = limit;
+}
+
+void Arm_Cartesian_Control::setJointVelLimit(double limit)
+{
+    max_joint_vel = limit;
+}
 
 void Arm_Cartesian_Control::process(
     double dt,
@@ -88,9 +97,6 @@ void Arm_Cartesian_Control::process(
 
     out_jnt_velocities.q.data = joint_positions.data;
 
-    double max_lin_frame_velocitiy = 0.1;  // m/s
-    double max_joint_vel = 0.25; // radian/s
-    double eps_velocity = 0.0001;
 
     // calc Jacobian
     //KDL::Jacobian jacobian(arm.getNrOfJoints());
@@ -107,12 +113,12 @@ void Arm_Cartesian_Control::process(
     }
 
 
-    if (linear_frame_vel > max_lin_frame_velocitiy)
+    if (linear_frame_vel > max_lin_frame_velocity)
     {
         //reduce target velocity to maximum limit
-        targetVelocity.vel.data[0] *= (max_lin_frame_velocitiy / linear_frame_vel) ;
-        targetVelocity.vel.data[1] *= (max_lin_frame_velocitiy / linear_frame_vel) ;
-        targetVelocity.vel.data[2] *= (max_lin_frame_velocitiy / linear_frame_vel) ;
+        targetVelocity.vel.data[0] *= (max_lin_frame_velocity / linear_frame_vel) ;
+        targetVelocity.vel.data[1] *= (max_lin_frame_velocity / linear_frame_vel) ;
+        targetVelocity.vel.data[2] *= (max_lin_frame_velocity / linear_frame_vel) ;
     }
 
 
@@ -121,7 +127,7 @@ void Arm_Cartesian_Control::process(
 
     ik_solver->CartToJnt(joint_positions, targetVelocity, jntVel);
     sigma.resize(arm_chain->getNrOfJoints());
-    int error_sigma = ((KDL::ChainIkSolverVel_wdls*) ik_solver)->getSigma(sigma);
+    ((KDL::ChainIkSolverVel_wdls*) ik_solver)->getSigma(sigma);
 
     // limit joint velocitied
     if (jntVel.data.norm() > 0.01)

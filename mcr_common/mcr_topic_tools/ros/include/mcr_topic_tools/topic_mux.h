@@ -34,7 +34,7 @@
 #define MCR_TOPIC_TOOLS_TOPIC_MUX_H_
 
 #include <nodelet/nodelet.h>
-#include <pluginlib/class_list_macros.h>
+#include <pluginlib/class_list_macros.hpp>
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include <string>
