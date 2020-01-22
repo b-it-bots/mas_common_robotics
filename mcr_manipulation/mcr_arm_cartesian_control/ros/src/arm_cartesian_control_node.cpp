@@ -205,7 +205,7 @@ void publishJointVelocities(KDL::JntArrayVel& joint_velocities)
         jointMsg.velocities[i].value = joint_velocities.qdot(i);
         ROS_DEBUG("%s: %.5f %s", jointMsg.velocities[i].joint_uri.c_str(),
                   jointMsg.velocities[i].value, jointMsg.velocities[i].unit.c_str());
-        if (isnan(jointMsg.velocities[i].value))
+        if (std::isnan(jointMsg.velocities[i].value))
         {
             ROS_ERROR("invalid joint velocity: nan");
             return;
@@ -227,7 +227,7 @@ void publishJointVelocities_FA(KDL::JntArrayVel& joint_velocities)
     for (unsigned int i = 0; i < joint_velocities.qdot.rows(); i++)
     {
         joint_velocitiy_array.data.push_back(joint_velocities.qdot(i));
-        if (isnan(joint_velocities.qdot(i)))
+        if (std::isnan(joint_velocities.qdot(i)))
         {
             ROS_ERROR("invalid joint velocity: nan");
             return;
@@ -276,7 +276,7 @@ bool watchdog()
 
     ros::Duration time = (now - t_last_command);
 
-    if (time > ros::Duration(watchdog_time))
+    if (active && time > ros::Duration(watchdog_time))
     {
         active = false;
         stopMotion();
@@ -294,6 +294,8 @@ int main(int argc, char **argv)
     tf_listener = new tf::TransformListener();
 
     double rate = 50;
+    float max_arm_cartesian_velocity = 0.1; // m/s
+    float max_arm_joint_velocity = 0.25; // rad/s
 
     //TODO: read from param
     std::string velocity_command_topic = "joint_velocity_command";
@@ -307,6 +309,8 @@ int main(int argc, char **argv)
 
     node_handle.getParam("use_float_array_msg", use_float_array_msg);
     node_handle.getParam("joint_state_topic", joint_state_topic);
+    node_handle.getParam("max_arm_cartesian_velocity", max_arm_cartesian_velocity);
+    node_handle.getParam("max_arm_joint_velocity", max_arm_joint_velocity);
 
     if (!node_handle.getParam("root_name", root_name))
     {
@@ -328,7 +332,7 @@ int main(int argc, char **argv)
     //load URDF model
     ROS_URDF_Loader loader;
     loader.loadModel(node_handle, root_name, tooltip_name, arm_chain, joint_limits);
-    
+
     //init
     nrOfJoints = arm_chain.getNrOfJoints();
     joint_positions.resize(nrOfJoints);
@@ -344,7 +348,7 @@ int main(int argc, char **argv)
     //fk_solver = new KDL::ChainFkSolverPos_recursive(arm_chain);
     //jnt2jac = new KDL::ChainJntToJacSolver(arm_chain);
 
-    //sigma values publisher 
+    //sigma values publisher
     sigma_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
                             sigma_values_topic, 1);
 
@@ -354,7 +358,7 @@ int main(int argc, char **argv)
                             velocity_command_topic, 1);
     }
     else{
-        //register publisher with brics float array      
+        //register publisher with brics float array
         cmd_vel_publisher = node_handle.advertise<std_msgs::Float32MultiArray>(
                             velocity_command_topic, 1);
     }
@@ -364,13 +368,13 @@ int main(int argc, char **argv)
 
     ros::Subscriber sub_wjs = node_handle.subscribe(weight_js_topic, 1,
                              wjsCallback);
-    
+
     ros::Subscriber sub_wts = node_handle.subscribe(weight_ts_topic, 1,
                              wtsCallback);
 
     ros::Subscriber sub_cc = node_handle.subscribe(cart_control_topic, 1,
                              ccCallback);
-    
+
 
     arm_cc::Arm_Cartesian_Control control(&arm_chain, ik_solver);
     std::vector<double> upper_limits;
@@ -385,6 +389,8 @@ int main(int argc, char **argv)
 
     KDL::JntArrayVel cmd_velocities(nrOfJoints);
 
+    control.setJointVelLimit(max_arm_joint_velocity);
+    control.setCartVelLimit(max_arm_cartesian_velocity);
     //loop with 50Hz
     ros::Rate loop_rate(rate);
 
@@ -396,7 +402,7 @@ int main(int argc, char **argv)
         if (watchdog())
         {
             control.process(1 / rate, joint_positions, targetVelocity, cmd_velocities, sigma);
-            
+
             sigma_array.data.clear();
             if (sigma.size() != 0)
             {
@@ -405,7 +411,7 @@ int main(int argc, char **argv)
                     sigma_array.data.push_back(sigma[i]);
                 }
             }
-            
+
             sigma_publisher.publish(sigma_array);
             if (use_float_array_msg == false)
             {

@@ -134,7 +134,7 @@ void RosArmCartesianControl::publishJointVelocities(KDL::JntArrayVel& joint_velo
         jointMsg.velocities[i].value = joint_velocities.qdot(i);
         ROS_DEBUG("%s: %.5f %s", jointMsg.velocities[i].joint_uri.c_str(),
                   jointMsg.velocities[i].value, jointMsg.velocities[i].unit.c_str());
-        if (isnan(jointMsg.velocities[i].value))
+        if (std::isnan(jointMsg.velocities[i].value))
         {
             ROS_ERROR("invalid joint velocity: nan");
             return;
