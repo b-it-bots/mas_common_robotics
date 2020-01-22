@@ -22,7 +22,7 @@
 #include <std_msgs/Float32MultiArray.h>
 
 KDL::Chain arm_chain;
-std::vector<std::shared_ptr<urdf::JointLimits> > joint_limits;
+std::vector<urdf::JointLimitsSharedPtr > joint_limits;
 
 KDL::JntArray joint_positions;
 std::vector<bool> joint_positions_initialized;
