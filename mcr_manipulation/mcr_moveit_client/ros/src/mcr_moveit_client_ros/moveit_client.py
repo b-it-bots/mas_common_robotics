@@ -252,6 +252,7 @@ class MoveitClient(object):
                                                                timeout=self._ik_timeout)
                 rospy.logdebug(joint_values)
                 if joint_values is None:
+                    rospy.logerr('unable to get IK solution')
                     return False
                 try:
                     self.arm.set_joint_value_target(joint_values)
