@@ -21,6 +21,8 @@ joint configuration using MoveIt!.
 """
 # -*- encoding: utf-8 -*-
 
+import tf
+import numpy as np
 import rospy
 import actionlib
 import moveit_commander
@@ -28,7 +30,7 @@ import std_msgs.msg
 import geometry_msgs.msg
 import moveit_msgs.msg
 import brics_actuator.msg
-
+from mcr_manipulation_utils_ros.kinematics import Kinematics
 
 class MoveitClient(object):
     """
@@ -62,6 +64,27 @@ class MoveitClient(object):
 
         # Set up MoveIt!
         self.arm = moveit_commander.MoveGroupCommander(arm)
+
+        ee_frame = rospy.get_param('~end_effector_frame', None)
+        if ee_frame:
+            # Initialise kinematics class object
+            self._kinematics = Kinematics(arm, move_group)
+            last_arm_link = self._kinematics.link_names[-1]
+
+            # Time allowed for the IK solver to find a solution (in seconds).
+            self._ik_timeout = rospy.get_param('~ik_timeout', 0.5)
+
+            tf_listener = tf.TransformListener()
+            rospy.sleep(2.0) # wait so transform listener has time to get enough tf data
+
+            self._ee_to_arm_transform = None
+            try:
+                trans, rot = tf_listener.lookupTransform(ee_frame, last_arm_link, rospy.Time(0))
+                self._ee_to_arm_transform = tf_listener.fromTranslationRotation(trans, rot)
+            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException) as e:
+                rospy.logerr('Could not lookup transform from end effector to last arm link')
+                rospy.logerr(str(e))
+                rospy.logerr('Will not be able to move arm using target pose.')
 
         # Setting up goal tolerences
         self.arm.set_goal_position_tolerance(goal_position_tolerance)
@@ -223,11 +246,24 @@ class MoveitClient(object):
                 rospy.logerr('unable to set target position: %s' % (str(e)))
                 return False
         elif self.target_pose:
-            try:
-                self.arm.set_pose_target(self.target_pose)
-            except Exception as e:
-                rospy.logerr('unable to set target position: %s' % (str(e)))
-                return False
+            if self._ee_to_arm_transform is not None:
+                arm_pose = self._get_arm_pose_from_ee_pose(self.target_pose)
+                joint_values = self._kinematics.inverse_kinematics(arm_pose,
+                                                               timeout=self._ik_timeout)
+                rospy.logdebug(joint_values)
+                if joint_values is None:
+                    return False
+                try:
+                    self.arm.set_joint_value_target(joint_values)
+                except Exception as e:
+                    rospy.logerr('unable to set target position: %s' % (str(e)))
+                    return False
+            else:
+                try:
+                    self.arm.set_pose_target(self.target_pose)
+                except Exception as e:
+                    rospy.logerr('unable to set target position: %s' % (str(e)))
+                    return False
         status = self.arm.go(wait=wait)
         return status
 
@@ -254,6 +290,37 @@ class MoveitClient(object):
 
         """
         return [joint.value for joint in joint_configuration.positions]
+
+    def _get_arm_pose_from_ee_pose(self, gripper_pose):
+        """ Transform 'gripper_pose' into 'arm_pose' such that if 'gripper_pose' represents where
+        the gripper must be, then 'arm_pose' represents where the arm_link_5 must be
+
+        :gripper_pose: geometry_msgs/PoseStamped
+        :returns: geometry_msgs/PoseStamped
+
+        """
+        # convert gripper_pose to gripper_pose_matrix
+        gripper_pose_matrix = tf.transformations.quaternion_matrix([
+            gripper_pose.pose.orientation.x,
+            gripper_pose.pose.orientation.y,
+            gripper_pose.pose.orientation.z,
+            gripper_pose.pose.orientation.w])
+        gripper_pose_matrix[0, 3] = gripper_pose.pose.position.x
+        gripper_pose_matrix[1, 3] = gripper_pose.pose.position.y
+        gripper_pose_matrix[2, 3] = gripper_pose.pose.position.z
+
+        # transform gripper to arm_pose using a transformation matrix
+        arm_pose_matrix = np.dot(gripper_pose_matrix, self._ee_to_arm_transform)
+
+        # convert arm_pose_matrix to arm_pose
+        arm_pose = geometry_msgs.msg.PoseStamped()
+        arm_pose.pose.position.x = arm_pose_matrix[0, 3]
+        arm_pose.pose.position.y = arm_pose_matrix[1, 3]
+        arm_pose.pose.position.z = arm_pose_matrix[2, 3]
+        quaternion = tf.transformations.quaternion_from_matrix(arm_pose_matrix)
+        arm_pose.pose.orientation = geometry_msgs.msg.Quaternion(*quaternion)
+        arm_pose.header.frame_id = gripper_pose.header.frame_id
+        return arm_pose
 
 
 def main():
