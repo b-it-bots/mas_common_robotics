@@ -189,7 +189,7 @@ void init_joint_msgs()
 {
     joint_positions_initialized.resize(arm_chain.getNrOfJoints(), false);
     jointMsg.velocities.resize(arm_chain.getNrOfJoints());
-    for (unsigned int i = 0; i < arm_chain.getNrOfSegments(); i++)
+    for (unsigned int i = 0; i < arm_chain.getNrOfJoints(); i++)
     {
         jointMsg.velocities[i].joint_uri =
             arm_chain.getSegment(i).getJoint().getName();
