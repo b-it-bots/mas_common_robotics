@@ -26,3 +26,6 @@ rospack_nosubdirs
 bin/
 build/
 install/
+
+# VSCode
+.vscode/
