@@ -5,6 +5,7 @@ find_package(catkin REQUIRED COMPONENTS
   roslint
   rospy
   rqt_gui_py
+  srdfdom
 )
 
 catkin_python_setup()
