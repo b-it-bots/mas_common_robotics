@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+
+<root xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- density of concrete (kg/m^3) -->
+    <xacro:property name="density" value="2100" />
+    <xacro:property name="default_width" value="0.04" />
+    <xacro:property name="default_height" value="0.3" />
+    <xacro:property name="default_cavity" value="m30" />
+
+    <material name="grey">
+        <color rgba="0.4 0.4 0.4 1.0"/>
+    </material>
+
+    <xacro:macro name="cuboid_inertia" params="length width height density:=^">
+        <inertial>
+            <mass value="${density*length*width*height}" />
+            <inertia ixx="${(density*length*width*height/12)*(width*width + height*height)}"
+                     iyy="${(density*length*width*height/12)*(height*height + length*length)}"
+                     iyz="0.0" ixy="0.0" ixz="0.0"
+                     izz="${(density*length*width*height/12)*(width*width + length*length)}" />
+        </inertial>
+    </xacro:macro>
+
+    <xacro:macro name="wall" params="name parent *origin length width:=${default_width} height:=${default_height}">
+        <joint name="joint_${name}" type="fixed">
+            <xacro:insert_block name="origin" />
+            <parent link="${parent}"/>
+            <child link="${name}"/>
+        </joint>
+        <link name="${name}">
+            <visual>
+                <origin xyz="0 0 0"/>
+                <geometry>
+                    <box size="${length} ${width} ${height}" /> 
+                </geometry>
+                <material name="grey"/>
+            </visual>
+            <collision>
+                <origin xyz="0 0 0"/>
+                <geometry>
+                    <box size="${length} ${width} ${height}" /> 
+                </geometry>
+            </collision>
+            <xacro:cuboid_inertia length="${length}" width="${width}" height="${height}" />
+        </link>
+        <gazebo reference="${name}">
+            <material>Gazebo/White</material>
+            <selfCollide>false</selfCollide>
+        </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="ws" params="name parent *origin">
+        <joint name="joint_${name}" type="fixed">
+            <xacro:insert_block name="origin" />
+            <parent link="${parent}"/>
+            <child link="${name}"/>
+        </joint>
+        <link name="${name}">
+            <visual>
+                <origin xyz="0.25 -0.4 -0.05" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <mesh filename="package://mcr_gazebo_objects/common/models/workstation.stl"
+                          scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="grey"/>
+            </visual>
+            <collision>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <box size="0.5 0.8 0.1" /> 
+                </geometry>
+            </collision>
+            <xacro:cuboid_inertia length="0.5" width="0.8" height="0.1" />
+        </link>
+        <gazebo reference="${name}">
+            <material>Gazebo/White</material>
+            <selfCollide>false</selfCollide>
+        </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="shelf" params="name parent *origin">
+        <joint name="joint_${name}" type="fixed">
+            <xacro:insert_block name="origin" />
+            <parent link="${parent}"/>
+            <child link="${name}"/>
+        </joint>
+        <link name="${name}">
+            <visual>
+                <origin xyz="0.25 0.4 -0.05" rpy="0.0 0.0 ${pi}"/>
+                <geometry>
+                    <mesh filename="package://mcr_gazebo_objects/common/models/shelf.stl"
+                          scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="grey"/>
+            </visual>
+            <collision>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <box size="0.5 0.8 0.1" /> 
+                </geometry>
+            </collision>
+            <collision>
+                <origin xyz="0.06 0.0 0.37" rpy="0.0 -${pi/6} 0.0"/>
+                <geometry>
+                    <box size="0.4 0.8 0.05" /> 
+                </geometry>
+            </collision>
+            <xacro:cuboid_inertia length="0.5" width="0.8" height="0.15" />
+        </link>
+        <gazebo reference="${name}">
+            <material>Gazebo/White</material>
+            <selfCollide>false</selfCollide>
+        </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="ppt_cavity" params="name parent cavity_name *origin">
+        <joint name="joint_${name}" type="fixed">
+            <xacro:insert_block name="origin" />
+            <parent link="${parent}"/>
+            <child link="${name}"/>
+        </joint>
+        <link name="${name}">
+            <visual>
+                <origin xyz="-0.07 -0.07 -0.005" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <mesh filename="package://mcr_gazebo_objects/common/models/ppt_cavity_${cavity_name}.stl"
+                          scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="grey"/>
+            </visual>
+            <collision>
+                <origin xyz="-0.07 -0.07 -0.005" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <mesh filename="package://mcr_gazebo_objects/common/models/ppt_cavity_${cavity_name}.stl"
+                          scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+            <xacro:cuboid_inertia length="0.14" width="0.14" height="0.01" />
+        </link>
+        <gazebo reference="${name}">
+            <material>Gazebo/White</material>
+            <selfCollide>false</selfCollide>
+        </gazebo>
+    </xacro:macro>
+
+    <xacro:macro name="ppt_platform" params="name parent *origin cavity_1:=${default_cavity} cavity_2:=${default_cavity} cavity_3:=${default_cavity} cavity_4:=${default_cavity} cavity_5:=${default_cavity}">
+        <joint name="joint_${name}" type="fixed">
+            <xacro:insert_block name="origin" />
+            <parent link="${parent}"/>
+            <child link="${name}"/>
+        </joint>
+        <link name="${name}">
+            <visual>
+                <origin xyz="0.008 0.05 0.0" rpy="0.0 0.0 ${pi}"/>
+                <geometry>
+                    <mesh filename="package://mcr_gazebo_objects/common/models/ppt_platform.stl"
+                          scale="0.001 0.001 0.001"/>
+                </geometry>
+                <material name="grey"/>
+            </visual>
+            <collision>
+                <origin xyz="0.008 0.05 0.0" rpy="0.0 0.0 ${pi}"/>
+                <geometry>
+                    <mesh filename="package://mcr_gazebo_objects/common/models/ppt_platform.stl"
+                          scale="0.001 0.001 0.001"/>
+                </geometry>
+            </collision>
+            <xacro:cuboid_inertia length="0.5" width="0.8" height="0.1" />
+        </link>
+        <gazebo reference="${name}">
+            <material>Gazebo/White</material>
+            <selfCollide>false</selfCollide>
+        </gazebo>
+        <xacro:ppt_cavity name="${name}_cavity_1" parent="${name}" cavity_name="${cavity_1}">
+            <origin xyz="-0.14 0.28 0.05" rpy="0.0 0.0 0.0"/>
+        </xacro:ppt_cavity>
+        <xacro:ppt_cavity name="${name}_cavity_2" parent="${name}" cavity_name="${cavity_2}">
+            <origin xyz="-0.14 0.14 0.05" rpy="0.0 0.0 0.0"/>
+        </xacro:ppt_cavity>
+        <xacro:ppt_cavity name="${name}_cavity_3" parent="${name}" cavity_name="${cavity_3}">
+            <origin xyz="-0.14 0.0 0.05" rpy="0.0 0.0 0.0"/>
+        </xacro:ppt_cavity>
+        <xacro:ppt_cavity name="${name}_cavity_4" parent="${name}" cavity_name="${cavity_4}">
+            <origin xyz="-0.14 -0.14 0.05" rpy="0.0 0.0 0.0"/>
+        </xacro:ppt_cavity>
+        <xacro:ppt_cavity name="${name}_cavity_5" parent="${name}" cavity_name="${cavity_5}">
+            <origin xyz="-0.14 -0.28 0.05" rpy="0.0 0.0 0.0"/>
+        </xacro:ppt_cavity>
+    </xacro:macro>
+
+</root>
