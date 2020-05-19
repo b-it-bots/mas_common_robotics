@@ -6,10 +6,14 @@
   <arg name="topics" default="$(find mcr_rosbag_recorder)/ros/config/topics.yaml" />
 
   <node pkg="mcr_rosbag_recorder" type="rosbag_recorder_node"
-        name="rosbag_recorder" ns="mcr_tools" output="screen">
+        name="$(anon rosbag_recorder)" ns="mcr_tools" output="screen">
     <param name="topics" type="str" value="$(arg topics)"/>
     <param name="file_path" type="str" value="$(arg file_path)"/>
     <param name="file_prefix" type="str" value="$(arg file_prefix)"/>
+    <param name="timeout" type="double" value="5.0"/>
     <param name="loop_rate" type="double" value="1.0"/>
+    <param name="rosbag_arguments" type="str" value="--lz4" />
+    <remap from="~event_in" to="/mcr_tools/rosbag_recorder/event_in" />
+    <remap from="~event_out" to="/mcr_tools/rosbag_recorder/event_out" />
   </node>
 </launch>
