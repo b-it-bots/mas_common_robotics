@@ -199,7 +199,7 @@ bool interpolation_planner_interface::InterpolationPlannerContext::generateTraje
     }
 
     ROS_INFO("Total trajectory time: %f", (planned_trajectory_time_));
-    ROS_INFO("Interpolated trajectory contains %d points.", (joint_traj_.points.size()));
+    ROS_INFO("Interpolated trajectory contains %lu points.", (joint_traj_.points.size()));
     return true;
 }
 
@@ -242,6 +242,7 @@ bool interpolation_planner_interface::InterpolationPlannerContext::constructStar
             complete_initial_robot_state_.getJointPositions(planning_req_joint_names_[i]);
         start_state_map_[planning_req_joint_names_[i]] = *current_position;
     }
+    return true;
 }
 
 bool interpolation_planner_interface::InterpolationPlannerContext::constructGoalState()
