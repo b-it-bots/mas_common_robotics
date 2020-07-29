@@ -4,6 +4,7 @@ services:
   - docker
 
 language: cpp
+dist: bionic
 
 env:
   global:
