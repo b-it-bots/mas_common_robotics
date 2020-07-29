@@ -32,7 +32,7 @@ bool ROS_URDF_Loader::loadModel(ros::NodeHandle& node_handle,
     std::string urdf_xml, full_urdf_xml;
     node_handle.param("urdf_xml", urdf_xml, std::string("robot_description"));
     node_handle.searchParam(urdf_xml, full_urdf_xml);
-    TiXmlDocument xml;
+    tinyxml2::XMLDocument xml;
     ROS_DEBUG("Reading xml file from parameter server\n");
     std::string result;
     if (node_handle.getParam(full_urdf_xml, result))
@@ -44,8 +44,8 @@ bool ROS_URDF_Loader::loadModel(ros::NodeHandle& node_handle,
         return false;
     }
     xml_string = result;
-    TiXmlElement *root_element = xml.RootElement();
-    TiXmlElement *root = xml.FirstChildElement("robot");
+    tinyxml2::XMLElement *root_element = xml.RootElement();
+    tinyxml2::XMLElement *root = xml.FirstChildElement("robot");
     if (!root || !root_element)
     {
         ROS_FATAL("Could not parse the xml from %s\n", urdf_xml.c_str());
