@@ -13,7 +13,7 @@
 #include <kdl/chain.hpp>
 
 #include <ros/ros.h>
-#include <urdf_model/joint.h>
+#include <urdf/model.h>
 
 class ROS_URDF_Loader
 {

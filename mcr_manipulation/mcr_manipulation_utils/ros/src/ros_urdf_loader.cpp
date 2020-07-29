@@ -9,6 +9,7 @@
 
 #include <urdf/model.h>
 #include <kdl_parser/kdl_parser.hpp>
+#include <tinyxml2.h>
 
 ROS_URDF_Loader::ROS_URDF_Loader()
 {
