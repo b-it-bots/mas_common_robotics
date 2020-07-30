@@ -11,8 +11,7 @@
 
 using namespace std;
 
-PLUGINLIB_REGISTER_CLASS(mcr_node_analyzer,
-                         diagnostic_aggregator::mcr_node_analyzer,
+PLUGINLIB_EXPORT_CLASS(diagnostic_aggregator::mcr_node_analyzer,
                          diagnostic_aggregator::Analyzer)
 
 namespace diagnostic_aggregator
