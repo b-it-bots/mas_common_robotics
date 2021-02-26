@@ -136,4 +136,3 @@ vector<boost::shared_ptr<diagnostic_msgs::DiagnosticStatus> > mcr_node_analyzer:
 }
 
 } // end of namespace diagnostic_aggregator
-
