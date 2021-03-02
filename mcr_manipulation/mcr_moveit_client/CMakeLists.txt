@@ -18,6 +18,7 @@ catkin_package(
     moveit_msgs
     brics_actuator
     moveit_commander
+    mcr_manipulation_utils
 )
 
 ### TESTS

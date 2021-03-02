@@ -4,7 +4,7 @@ import rospkg
 
 from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
-from python_qt_binding.QtGui import QWidget
+from python_qt_binding.QtWidgets import QWidget
 from moveit_commander_widget import MoveitCommanderWidget
 
 import yaml

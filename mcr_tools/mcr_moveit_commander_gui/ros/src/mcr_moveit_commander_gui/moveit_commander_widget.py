@@ -7,10 +7,11 @@ import rospy
 import rospkg
 import moveit_commander
 import moveit_msgs.msg
+from srdfdom.srdf import SRDF
 
 from python_qt_binding import loadUi
 from python_qt_binding.QtCore import Qt, qWarning, Signal
-from python_qt_binding.QtGui import QWidget, QGridLayout, QPushButton, QButtonGroup, QVBoxLayout, \
+from python_qt_binding.QtWidgets import QWidget, QGridLayout, QPushButton, QButtonGroup, QVBoxLayout, \
     QFrame, QLineEdit, QTabWidget
 
 
@@ -26,6 +27,7 @@ class MoveitCommanderWidget(QWidget):
         super(MoveitCommanderWidget, self).__init__()
         self.setObjectName('MoveitCommanderWidget')
 
+        self.robot = SRDF.from_parameter_server()
         self.groups = self.get_groups()
         self.commanders = [moveit_commander.MoveGroupCommander(group) for group in self.groups]
 
@@ -136,27 +138,18 @@ class MoveitCommanderWidget(QWidget):
             rospy.logerr("Malformed joint angle list")
 
     def get_named_targets(self, group_name):
-        s = rospy.get_param('/robot_description_semantic')
-        rex = "group_state[ \\\\\n\r\f\v\t]*name=\"[a-zA-Z0-9_/\n\r ]*\"[ \\\\\n\r\f\v\t]*group=\"[ \\\\\n\r\f\v\t]*" \
-              + group_name + "\""
-        p = re.compile(rex)
-
-        # returns a list of 'group_state name="named_target"' entries
-        l = p.findall(s)
-
-        pp = re.compile("name=\"[a-zA-Z0-9_/\n\r ]*\"")
-        named_targets = [pp.findall(ll)[0][6:-1].strip() for ll in l]
-
+        '''
+        Return list of group states associated with `group_name`
+        '''
+        group_states = self.robot.group_state_map.keys()
+        named_targets = []
+        for group_state in group_states:
+            if self.robot.group_state_map[group_state].group == group_name:
+                named_targets.append(group_state)
         return named_targets
 
     def get_groups(self):
-        s = rospy.get_param('/robot_description_semantic')
-        p = re.compile("group[ \\\\\n\r\f\v\t]*name=\"[a-zA-Z0-9_/\n\r ]*\"")
-
-        # returns a list of 'group name="group_name"' entries
-        l = p.findall(s)
-
-        pp = re.compile("name=\"[a-zA-Z0-9_/\n\r ]*\"")
-        groups = [pp.findall(ll)[0][6:-1].strip() for ll in l]
-
-        return groups
+        '''
+        Return list of joint group names
+        '''
+        return self.robot.group_map.keys()
