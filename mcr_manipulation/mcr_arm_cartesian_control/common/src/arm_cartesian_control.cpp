@@ -48,6 +48,10 @@ void Arm_Cartesian_Control::checkLimits(
         double upper_limit = this->upper_joint_limits[i];
         double lower_limit = this->lower_joint_limits[i];
 
+        // skip the joint if the upper and lower limits are the same
+        if (fabs(upper_limit - lower_limit) < 1e-5)
+            continue;
+
         double upper_clearance = upper_limit - fpos;
         double lower_clearance = lower_limit - fpos;
 
