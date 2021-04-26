@@ -5,10 +5,12 @@ project(mcr_trajectory_time_parameterizer)
 find_package(catkin REQUIRED
   COMPONENTS
     roscpp
+    geometric_shapes
     geometry_msgs
     trajectory_msgs
     std_msgs
     moveit_core
+    moveit_ros_occupancy_map_monitor
     moveit_ros_planning_interface
     moveit_ros_planning
     roslint
@@ -21,8 +23,10 @@ catkin_package(
     roscpp
     std_msgs
     trajectory_msgs
+    geometric_shapes
     geometry_msgs
     moveit_core
+    moveit_ros_occupancy_map_monitor
     moveit_ros_planning_interface
     moveit_ros_planning
 )
