@@ -100,18 +100,26 @@ void ccCallback(geometry_msgs::TwistStampedConstPtr desiredVelocity)
 {
     // ignore the request if none of the joints have been initialised
     bool all_joints_uninitialised = true;
+    std::string uninitialized_joints = "";
     for (size_t i = 0; i < joint_positions_initialized.size(); i++)
     {
         if (joint_positions_initialized[i])
         {
             all_joints_uninitialised = false;
-            break;
         }
+        else
+        {
+            uninitialized_joints += std::to_string(i) + ", " ;
+        }
+    }
+    if (!uninitialized_joints.empty())
+    {
+        ROS_WARN_THROTTLE(5,"Joint(s) %s not initialised", uninitialized_joints.c_str());
     }
 
     if (all_joints_uninitialised)
     {
-        std::cout << "Joints not initialized; ignoring request" << std::endl;
+        ROS_ERROR("Joints not initialized; ignoring request");
         return;
     }
 
