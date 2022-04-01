@@ -75,7 +75,6 @@ class Kinematics:
 
         req = moveit_msgs.srv.GetPositionIKRequest()
         req.ik_request.timeout = rospy.Duration(timeout)
-        req.ik_request.attempts = attempts
         req.ik_request.group_name = self.group_name
         req.ik_request.robot_state.joint_state.name = self.joint_names
         req.ik_request.robot_state.joint_state.position = configuration
