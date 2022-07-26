@@ -173,7 +173,7 @@ class PoseToTransformConverter(object):
             )
             self.transformed_pose = self.tf_listener.transformPose(self.reference_frame, self.pose_in)
             return True
-        except tf.Exception, error:
+        except tf.Exception as error:
             rospy.logwarn("Exception occurred: {0}".format(error))
             return False
 

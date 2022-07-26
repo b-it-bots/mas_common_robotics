@@ -444,7 +444,7 @@ class DmpTaskSpace(object):
             return self.lfd_client(
                 demo_trajectory, self.k_gains, self.d_gains, self.number_of_bases
             )
-        except rospy.ServiceException, e:
+        except rospy.ServiceException as e:
             rospy.logerr("Service call failed: {0}".format(e))
             return None
 
@@ -464,7 +464,7 @@ class DmpTaskSpace(object):
             self.set_active_dmp_client(dmp_list)
             rospy.logdebug("Active DMP has been set.")
             return True
-        except rospy.ServiceException, e:
+        except rospy.ServiceException as e:
             rospy.logerr("Service call failed: {0}".format(e))
             return False
 
@@ -502,7 +502,7 @@ class DmpTaskSpace(object):
                 goal_point, self.goal_threshold, self.segment_length,
                 self.tau, self.time_resolution, self.number_of_integrations
             )
-        except rospy.ServiceException, e:
+        except rospy.ServiceException as e:
             rospy.logerr("Service call failed: {0}".format(e))
             return None
 

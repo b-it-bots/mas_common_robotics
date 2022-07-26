@@ -25,7 +25,7 @@ if __name__ == "__main__":
                 if item == 'world':
                     world_loaded = True
                     break
-        except rospy.ServiceException, e:
+        except rospy.ServiceException as e:
             print "Service call <</gazebo/get_world_properties>> failed: %s"%e
         
         rospy.sleep(1)
