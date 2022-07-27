@@ -160,7 +160,7 @@ class DynamicReconfigureClient(object):
 
         try:
             client = dynamic_reconfigure.client.Client(node_name, timeout=1.5)
-        except Exception, e:
+        except Exception as e:
             rospy.logerr("Service {0} does not exist".format(node_name + '/set_parameters'))
             return False
         try:

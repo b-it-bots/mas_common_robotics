@@ -160,7 +160,7 @@ class StaticTransformPublisher(object):
                 self.reference_frame, self.target_frame
             )
 
-        except tf.Exception, error:
+        except tf.Exception as error:
             self.static_transform_pose = None
             rospy.logwarn("Exception occurred: {0}".format(error))
 

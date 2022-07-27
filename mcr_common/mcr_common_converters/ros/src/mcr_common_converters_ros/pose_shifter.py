@@ -206,7 +206,7 @@ class PoseShifter(object):
 
             return transformed_pose
 
-        except tf.Exception, error:
+        except tf.Exception as error:
             rospy.logwarn("Exception occurred: {0}".format(error))
             return None
 

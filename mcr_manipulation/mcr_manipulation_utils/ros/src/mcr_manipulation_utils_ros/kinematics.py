@@ -81,7 +81,7 @@ class Kinematics:
         req.ik_request.pose_stamped = goal_pose
         try:
             resp = self.ik_client(req)
-        except rospy.ServiceException, e:
+        except rospy.ServiceException as e:
             rospy.logerr('Service did not process request: %s', str(e))
             return None
 
@@ -145,7 +145,7 @@ class Kinematics:
             else:
                 return None
 
-        except rospy.ServiceException, e:
+        except rospy.ServiceException as e:
             rospy.logerr("Service did not process request: {0}".format(e))
             return None
 
