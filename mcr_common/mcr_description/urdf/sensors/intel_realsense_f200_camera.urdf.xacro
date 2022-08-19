@@ -6,9 +6,9 @@
 
   <xacro:include filename="$(find mcr_description)/urdf/sensors/intel_realsense_f200_camera.gazebo.xacro" />
 
-  <property name="eye_x_offset" value="-0.015" />   
-  <property name="eye_y_offset" value="0.024" />  
-  <property name="eye_z_offset" value="0.018" />
+  <xacro:property name="eye_x_offset" value="-0.015" />   
+  <xacro:property name="eye_y_offset" value="0.024" />  
+  <xacro:property name="eye_z_offset" value="0.018" />
 
   <xacro:macro name="intel_realsense_f200_eye" params="suffix parent *origin">
 	<link name="${parent}_${suffix}_frame">

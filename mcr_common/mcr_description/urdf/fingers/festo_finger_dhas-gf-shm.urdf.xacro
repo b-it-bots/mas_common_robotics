@@ -7,7 +7,7 @@
   <xacro:macro name="festo_finger_DHAS-GF-shm" params="parent name *origin">
 
     <joint name="${name}_joint" type="fixed" >
-      <insert_block name="origin" />
+      <xacro:insert_block name="origin" />
       <parent link="${parent}" />
       <child link="${name}_link" />
     </joint>
