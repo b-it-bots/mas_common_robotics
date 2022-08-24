@@ -98,14 +98,29 @@ void wjsCallback(std_msgs::Float32MultiArray weights)
 
 void ccCallback(geometry_msgs::TwistStampedConstPtr desiredVelocity)
 {
-
+    // ignore the request if none of the joints have been initialised
+    bool all_joints_uninitialised = true;
+    std::string uninitialized_joints = "";
     for (size_t i = 0; i < joint_positions_initialized.size(); i++)
     {
-        if (!joint_positions_initialized[i])
+        if (joint_positions_initialized[i])
         {
-            std::cout << "joints not initialized" << std::endl;
-            return;
+            all_joints_uninitialised = false;
         }
+        else
+        {
+            uninitialized_joints += std::to_string(i) + ", " ;
+        }
+    }
+    if (!uninitialized_joints.empty())
+    {
+        ROS_WARN_THROTTLE(5,"Joint(s) %s not initialised", uninitialized_joints.c_str());
+    }
+
+    if (all_joints_uninitialised)
+    {
+        ROS_ERROR("Joints not initialized; ignoring request");
+        return;
     }
 
     if (!tf_listener) return;
